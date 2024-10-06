@@ -27,6 +27,6 @@ public class PageAbout extends JPanel {
         ImageIcon icon = new ImageIcon("./image/bg-wood.png");
         ImageIcon icon_dep = new ImageIcon("./image/dep.png");
         g.drawImage(icon.getImage(), 0, 0, 1280, 720, this);
-        g.drawImage(icon_dep.getImage(), 0, 0, 1280, 720, this);
+        g.drawImage(icon_dep.getImage(), 0, 0, 1280, 600, this);
     }
 }
