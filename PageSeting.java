@@ -1,19 +1,32 @@
 import java.awt.*;
 
 import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class PageSeting extends JPanel{
     PageSeting(){
-        setBackground(Color.black);
-        setLayout(new BorderLayout());
-        JLabel  label = new JLabel("Seting");
+        setBackground(Color.white);
+        setLayout(null);
+        JPanel panel = new JPanel();
         JButton b = new JButton("Back to the menu");
-        JButton b1 = new JButton("Test1");
-        add(label);
+        panel.setBounds(170, 180, 911, 420);
+        panel.setBackground(Color.black);
+        b.setBounds(480, 530, 300, 50);
         add(b);
-        add(b1);
+        add(panel);
+    }
+    @Override
+    public void paint(Graphics g) {
+        ImageIcon icon = new ImageIcon("./image/BannerSeting.png");
+        super.paint(g);
+        g.drawImage(icon.getImage(), 300,0, this);
+        icon = new ImageIcon("./image/settings-back.png");
+        g.drawImage(icon.getImage(), 10,0, this);
+        icon = new ImageIcon("./image/settings-back.png");
+        g.drawImage(icon.getImage(), 10,0, this);
     }
 }
