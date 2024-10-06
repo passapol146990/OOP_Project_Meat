@@ -15,6 +15,7 @@ public class PageStart extends JPanel{
         ImageIcon icon_shop = new ImageIcon("./image/shop -white.png");
         ImageIcon icon_dish = new ImageIcon("./image/dish.png");
         ImageIcon icon_thermometer = new ImageIcon("./image/thermometer.png");
+        ImageIcon icon_Rank = new ImageIcon("./image/rank.png");
         super.paint(g);
         g.drawImage(icon.getImage(), 0,0, this);
         g.drawImage(icon_setting.getImage(), 0,0,50,50, this);
@@ -22,6 +23,7 @@ public class PageStart extends JPanel{
         g.drawImage(icon_shop.getImage(), 0,140,50,50, this);
         g.drawImage(icon_dish.getImage(), 1000,-50,500,500, this);
         g.drawImage(icon_thermometer.getImage(), 0,310,359,91, this);
+        g.drawImage(icon_Rank.getImage(), 980, 400,287,304, this);
     }
 
 }
