@@ -25,14 +25,8 @@ public class PageAbout extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         ImageIcon icon = new ImageIcon("./image/bg-wood.png");
-        ImageIcon dep_1 = new ImageIcon("./image/dep_1.png");
-        ImageIcon dep_2 = new ImageIcon("./image/dep_2.png");
-        ImageIcon dep_3 = new ImageIcon("./image/dep_3.png");
-        ImageIcon dep_4 = new ImageIcon("./image/dep_4.png");
+        ImageIcon icon_dep = new ImageIcon("./image/dep.png");
         g.drawImage(icon.getImage(), 0, 0, 1280, 720, this);
-        g.drawImage(dep_1.getImage(), 100, 205, 250, 300, this); 
-        g.drawImage(dep_2.getImage(), 380, 205, 250, 300, this); 
-        g.drawImage(dep_3.getImage(), 660, 205, 250, 300, this); 
-        g.drawImage(dep_4.getImage(), 940, 205, 250, 300, this); 
+        g.drawImage(icon_dep.getImage(), 0, 0, 1280, 720, this);
     }
 }
