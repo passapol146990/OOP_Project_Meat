@@ -14,7 +14,7 @@ public class PageSeting extends JPanel{
         JPanel panel = new JPanel();
         JButton b = new JButton("Back to the menu");
         panel.setBounds(170, 180, 911, 420);
-        panel.setBackground(Color.black);
+        panel.setBackground(Color.blue);
         b.setBounds(480, 530, 300, 50);
         add(b);
         add(panel);
@@ -24,9 +24,9 @@ public class PageSeting extends JPanel{
         ImageIcon icon = new ImageIcon("./image/BannerSeting.png");
         super.paint(g);
         g.drawImage(icon.getImage(), 300,0, this);
-        icon = new ImageIcon("./image/settings-back.png");
-        g.drawImage(icon.getImage(), 10,0, this);
-        icon = new ImageIcon("./image/settings-back.png");
-        g.drawImage(icon.getImage(), 10,0, this);
+        icon = new ImageIcon("./image/music.png");
+        g.drawImage(icon.getImage(), 225,250,50,50, this);
+        icon = new ImageIcon("./image/volume.png");
+        g.drawImage(icon.getImage(), 225,450,50,50, this);
     }
 }
