@@ -16,30 +16,31 @@ public class PageStart extends JPanel {
     private Rectangle plateRect;
     private MeatThread meatThread;
     private boolean isHoldingMeat = false;
+    private boolean isMeatOnPlate = false; // Track if the meat is on the plate
     private Point lastMousePosition;
-    
+
     PageStart(App app) {
         this.app = app;
         setLayout(null);
-        
-        // สร้างพื้นที่ชิ้นเนื้อและจาน
-        meatRect = new Rectangle(402, 160, 500, 382); // ขนาดและตำแหน่งชิ้นเนื้อ
-        plateRect = new Rectangle(1000, -50, 500, 500); // ขนาดและตำแหน่งจาน
 
-        // สร้างปุ่ม setting
+        // Meat and plate areas
+        meatRect = new Rectangle(402, 160, 400, 300); // Meat size and position
+        plateRect = new Rectangle(1000, -50, 100, 100); // Plate size and position
+
+        // Setting button
         B_setting = new JButton();
         B_setting.setBounds(0, 0, 50, 50);
-        B_setting.setOpaque(false); // ทำให้ปุ่มโปร่งแสง
-        B_setting.setBorderPainted(false); // ไม่วาดขอบปุ่ม
+        B_setting.setOpaque(false);
+        B_setting.setBorderPainted(false);
         B_setting.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("setting Clicked");
+                System.out.println("Setting Clicked");
             }
         });
         add(B_setting);
 
-        // สร้างปุ่ม order
+        // Order button
         B_order = new JButton("Order");
         B_order.setBounds(0, 70, 50, 50);
         B_order.setOpaque(false);
@@ -51,8 +52,8 @@ public class PageStart extends JPanel {
             }
         });
         add(B_order);
-        
-        // สร้างปุ่ม shop
+
+        // Shop button
         B_shop = new JButton("Shop");
         B_shop.setBounds(0, 140, 50, 50);
         B_shop.setOpaque(false);
@@ -64,44 +65,50 @@ public class PageStart extends JPanel {
             }
         });
         add(B_shop);
+
         
-        // เริ่มการทำงานของ MeatThread
         meatThread = new MeatThread(this, meatRect);
         meatThread.start();
-        
-        // Mouse listener เพื่อตรวจจับการลากชิ้นเนื้อ
+
+        // Mouse listener to drag meat
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (meatRect.contains(e.getPoint())) {
+                if (meatRect.contains(e.getPoint()) && !isMeatOnPlate) {
                     isHoldingMeat = true;
                     lastMousePosition = e.getPoint();
                 }
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
-                    // ตรวจสอบว่าชิ้นเนื้อชนกับจานหรือไม่
+                    // Check if meat intersects with plate
                     if (meatRect.intersects(plateRect)) {
-                        System.out.println("Finish! Meat on plate.");
+                        isMeatOnPlate = true;
+                        meatThread.stopRunning(); 
+                        System.out.println("Finish! Meat on Dish.");
+                    }
+                    else{
+                        meatRect.x = 402;
+                        meatRect.y = 160;
                     }
                 }
             }
         });
 
-        // Mouse motion listener เพื่อลากชิ้นเนื้อ
+        // Mouse motion listener to drag meat
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (isHoldingMeat) {
+                if (isHoldingMeat && !isMeatOnPlate) {
                     int dx = e.getX() - lastMousePosition.x;
                     int dy = e.getY() - lastMousePosition.y;
                     meatRect.x += dx;
                     meatRect.y += dy;
                     lastMousePosition = e.getPoint();
-                    repaint(); // รีเฟรชจอภาพเมื่อมีการลากเนื้อ
+                    repaint(); // Refresh the screen when dragging
                 }
             }
         });
@@ -110,22 +117,33 @@ public class PageStart extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
         
-        // วาด background และปุ่มต่างๆ
         ImageIcon icon_setting = new ImageIcon("./image/settings-white.png");
         ImageIcon icon = new ImageIcon("./image/bg-start.png");
         ImageIcon icon_order = new ImageIcon("./image/checklist-white.png");
         ImageIcon icon_shop = new ImageIcon("./image/shop -white.png");
         ImageIcon icon_dish = new ImageIcon("./image/dish.png");
         ImageIcon icon_meat = new ImageIcon("./image/rare.png");
-        
+        ImageIcon icon_Rank = new ImageIcon("./image/rank.png");
         g.drawImage(icon.getImage(), 0, 0, this);
         g.drawImage(icon_setting.getImage(), 0, 0, 50, 50, this);
         g.drawImage(icon_order.getImage(), 0, 70, 50, 50, this);
         g.drawImage(icon_shop.getImage(), 0, 140, 50, 50, this);
-        g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, plateRect.width, plateRect.height, this); // วาดจาน
-        g.drawImage(icon_meat.getImage(), meatRect.x, meatRect.y, meatRect.width, meatRect.height, this); // วาดชิ้นเนื้อ
+        g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, 500, 500, this);
+        g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
+        
+        if (!isMeatOnPlate) {
+            g.drawImage(icon_meat.getImage(), meatRect.x, meatRect.y, 500, 382, this); 
+        }
     }
+}
+class meat_icon{
+    String[] meat_pic = {
+        "image/rare.png",
+        "image/medium rare.png",
+        // เดี๋ยวมาเพิ่มเอาเดอ
+    };
 }
 
 // คลาสสำหรับจัดการการทำงานของเทรด
@@ -143,15 +161,15 @@ class MeatThread extends Thread {
     public void run() {
         while (isRunning) {
             try {
-                Thread.sleep(16); // อัพเดตทุก 16 ms (60 FPS)
+                Thread.sleep(16); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            panel.repaint(); // รีเฟรชหน้าจอ
+            panel.repaint(); // Refresh the screen
         }
     }
 
     public void stopRunning() {
-        isRunning = false; // หยุดการทำงานของเทรด
+        isRunning = false; 
     }
 }
