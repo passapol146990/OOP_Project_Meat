@@ -37,6 +37,9 @@ public class PageSeting extends JPanel {
 
     @Override
     public void paint(Graphics g) {
+        ImageIcon icon = new ImageIcon("./image/bg-start.png");
+        super.paint(g);
+        g.drawImage(icon.getImage(), 0,0, this);
         super.paint(g); // เรียกการวาดพื้นฐาน
 
         // ตรวจสอบว่าภาพสามารถโหลดได้หรือไม่
@@ -63,3 +66,11 @@ public class PageSeting extends JPanel {
         }
     }
 }
+
+
+// class settingInTheGame extends JPanel{
+
+// }
+// class settingOutTheGame extends JPanel{
+
+// }
