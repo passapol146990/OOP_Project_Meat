@@ -73,6 +73,13 @@ public class PageStart extends JPanel {
         // Mouse listener to drag meat
         addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseClicked(MouseEvent e) {
+                if (meatRect.contains(e.getPoint()) && !isMeatOnPlate) {
+                    isHoldingMeat = true;
+                    lastMousePosition = e.getPoint();
+                }
+            }
+            @Override
             public void mousePressed(MouseEvent e) {
                 if (meatRect.contains(e.getPoint()) && !isMeatOnPlate) {
                     isHoldingMeat = true;
