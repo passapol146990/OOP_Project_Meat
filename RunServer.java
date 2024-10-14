@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * InnerServer
@@ -10,44 +13,27 @@ import java.net.Socket;
 public class RunServer {
     public static void main(String[] args) {
         BaseServer baseServer = new BaseServer();
-        Server server = new Server(3333, baseServer);
-        server.start();
+        ServerRoby roby = new ServerRoby(baseServer);
+        roby.start();
     }
 }
 
 class Server extends Thread{
-    ServerSocket serverSocket;
-    private int port;
     private BaseServer baseServer;
-    Server(int port, BaseServer baseServer){
-        this.port = port;
+    Server(BaseServer baseServer){
         this.baseServer = baseServer;
     }
     public void run(){
-        try{
-            serverSocket = new ServerSocket(this.port);
-            System.out.println("Start Server PORT : "+this.port);
-            while (!this.baseServer.getStatusStartGame()){
-                Socket socket = serverSocket.accept();
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                BaseClient baseClient = (BaseClient) in.readObject();
-                String ipAddress = socket.getInetAddress().getHostAddress();
-                this.baseServer.setUser(baseClient, ipAddress);
-                System.out.println(baseClient.getStatusPlayGame());
-                // ถ้าผู้เล่นกดพร้อมและเกมยังไม่เริ่ม ถ้าเริ่มเกมไปแล้วจะไม่ทำงาน
-                if(baseClient.getStatusPlayGame()){
-                    this.baseServer.StartStatusGame();
-                }
-                in.close();
-                socket.close();
-                try {Thread.sleep(10);} catch (InterruptedException e) {throw new RuntimeException(e);}
+        while (true) {
+            if(this.baseServer.getStatusInRoby()){
+                ServerRoby roby = new ServerRoby(baseServer);
+                roby.start();
+            }else{
+
             }
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 }
-
 class Countdown extends Thread {
     BaseServer baseServer;
     Countdown(BaseServer baseServer){
@@ -61,6 +47,50 @@ class Countdown extends Thread {
             } catch (InterruptedException e) {throw new RuntimeException(e);}
         }
         // System.out.println("หยุดทำงาน");
+    }
+}
+class ServerRoby extends Thread{
+    private ServerSocket serverSocket;
+    private BaseServer baseServer;
+    ServerRoby(BaseServer baseServer){
+        this.baseServer = baseServer;
+    }
+    public void run(){
+        try{
+            serverSocket = new ServerSocket(this.baseServer.port);
+            System.out.println("Start Server PORT : "+this.baseServer.port);
+            while (this.baseServer.getStatusInRoby()){
+                Socket socket = serverSocket.accept();
+                String ipAddress = socket.getInetAddress().getHostAddress();
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                BaseClient baseClient = (BaseClient) in.readObject();
+                this.baseServer.setUser(baseClient, ipAddress);
+                if(this.baseServer.getUser().get(ipAddress)==null){
+                    SendClient send = new SendClient(ipAddress, baseServer);
+                    send.start();
+                }
+                in.close();
+                socket.close();
+                try {Thread.sleep(10);} catch (InterruptedException e) {throw new RuntimeException(e);}
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+        }
+    }
+}
+class ResponseServerRoby implements Serializable{
+    private HashMap<String,BaseClient> data;
+    ResponseServerRoby(HashMap<String,BaseClient> data){
+        this.data = data;
+    }
+    ArrayList<String> getUsernameInRoby(){
+        ArrayList<String> user = new ArrayList<String>();
+        for(String i : this.data.keySet()){
+            user.add(this.data.get(i).getName());
+        }
+        return user;
     }
 }
 class ServerStartGamer extends Thread{
@@ -91,4 +121,29 @@ class ServerStartGamer extends Thread{
         }
     }
 }
-
+class SendClient extends Thread{
+    private boolean statusSend = true;
+    private String userip;
+    private int userport = 33333;
+    private BaseServer baseServer;
+    SendClient(String ip, BaseServer baseServer){
+        this.userip = ip;
+        this.baseServer = baseServer;
+    }
+    public void run(){
+        // ResultServer
+        while (this.statusSend) {
+            try{
+                Socket socket = new Socket(this.userip,this.userport);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(new ResponseServerRoby(this.baseServer.getUser()));
+                out.close();
+                socket.close();
+            }catch(IOException e){
+                System.out.println(e);
+                this.statusSend = false;
+            }
+        }
+        System.out.println(this.userip+" ไม่สามารถเชื่อมต่อได้");
+    }
+}

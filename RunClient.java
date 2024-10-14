@@ -16,28 +16,49 @@ public class RunClient {
     }
 }
 
-class Client extends Thread{
+class ClientConnextServer extends Thread{
     private Seting_Client seting_Client;
     private BaseClient baseClient;
-    Client(BaseClient baseClient, Seting_Client seting_Client){
+    ClientConnextServer(BaseClient baseClient, Seting_Client seting_Client){
         this.baseClient = baseClient;
         this.seting_Client = seting_Client;
     }
     public void run(){
+        ServerSocket serverSocket;
         try{
             while (this.baseClient.getStatusConnectServer()) {
                 Socket socket = new Socket(this.seting_Client.getIPAddressServer(),this.seting_Client.getPortServer());
-                ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-                send.writeObject(this.baseClient);
-                send.flush();
-
-                send.close();
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(this.baseClient);
+                out.close();
                 socket.close();
-                Thread.sleep(10);
+                try {Thread.sleep(1000);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
         } catch (Exception e) {
             System.out.println(e);
             this.baseClient.setStatusConnectServer(false);
+        }
+    }
+}
+class ClientResponseServer extends Thread{
+    private BaseClient baseClient;
+    ClientResponseServer(BaseClient baseClient){
+        this.baseClient = baseClient;
+    }
+    public void run(){
+        ServerSocket serverSocket;
+        while (this.baseClient.getStatusConnectServer()) {
+            try{
+                serverSocket = new ServerSocket(33333);
+                Socket socket = serverSocket.accept();
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                ResponseServerRoby responseServerRoby;
+                responseServerRoby = (ResponseServerRoby) in.readObject();
+                System.out.println(responseServerRoby.getUsernameInRoby().size());
+                in.close();
+                try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+            }catch(IOException e){}
+            catch (ClassNotFoundException e) {e.printStackTrace();}
         }
     }
 }
@@ -88,13 +109,12 @@ class Input extends Thread{
                 boolean status = sc.nextBoolean();
                 if(status){
                     this.baseClient.setStatusConnectServer(status);
-                    Client client = new Client(this.baseClient, this.seting_Client);
+                    ClientResponseServer res = new ClientResponseServer(this.baseClient);
+                    res.start();
+                    ClientConnextServer client = new ClientConnextServer(this.baseClient, this.seting_Client);
                     client.start();
-                    // ServerClient serverClient = new ServerClient(seting_Client.getPortServer()+1, baseClient);
-                    // serverClient.start();
                 }
             }
-            // this.baseClient.setStatusPlayGame(x);
             try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
         }
     }
