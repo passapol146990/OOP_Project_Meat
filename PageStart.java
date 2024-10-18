@@ -70,23 +70,24 @@ public class PageStart extends JPanel {
         meatThread = new MeatThread(this, meatRect);
         meatThread.start();
 
-        // Mouse listener to drag meat
+        
         addMouseListener(new MouseAdapter() {
-            @Override
+            //กดพลิกเนื้อ ยังไม่ได้ทำเพิ่มนะ
             public void mouseClicked(MouseEvent e) {
-                if (meatRect.contains(e.getPoint()) && !isMeatOnPlate) {
-                    isHoldingMeat = true;
-                    lastMousePosition = e.getPoint();
+                super.mouseClicked(e);
+                if(meatRect.contains(e.getPoint())){
+                    System.out.println("click meat");
                 }
             }
             @Override
+            //กดยกเนื้อ
             public void mousePressed(MouseEvent e) {
                 if (meatRect.contains(e.getPoint()) && !isMeatOnPlate) {
                     isHoldingMeat = true;
                     lastMousePosition = e.getPoint();
                 }
             }
-
+            //เช็คว่าเนื้ออยู่จานมั้ย
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
