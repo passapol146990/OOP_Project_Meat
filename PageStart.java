@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -61,11 +63,15 @@ public class PageStart extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Shop Clicked");
-                app.getBaseClient().newMeat();
-                app.getBaseClient().delMoney(50);
-                // Meat and plate areas
-                meatRect = new Rectangle(402, 160, 400, 300); // Meat size and position
-                plateRect = new Rectangle(1000, -50, 100, 100); // Plate size and position
+                if(app.getBaseClient().getMoney()<=0){
+                    System.out.println("คุณมีเงิน "+app.getBaseClient().getMoney()+" ไม่สามารถซื้อเนื้อมาทำอาหารได้");
+                }else{
+                    app.getBaseClient().newMeat();
+                    app.getBaseClient().delMoney(50);
+                    // Meat and plate areas
+                    meatRect = new Rectangle(402, 160, 400, 300); // Meat size and position
+                    plateRect = new Rectangle(1000, -50, 100, 100); // Plate size and position
+                }
             }
         });
         add(B_shop);
@@ -142,7 +148,10 @@ public class PageStart extends JPanel {
         g.drawImage(icon_shop.getImage(), 0, 140, 50, 50, this);
         g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, 500, 500, this);
         g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
-        // ถ้ามีเนื้อใน baseClient
+
+        g.setColor(new Color(255,255,255));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.drawString(""+app.getBaseClient().getMoney()+"$", 10, 660);
         // System.out.println(app.getBaseClient().getMoney());
         if(this.app.getBaseClient().getMeat()!=null&&this.app.getBaseClient().getMeat().getImage()!=null){
             ImageIcon icon_meat = new ImageIcon(this.app.getBaseClient().getMeat().getImage());
