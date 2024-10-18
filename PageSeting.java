@@ -5,7 +5,8 @@ public class PageSeting extends JPanel {
 
     private JSlider musicSlider;
     private JSlider audioSlider;
-
+    private JLabel  music;
+    private JLabel  audio;
     public PageSeting() {
         setLayout(null);
 
@@ -16,18 +17,22 @@ public class PageSeting extends JPanel {
         panel.setBackground(Color.blue);
         
         // สร้างปุ่ม "Back to the menu"
-        JButton backButton = new JButton("Back to the menu");
+        Component backButton = new Component("Back to the menu",new Color(254,169,169));
         backButton.setBounds(480, 530, 300, 50);
         add(backButton);
 
         // สร้าง JSlider สำหรับ music และ audio
         musicSlider = new JSlider(0, 100, 50);
         musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
+        music = new JLabel("Music");
+        music.setBounds(150, 50, 1000, 50);
+        music.setFont(new Font("Courier New",Font.BOLD,50));
         audioSlider = new JSlider(0, 100, 50);
         audioSlider.setBounds(300, 250, 500, 50);
 
         // เพิ่ม slider และ panel ในแผง
         panel.add(musicSlider);
+        panel.add(music);
         panel.add(audioSlider);
         add(panel);
         
@@ -44,26 +49,13 @@ public class PageSeting extends JPanel {
 
         // ตรวจสอบว่าภาพสามารถโหลดได้หรือไม่
         ImageIcon bannerIcon = new ImageIcon("./image/BannerSeting.png");
-        if (bannerIcon.getImage() != null) {
-            g.drawImage(bannerIcon.getImage(), 300, 0, this);
-        } else {
-            System.out.println("Failed to load BannerSeting.png");
-        }
-
+         g.drawImage(bannerIcon.getImage(), 300, 0, this);
         // วาดไอคอนสำหรับ music และ audio
         ImageIcon musicIcon = new ImageIcon("./image/music.png");
-        if (musicIcon.getImage() != null) {
-            g.drawImage(musicIcon.getImage(), 225, 250, 50, 50, this);
-        } else {
-            System.out.println("Failed to load music.png");
-        }
-
+        g.drawImage(musicIcon.getImage(), 225, 250, 50, 50, this);
         ImageIcon volumeIcon = new ImageIcon("./image/volume.png");
-        if (volumeIcon.getImage() != null) {
-            g.drawImage(volumeIcon.getImage(), 225, 450, 50, 50, this);
-        } else {
-            System.out.println("Failed to load volume.png");
-        }
+        g.drawImage(volumeIcon.getImage(), 225, 450, 50, 50, this);
+           
     }
 }
 
