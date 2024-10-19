@@ -2,32 +2,29 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
 
-public class CustomSlider extends JFrame {
+public class CustomSliderExample extends JFrame {
 
-    public CustomSlider() {
+    public CustomSliderExample() {
+        // Create a JSlider
         JSlider slider = new JSlider(0, 100);
         
         // Set custom UI for the slider
         slider.setUI(new CustomSliderUI(slider));
         
         // Adjust slider properties
-        slider.setValue(50); // Set initial value
+        slider.setValue(50); // Set initial value to the middle
         slider.setPaintTicks(false); // Hide ticks
         
         add(slider);
 
-        setTitle("Custom JSlider");
+        // Set frame properties
+        setTitle("Custom JSlider Example");
         setSize(400, 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            CustomSlider slider = new CustomSlider();
-            slider.setVisible(true);
-        });
-    }
+    
 }
 
 // Custom UI class for JSlider
@@ -43,7 +40,7 @@ class CustomSliderUI extends BasicSliderUI {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLUE); // Blue color for the track
         
-        // Draw track
+        // Draw track as a blue rectangle
         g2d.fillRect(trackRect.x, trackRect.y + trackRect.height / 4, trackRect.width, trackRect.height / 2);
     }
 
@@ -53,8 +50,10 @@ class CustomSliderUI extends BasicSliderUI {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLUE); // Blue color for the thumb
         
-        // Draw a circular thumb
-        int thumbRadius = 12;
-        g2d.fillOval(thumbRect.x, thumbRect.y, thumbRadius, thumbRadius);
+        // Draw thumb as a circular shape
+        int thumbRadius = 30; // Size of the thumb
+        int thumbX = thumbRect.x + thumbRect.width / 2 - thumbRadius / 2;
+        int thumbY = thumbRect.y + thumbRect.height / 2 - thumbRadius / 2;
+        g2d.fillOval(thumbX, thumbY, thumbRadius, thumbRadius);
     }
 }
