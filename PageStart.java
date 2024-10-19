@@ -1,13 +1,7 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.*;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
+import javax.swing.*;
+import java.awt.*;
 
 public class PageStart extends JPanel {
     private App app;
@@ -19,7 +13,60 @@ public class PageStart extends JPanel {
     private RunRepaint runRepaint;
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
+    private JPanel createOrderItemPanel(String imagePath, String description, String price) {
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(Color.BLACK);
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 30, 30);
+                super.paintComponent(g);
+            }
+        };
+        
+        panel.setOpaque(false); // ทำให้พาเนลโปร่งใสเพื่อแสดงขอบโค้งได้ชัดเจน
+        panel.setLayout(new BorderLayout());
+    
+        // โหลดรูปภาพและปรับขนาดให้พอดีกับพื้นที่
+        ImageIcon imageIcon = new ImageIcon(imagePath);
+        Image image = imageIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH); // ปรับขนาดรูปภาพ
+        JLabel imageLabel = new JLabel(new ImageIcon(image));
+    
+        // พาเนลซ้าย: รูปภาพสินค้า
+        panel.add(imageLabel, BorderLayout.WEST);
+    
+        // พาเนลกลาง: คำอธิบายสินค้า (ใช้ JTextArea สำหรับการตัดบรรทัด)
+        JTextArea descTextArea = new JTextArea(description);
+        descTextArea.setFont(new Font("Tahoma", Font.PLAIN, 12)); // ตั้งฟอนต์ที่รองรับภาษาไทย
+        descTextArea.setLineWrap(true); // เปิดใช้งานการตัดบรรทัด
+        descTextArea.setWrapStyleWord(true); // ตัดบรรทัดที่เว้นวรรค
+        descTextArea.setOpaque(false); // ตั้งค่าให้โปร่งใสเพื่อให้ดูเหมือน JLabel
+        descTextArea.setEditable(false); // ปิดการแก้ไข
+    
+        panel.add(descTextArea, BorderLayout.CENTER);
+    
+        // พาเนลขวา: ราคา (เพิ่มการเว้นขอบด้วย EmptyBorder)
+        JLabel priceLabel = new JLabel(price);
+        priceLabel.setFont(new Font("Tahoma", Font.BOLD, 14)); // ตั้งฟอนต์ที่รองรับภาษาไทย
+        priceLabel.setForeground(Color.GREEN);
+        priceLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // เว้นขอบขวา 10px
+    
+        panel.add(priceLabel, BorderLayout.EAST);
 
+        // เพิ่ม MouseListener ให้กับพาเนลเพื่อตรวจจับการคลิก
+        panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                System.out.println("Selected Price: " + price); // พิมพ์ราคาที่เลือกเมื่อคลิก
+            }
+        });
+    
+        // เพิ่มเส้นขอบโค้ง
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // เพิ่มระยะห่างจากขอบพาเนลเล็กน้อย
+    
+        return panel;
+    }
+    
     PageStart(App app) {
         this.app = app;
         setLayout(null);
@@ -41,7 +88,7 @@ public class PageStart extends JPanel {
         });
         add(B_setting);
 
-        // Order button
+        // ปุ่ม Order
         B_order = new JButton("Order");
         B_order.setBounds(0, 70, 50, 50);
         B_order.setOpaque(false);
@@ -49,7 +96,42 @@ public class PageStart extends JPanel {
         B_order.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Order Clicked");
+                // สร้าง popup modal สำหรับการสั่งซื้อ
+                JDialog orderDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Order", true);
+                orderDialog.setSize(350, 500);
+                orderDialog.setLayout(new BorderLayout());
+                orderDialog.setUndecorated(true); // ป้องกันการขยับ popup
+
+                JLabel orderLabel = new JLabel("SHOP", SwingConstants.CENTER);
+                orderDialog.add(orderLabel, BorderLayout.NORTH);
+                JButton order = new JButton("close");
+                orderDialog.add(order, BorderLayout.CENTER);
+
+                // พาเนลแสดงสินค้า
+                JPanel outerPanel = new JPanel(new BorderLayout());
+                outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // ตั้ง padding ซ้าย 20 และขวา 20
+
+                JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+                String path = "./image/meat/01/rare1.png.";
+                for(int order_count = 0;order_count<5;order_count++){
+                    // สินค้า
+                    JPanel item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
+                    productPanel.add(item1);
+                }
+                // ปุ่ม back
+                JButton backButton = new JButton("back");
+                backButton.addActionListener(e1 -> orderDialog.dispose());
+
+                // ตั้ง layout และเพิ่มเนื้อหา
+                // เพิ่ม productPanel เข้าไปใน outerPanel
+                outerPanel.add(productPanel, BorderLayout.CENTER);
+                // ตั้ง outerPanel เป็นเนื้อหาหลักแทน
+                orderDialog.add(outerPanel, BorderLayout.CENTER);
+                orderDialog.add(backButton, BorderLayout.SOUTH);
+
+                // ตั้ง popup ให้อยู่ตรงกลาง
+                orderDialog.setLocationRelativeTo(PageStart.this);
+                orderDialog.setVisible(true);
             }
         });
         add(B_order);
