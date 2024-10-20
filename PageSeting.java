@@ -111,7 +111,7 @@ class settingInTheGame extends JPanel{
         // สร้างแผงหลัก
         JPanel panel = new JPanel();
         panel.setLayout(null);
-        panel.setBounds(170, 180, 911, 420);
+        panel.setBounds(170, 180, 900, 420);
         panel.setBackground(new Color(85, 85, 85));
 
         // สร้างปุ่ม "Back to the game"
