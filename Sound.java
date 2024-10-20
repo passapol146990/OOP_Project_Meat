@@ -6,10 +6,9 @@ public class Sound {
 
     // โหลดเสียง
     public void playmusic(){
-        Sound sound = new Sound();
         try {
-            sound.loadSound("./Sound/tvari-tokyo-cafe-159065.wav");
-            sound.play();
+            loadSound("./Sound/tvari-tokyo-cafe-159065.wav");
+            play();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
@@ -17,10 +16,9 @@ public class Sound {
     }
 
     public void loadSound(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        File soundFile = new File(filePath);
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
         clip = AudioSystem.getClip();
-        clip.open(audioStream);
+        clip.open(audioInputStream);
     }
 
     // เล่นเสียง
@@ -40,9 +38,20 @@ public class Sound {
 }
     public void setVolume(int value) {
     if (clip != null) {
+        float volume;
         FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        float volume = (float) (value - 100) * 0.5f; // ค่าระดับเสียงจาก -80 dB ถึง 0 dB
+        if(value == 0)
+        {
+            clip.stop(); // หยุดเสียง
+            volumeControl.setValue(-80.0f);
+        }
+        else{
+        volume = (float) (value - 100) * 0.5f;
         volumeControl.setValue(volume); // ปรับระดับเสียง
+        if (!clip.isRunning()) {
+            clip.start(); // เริ่มเสียงถ้าหยุด
+        }
+        }
     }
 }
 }
