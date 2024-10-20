@@ -8,5 +8,6 @@ class Run {
         app.showPanel("menu");
         app.addPanel(seting, "seting");
         app.showPanel("seting");
+        sound.playmusic();
     }    
 }
