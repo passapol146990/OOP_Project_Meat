@@ -5,12 +5,12 @@ public class PageSeting extends JPanel{
 
     public PageSeting() {
         setSize(1200, 800);
+        setBackground(new Color(85,85,85));
         setLayout(new BorderLayout());
 
         // สร้างอินสแตนซ์ของ settingInTheGame และเพิ่มในเฟรม
         settingInTheGame settingPanel = new settingInTheGame();
         add(settingPanel, BorderLayout.CENTER);
-
         setVisible(true);  // แสดงหน้าต่าง
     }
 }
@@ -29,7 +29,6 @@ class settingInTheGame extends JPanel{
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBounds(170, 180, 911, 420);
-        panel.setBackground(new Color(85,85,85));
 
         // สร้างปุ่ม "Back to the menu"
         JButton backButton = Component.createCustomRoundedButton("Back to the menu", Color.pink);
@@ -41,14 +40,14 @@ class settingInTheGame extends JPanel{
         musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
 
         music = new JLabel("Music");
-        music.setBounds(150, 100, 1000, 50);
+        music.setBounds(145, 100, 1000, 50);
         music.setFont(new Font("Courier New", Font.BOLD, 50));
 
         audioSlider = Component.createCustomSlider();
         audioSlider.setBounds(300, 250, 500, 50);
         
         audio = new JLabel("Audio");
-        audio.setBounds(150, 250, 1000, 50);
+        audio.setBounds(145, 250, 1000, 50);
         audio.setFont(new Font("Courier New", Font.BOLD, 50));
 
         // เพิ่ม slider และ label ในแผง
