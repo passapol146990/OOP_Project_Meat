@@ -129,11 +129,13 @@ class settingInTheGame extends JPanel{
          audio.setBounds(150, 250, 1000, 50);
          audio.setFont(new Font("Courier New", Font.BOLD, 50));
          
-        JLabel musicIcon = new JLabel(new ImageIcon("./image/music.png"));
-        musicIcon.setBounds(50, 100, 100, 200);
+         ImageIcon Music = new ImageIcon("./image/music.png");
+        JLabel musicIcon = new JLabel(new ImageIcon(Music.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        musicIcon.setBounds(50, 100, 50, 50);
         
-        JLabel volumeIcon = new JLabel(new ImageIcon("./image/volume.png"));
-        volumeIcon.setBounds(50, 250, 100, 200);
+        ImageIcon Volume = new ImageIcon("./image/volume.png");
+        JLabel volumeIcon = new JLabel(new ImageIcon(Volume.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        volumeIcon.setBounds(50, 250, 50, 50);
         // เพิ่ม slider และ label ในแผง
         panel.add(musicSlider);
         panel.add(music);
@@ -145,15 +147,15 @@ class settingInTheGame extends JPanel{
  
          // กำหนดขนาด panel
          setPreferredSize(new Dimension(1200, 800));
-     }
-
-     @Override
-    public void paintComponent(Graphics g) {
-         super.paintComponent(g);
-
-         // วาดพื้นหลังและไอคอน
-         ImageIcon icon = new ImageIcon("./image/bg-start.png");
-         g.drawImage(icon.getImage(), 0, 0, this);
+        }
+        
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            // วาดพื้นหลังและไอคอน
+            ImageIcon icon = new ImageIcon("./image/bg-start.png");
+            g.drawImage(icon.getImage(), 0, 0, this);
 
          ImageIcon bannerIcon = new ImageIcon("./image/BannerSeting.png");
          g.drawImage(bannerIcon.getImage(), 300, 0, this);
