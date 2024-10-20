@@ -69,16 +69,16 @@ public class Component{
         public void paintTrack(Graphics g) {
             // Custom track color
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(Color.BLUE); // Blue color for the track
-            g2d.fillRect(trackRect.x, trackRect.y + trackRect.height / 4, trackRect.width, trackRect.height / 2);
+            g2d.setColor(Color.white); // Blue color for the track
+            g2d.fillRect(trackRect.x - 10, trackRect.y + trackRect.height - 50, trackRect.width + 20,200);
         }
 
         @Override
         public void paintThumb(Graphics g) {
             // Custom thumb color and shape
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(Color.BLUE); // Blue color for the thumb
-            int thumbRadius = 16; // Size of the thumb
+            g2d.setColor(new Color(27,29,91)); // Blue color for the thumb
+            int thumbRadius = 60; // Size of the thumb
             int thumbX = thumbRect.x + thumbRect.width / 2 - thumbRadius / 2;
             int thumbY = thumbRect.y + thumbRect.height / 2 - thumbRadius / 2;
             g2d.fillOval(thumbX, thumbY, thumbRadius, thumbRadius); // Draw a circular thumb
