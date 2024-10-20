@@ -38,4 +38,11 @@ public class Sound {
             clip.close();
         }
 }
+    public void setVolume(int value) {
+    if (clip != null) {
+        FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        float volume = (float) (value - 100) * 0.5f; // ค่าระดับเสียงจาก -80 dB ถึง 0 dB
+        volumeControl.setValue(volume); // ปรับระดับเสียง
+    }
+}
 }

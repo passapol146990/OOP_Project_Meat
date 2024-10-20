@@ -1,4 +1,8 @@
 import java.awt.*;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 public class PageSeting extends JPanel{
@@ -21,9 +25,10 @@ class settingInTheGame extends JPanel{
     private JSlider audioSlider;
     private JLabel music;
     private JLabel audio;
-
+    private Sound sound;
     public settingInTheGame() {
         setLayout(null);
+        sound = new Sound();
 
         // สร้างแผงหลัก
         JPanel panel = new JPanel();
@@ -38,6 +43,11 @@ class settingInTheGame extends JPanel{
         // สร้าง JSlider สำหรับ music และ audio
         musicSlider = Component.createCustomSlider();
         musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
+        musicSlider.addChangeListener(e ->{
+            if (sound != null) { // ตรวจสอบว่า soundPlayer ไม่เป็น null
+                sound.setVolume(musicSlider.getValue()); // เชื่อมต่อกับการเปลี่ยนแปลงค่า
+                System.out.println(musicSlider.getValue());
+            }});
 
         music = new JLabel("Music");
         music.setBounds(145, 100, 1000, 50);
