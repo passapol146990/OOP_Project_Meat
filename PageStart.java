@@ -159,25 +159,32 @@ class MeatThread extends Thread {
     private Rectangle meatRect;
     private JPanel panel;
     private boolean isRunning = true;
+    private Sound grillSound;  // เรียกไปยัง class sound
 
     public MeatThread(JPanel panel, Rectangle meatRect) {
         this.panel = panel;
         this.meatRect = meatRect;
+        grillSound = new Sound();
     }
 
     @Override
     public void run() {
+        grillSound.playGrillSound();  //เริ่มเล่นเสียงงง
+
         while (isRunning) {
             try {
                 Thread.sleep(16); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            panel.repaint(); // Refresh the screen
+            panel.repaint(); 
         }
+
+        grillSound.stopSound();  // ปิดเสียงเมื่อ ออก loop
     }
 
     public void stopRunning() {
-        isRunning = false; 
+        isRunning = false;  //หยุดการทำงาน thread
     }
 }
+
