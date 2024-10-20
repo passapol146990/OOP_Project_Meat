@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class PageStart extends JPanel {
     private App app;
+    private Sound sound;
     private JButton B_setting;
     private JButton B_order;
     private JButton B_shop;
@@ -69,6 +70,7 @@ public class PageStart extends JPanel {
     
     PageStart(App app) {
         this.app = app;
+        
         setLayout(null);
 
         // Meat and plate areas
@@ -84,6 +86,19 @@ public class PageStart extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Setting Clicked");
+                // สร้าง JDialog สำหรับ settingInTheGame
+        // สร้าง JDialog สำหรับ settingInTheGame
+        JDialog settingsDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Settings", true);
+        settingsDialog.setSize(400, 300); // ขนาดของ dialog
+        settingsDialog.setLayout(new BorderLayout());
+
+        // สร้าง instance ของ settingInTheGame
+        settingInTheGame settingsPanel = new settingInTheGame(sound, app);
+        settingsDialog.add(settingsPanel, BorderLayout.CENTER); // เพิ่ม settingsPanel ลงใน dialog
+
+        // ตั้งตำแหน่งของ dialog ให้อยู่ตรงกลาง
+        settingsDialog.setLocationRelativeTo(PageStart.this);
+        settingsDialog.setVisible(true); // แสดง dialog
             }
         });
         add(B_setting);
