@@ -6,6 +6,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.basic.BasicSliderUI;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 public class Component{
     // Method to create a rounded button with custom background color
@@ -59,17 +61,47 @@ public class Component{
 
     // Custom UI class for JSlider
     static class CustomSliderUI extends BasicSliderUI {
+        private boolean isThumbHovered = false;
 
+        @Override
+            protected Dimension getThumbSize() {
+                // ปรับขนาดปุ่มเลื่อน (thumb)
+                return new Dimension(52, 52);
+            }
+          
         public CustomSliderUI(JSlider slider) {
             super(slider);
+            slider.setBackground(Color.blue);
+            slider.addMouseMotionListener(new MouseMotionListener() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    if (thumbRect.contains(e.getPoint())) {
+                        isThumbHovered = true;
+                    } else {
+                        isThumbHovered = false;
+                    }
+                    slider.repaint(); // Repaint slider to update hover effect
+                }
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    mouseMoved(e);
+                }
+            });
         }
 
         @Override
         public void paintTrack(Graphics g) {
             // Custom track color
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(Color.white); // Blue color for the track
-            g2d.fillRect(trackRect.x - 10, trackRect.y + trackRect.height - 50, trackRect.width + 20,200);
+            Rectangle trackBounds = trackRect;
+            int thumbPos = thumbRect.x + (thumbRect.width / 2);
+
+                g2d.setColor(Color.white);
+                g2d.fillRect(thumbPos, trackBounds.y + (trackBounds.height / 2) - 2, trackBounds.width - thumbPos, 4);
+
+                g2d.setColor(Color.blue);
+                g2d.fillRect(trackBounds.x, trackBounds.y + (trackBounds.height / 2) - 2,  thumbPos, 4);
         }
 
         @Override
@@ -77,10 +109,16 @@ public class Component{
             // Custom thumb color and shape
             Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(new Color(27,29,91)); // Blue color for the thumb
-            int thumbRadius = 60; // Size of the thumb
+            int thumbRadius = 48; // Size of the thumb
             int thumbX = thumbRect.x + thumbRect.width / 2 - thumbRadius / 2;
             int thumbY = thumbRect.y + thumbRect.height / 2 - thumbRadius / 2;
             g2d.fillOval(thumbX, thumbY, thumbRadius, thumbRadius); // Draw a circular thumb
+
+            if (isThumbHovered) {
+                g2d.setColor(Color.GRAY); // Gray color for hover border
+                g2d.setStroke(new BasicStroke(3)); // Set the thickness of the border
+                g2d.drawOval(thumbX, thumbY, thumbRadius, thumbRadius); // Draw a border around the thumb
+            }
         }
     }
 }
