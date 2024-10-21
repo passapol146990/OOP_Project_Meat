@@ -43,6 +43,7 @@ public class PageStart extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e){
                     System.out.println("Image clicked"+ productName);
+                    app.getBaseClient().newMeat(productName);
                 }
             });
     

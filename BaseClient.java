@@ -7,14 +7,14 @@ public class BaseClient{
     boolean statusCountTime = false;
     
     BaseClient(){}
-    void newMeat(){
+    void newMeat(String type){
         if(this.meat==null){
-            this.meat = new Meat();
+            this.meat = new Meat(type);
             this.meat.start();
         }else{
             // ป้องการ thead ซ้อมบี้
             this.meat.kill();
-            this.meat = new Meat();
+            this.meat = new Meat(type);
             this.meat.start();
         }
     }
@@ -45,7 +45,12 @@ class Meat extends Thread{
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
     boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
-    Meat(){}
+    Meat(String type){
+        if(type=="เนื้อวัว"){
+            this.type_meat = "01";
+        }
+    }
+
     public void run(){
         while (this.meat_on){
             if(this.sted_meat==1){
