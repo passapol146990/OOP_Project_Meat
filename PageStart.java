@@ -333,12 +333,14 @@ public class PageStart extends JPanel {
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
-        int maxWidth = 300; // ความกว้างสูงสุดที่กำหนด
 
     // วาดข้อความสำหรับแต่ละรายการใน lists
     for (int i = 0; i < lists.size(); i++) {
         String s = lists.get(i);
         int rank = i + 1;
+        g.setColor(new Color(85,85,85));
+        int rectHeight = lineHeight; // ปรับขนาดกรอบให้มีความสูงพอดีกับข้อความ
+        g.drawRect(x, startY + i * lineHeight - 20, s.length() * 30, rectHeight); // วาดกรอบสำหรับข้อความ
         g.setColor(new Color(0, 0, 0)); // ตั้งค่าสี
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
         // วาดบรรทัด
