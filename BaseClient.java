@@ -3,6 +3,9 @@ import java.util.Random;
 public class BaseClient{
     private int money = 50;
     private Meat meat=null;
+    private int time = 0;
+    boolean statusCountTime = false;
+    
     BaseClient(){}
     void newMeat(){
         if(this.meat==null){
@@ -19,6 +22,17 @@ public class BaseClient{
     int getMoney(){return this.money;}
     void addMoney(int money){this.money += money;}
     void delMoney(int money){this.money -= money;}
+    int getTime(){return this.time;}
+    String getFormatTime() {
+        int minutes = this.time / 60;
+        int seconds = this.time % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+    void setTime(int time){this.time = time;}
+    void runStartGame(){
+        CountTime runTime = new CountTime(this);
+        runTime.start();
+    }
 }
 
 class Meat extends Thread{
