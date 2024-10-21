@@ -60,7 +60,6 @@ public class Sound {
             e.printStackTrace();
         }
     }
-
     // เล่นเสียง
     public void play() {
         if (clip != null) {
@@ -68,7 +67,6 @@ public class Sound {
             clip.loop(-1); // เล่นเสียงซ้ำไปเรื่อย ๆ
         }
     }
-
     // ปิดเสียงเมื่อเสร็จสิ้น
     public void close() {
         if (clip != null) {

@@ -3,15 +3,18 @@ import java.util.Random;
 public class BaseClient{
     private int money = 50;
     private Meat meat=null;
+    private int time = 0;
+    boolean statusCountTime = false;
+    
     BaseClient(){}
-    void newMeat(){
+    void newMeat(String type){
         if(this.meat==null){
-            this.meat = new Meat();
+            this.meat = new Meat(type);
             this.meat.start();
         }else{
             // ป้องการ thead ซ้อมบี้
             this.meat.kill();
-            this.meat = new Meat();
+            this.meat = new Meat(type);
             this.meat.start();
         }
     }
@@ -19,6 +22,17 @@ public class BaseClient{
     int getMoney(){return this.money;}
     void addMoney(int money){this.money += money;}
     void delMoney(int money){this.money -= money;}
+    int getTime(){return this.time;}
+    String getFormatTime() {
+        int minutes = this.time / 60;
+        int seconds = this.time % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+    void setTime(int time){this.time = time;}
+    void runStartGame(){
+        CountTime runTime = new CountTime(this);
+        runTime.start();
+    }
 }
 
 class Meat extends Thread{
@@ -31,7 +45,12 @@ class Meat extends Thread{
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
     boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
-    Meat(){}
+    Meat(String type){
+        if(type=="เนื้อวัว"){
+            this.type_meat = "01";
+        }
+    }
+
     public void run(){
         while (this.meat_on){
             if(this.sted_meat==1){
