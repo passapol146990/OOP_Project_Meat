@@ -12,6 +12,6 @@ class Run {
         app.showPanel("start");
         // app.showPanel("menu");
         // app.showPanel("seting");
-        sound.playmusic();
+        //sound.playmusic();
     }    
 }

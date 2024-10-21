@@ -327,9 +327,9 @@ public class PageStart extends JPanel {
         for(int i = 0; i < 3; i++){
             g.setColor(new Color(0,0,0));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString(app.getBaseClient().getFormatTime(), 1000, 480+i*55);
+            g.drawString((i+1) + "   " + app.getBaseClient().getFormatTime() + "   " + app.getBaseClient().getMoney()+"$", 1000, 480+i*55);
         }
-            g.drawString("Test",1000,650);
+            g.drawString("Your ranking" + "                " + app.getBaseClient().getMoney()+"$" ,1000,650);
 
         if(this.app.getBaseClient().getMeat()!=null&&this.app.getBaseClient().getMeat().getImage()!=null){
             ImageIcon icon_meat = new ImageIcon(this.app.getBaseClient().getMeat().getImage());
