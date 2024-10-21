@@ -324,10 +324,15 @@ public class PageStart extends JPanel {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
 
-        for(int i = 0; i < 3; i++){
+        List<String> lists = new ArrayList<String>();
+        lists.add("Test1");
+        lists.add("Test2");
+        lists.add("Test3");
+        for(String s : lists){
+            int i = lists.indexOf(s);
             g.setColor(new Color(0,0,0));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString((i+1) + "   " + app.getBaseClient().getFormatTime() + "   " + app.getBaseClient().getMoney()+"$", 1000, 480+i*55);
+            g.drawString((i+1) + "   " + s + "   " + app.getBaseClient().getMoney()+"$", 1000, 480+i*55);
         }
             g.drawString("Your ranking" + "                " + app.getBaseClient().getMoney()+"$" ,1000,650);
 
