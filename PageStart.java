@@ -328,13 +328,25 @@ public class PageStart extends JPanel {
         lists.add("Test1");
         lists.add("Test2");
         lists.add("Test3");
-        for(String s : lists){
-            int i = lists.indexOf(s);
-            g.setColor(new Color(0,0,0));
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString((i+1) + "   " + s + "   " + app.getBaseClient().getMoney()+"$", 1000, 480+i*55);
-        }
-            g.drawString("Your ranking" + "                " + app.getBaseClient().getMoney()+"$" ,1000,650);
+        lists.add("Test4");
+        lists.add("Test5");
+        int x = 1000; // ตำแหน่ง x
+        int startY = 480; // ตำแหน่ง y เริ่มต้น
+        int lineHeight = 30; // ความสูงของแต่ละบรรทัด
+        int maxWidth = 300; // ความกว้างสูงสุดที่กำหนด
+
+    // วาดข้อความสำหรับแต่ละรายการใน lists
+    for (int i = 0; i < lists.size(); i++) {
+        String s = lists.get(i);
+        int rank = i + 1;
+        g.setColor(new Color(0, 0, 0)); // ตั้งค่าสี
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
+        // วาดบรรทัด
+        g.drawString(rank + "   " + s + "   " + app.getBaseClient().getMoney() + "$", x, startY + i * lineHeight);
+    }
+        // วาดข้อความการจัดอันดับรวม
+        String rankingText = "Your ranking: " + app.getBaseClient().getMoney() + "$";
+        g.drawString(rankingText, x, startY + lists.size() * lineHeight + 30); // วางหลังรายการ
 
         if(this.app.getBaseClient().getMeat()!=null&&this.app.getBaseClient().getMeat().getImage()!=null){
             ImageIcon icon_meat = new ImageIcon(this.app.getBaseClient().getMeat().getImage());
