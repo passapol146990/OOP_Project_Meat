@@ -6,13 +6,11 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 public class PageSeting extends JPanel{
-    private Sound sound;
     private App app;
-    public PageSeting(Sound sound,App app) {
-        this.sound = sound;
+    public PageSeting(App app) {
         setSize(1200, 800);
         setLayout(new BorderLayout());
-        settingOutTheGame settingPanel = new settingOutTheGame(sound,app);
+        settingOutTheGame settingPanel = new settingOutTheGame(app);
         add(settingPanel, BorderLayout.CENTER);
         setVisible(true);   
     }
@@ -24,10 +22,8 @@ class settingOutTheGame extends JPanel{
     private JSlider audioSlider;
     private JLabel music;
     private JLabel audio;
-    private Sound sound;
     private App app;
-    public settingOutTheGame(Sound sound,App app) {
-        this.sound = sound;
+    public settingOutTheGame(App app) {
         setLayout(null);
         // สร้างแผงหลัก
         JPanel panel = new JPanel();    
@@ -50,8 +46,8 @@ class settingOutTheGame extends JPanel{
         musicSlider = Component.createCustomSlider();
         musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
         musicSlider.addChangeListener(e ->{
-                sound.setVolume(musicSlider.getValue()); // เชื่อมต่อกับการเปลี่ยนแปลงค่า
-            });
+            // sound.setVolume(musicSlider.getValue()); // เชื่อมต่อกับการเปลี่ยนแปลงค่า
+        });
 
         music = new JLabel("Music");
         music.setBounds(145, 100, 1000, 50);
