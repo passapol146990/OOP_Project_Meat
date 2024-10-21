@@ -73,8 +73,7 @@ public class Sound {
             clip.stop();
             clip.close();
         }
-    // play sound 
-}
+    }
     public void setVolume(int value) {
         if (clip != null) {
             float volume;
