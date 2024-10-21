@@ -2,15 +2,17 @@ class Run {
     public static void main(String[] args){
         BaseClient baseClient = new BaseClient();
         App app = new App("The Meat",baseClient);
-        PageMenu menu = new PageMenu();
+        PageMenu menu = new PageMenu(app);
         PageStart start = new PageStart(app);
         Sound sound = new Sound();
         PageSeting seting = new PageSeting(sound,app);
+        PageAbout about = new PageAbout(app);
         app.addPanel(menu,"menu");
         app.addPanel(start,"start");
         app.addPanel(seting, "seting");
-        app.showPanel("start");
-        // app.showPanel("menu");
+        app.addPanel(about, "about");
+        // app.showPanel("start");
+        app.showPanel("menu");
         // app.showPanel("seting");
         sound.playmusic();
     }    
