@@ -30,6 +30,7 @@ class Meat extends Thread{
     private String rank_meat = "rare";
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
+    boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
     Meat(){}
     public void run(){
         while (this.meat_on){
@@ -76,15 +77,17 @@ class ClickMeat extends Thread{
         this.meat = meat;
     }
     public void run(){
-        if(this.meat.getSted_meat()==1){
-            while (this.meat.getSted_meat()<7) {
-                this.meat.setSted_meat(this.meat.getSted_meat()+1);
-                try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-            }
-        }else{
-            while (this.meat.getSted_meat()>1) {
-                this.meat.setSted_meat(this.meat.getSted_meat()-1);
-                try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+        if(!this.meat.clickMeat){
+            if(this.meat.getSted_meat()==1){
+                while (this.meat.getSted_meat()<7) {
+                    this.meat.setSted_meat(this.meat.getSted_meat()+1);
+                    try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+                }
+            }else{
+                while (this.meat.getSted_meat()>1) {
+                    this.meat.setSted_meat(this.meat.getSted_meat()-1);
+                    try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+                }
             }
         }
     }
