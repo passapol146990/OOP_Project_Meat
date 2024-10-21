@@ -10,7 +10,6 @@ import java.awt.*;
 
 public class PageStart extends JPanel {
     private App app;
-    private Sound sound;
     private JButton B_setting;
     private JButton B_order;
     private JButton B_shop;
@@ -120,6 +119,7 @@ public class PageStart extends JPanel {
         setLayout(null);
         app.getBaseClient().setTime(300);
         app.getBaseClient().runStartGame();
+        app.getSound().playmusic();
 
         // Meat and plate areas
         meatRect = new Rectangle(402, 160, 400, 300); // Meat size and position
@@ -134,17 +134,110 @@ public class PageStart extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Setting Clicked");
-                JDialog settingsDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Settings", true);
-                settingsDialog.setSize(400, 300); // ขนาดของ dialog
+                // สร้าง popup modal สำหรับการสั่งซื้อ
+                JDialog settingsDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Setting", true);
+                settingsDialog.setSize(400, 250);
                 settingsDialog.setLayout(new BorderLayout());
+                settingsDialog.setUndecorated(true); // ป้องกันการขยับ popup
 
-                // สร้าง instance ของ settingInTheGame
-                 settingInTheGame settingsPanel = new settingInTheGame(sound, app);
-                 settingsDialog.add(settingsPanel, BorderLayout.CENTER); // เพิ่ม settingsPanel ลงใน dialog
+                JLabel orderLabel = new JLabel("Setting", SwingConstants.CENTER);
+                settingsDialog.add(orderLabel, BorderLayout.NORTH);
 
-                 // ตั้งตำแหน่งของ dialog ให้อยู่ตรงกลาง
-                 settingsDialog.setLocationRelativeTo(PageStart.this);
-                 settingsDialog.setVisible(true); // แสดง dialog
+                // สร้าง JPanel สำหรับการตั้งค่า
+                JPanel settingsPanel = new JPanel();
+                settingsPanel.setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.insets = new Insets(10, 10, 10, 10);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+
+                // โหลดไอคอนและปรับขนาดให้พอดี (เช่น 50x50)
+                ImageIcon AmusicIcon = new ImageIcon("./image/music.png");
+                Image musicImage = AmusicIcon.getImage(); // แปลงจาก ImageIcon เป็น Image
+                Image resizedMusicImage = musicImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH); // ปรับขนาด
+
+                // โหลดไอคอน audio และปรับขนาด
+                ImageIcon AaudioIcon = new ImageIcon("./image/volume.png");
+                Image audioImage = AaudioIcon.getImage();
+                Image resizedAudioImage = audioImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+                
+                // Icon สำหรับ Music และ Audio
+                JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage)); // ตั้งค่าเส้นทาง icon ของ music
+                JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage)); // ตั้งค่าเส้นทาง icon ของ audio
+
+                // Slider สำหรับปรับระดับเสียง
+                JSlider musicSlider = new JSlider(0, 100, 50);
+                musicSlider.setForeground(Color.BLUE);
+                musicSlider.addChangeListener(e1 ->{
+                    app.getSound().setVolume(musicSlider.getValue());
+                    System.out.println(musicSlider.getValue());
+                });
+                
+                JSlider audioSlider = new JSlider(0, 100, 50);
+                audioSlider.setForeground(Color.BLUE);
+                audioSlider.addChangeListener(e1 ->{
+                    System.out.println(musicSlider.getValue());
+                });
+                
+                // Labels สำหรับ slider
+                JLabel musicLabel = new JLabel("Music");
+                JLabel audioLabel = new JLabel("Audio");
+
+                // ปุ่มสำหรับย้อนกลับ
+                JButton backToGameButton = new JButton("Back to the Game");
+                JButton backToMenuButton = new JButton("Back to the Menu");
+
+                // เพิ่ม Music Icon และ Slider
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                settingsPanel.add(musicIcon, gbc);
+                
+                gbc.gridx = 1;
+                gbc.gridy = 0;
+                settingsPanel.add(musicLabel, gbc);
+                
+                gbc.gridx = 0;
+                gbc.gridy = 1;
+                gbc.gridwidth = 2;
+                settingsPanel.add(musicSlider, gbc);
+
+                // เพิ่ม Audio Icon และ Slider
+                gbc.gridx = 0;
+                gbc.gridy = 2;
+                gbc.gridwidth = 1;
+                settingsPanel.add(audioIcon, gbc);
+                
+                gbc.gridx = 1;
+                gbc.gridy = 2;
+                settingsPanel.add(audioLabel, gbc);
+                
+                gbc.gridx = 0;
+                gbc.gridy = 3;
+                gbc.gridwidth = 2;
+                settingsPanel.add(audioSlider, gbc);
+
+                // เพิ่มปุ่มกลับ
+                gbc.gridx = 0;
+                gbc.gridy = 4;
+                gbc.gridwidth = 1;
+                settingsPanel.add(backToGameButton, gbc);
+                backToGameButton.addActionListener(e1 -> settingsDialog.dispose());
+                
+                gbc.gridx = 1;
+                gbc.gridy = 4;
+                settingsPanel.add(backToMenuButton, gbc);
+                backToMenuButton.addActionListener(e1 -> {
+                    // ปิด JDialog
+                    settingsDialog.dispose(); 
+                    // เปลี่ยนไปยังหน้าต่างเมนู
+                    app.showPanel("menu");
+                });
+
+                // เพิ่ม settingsPanel ลงใน JFrame
+                settingsDialog.add(settingsPanel);
+
+                // ตั้ง popup ให้อยู่ตรงกลาง
+                settingsDialog.setLocationRelativeTo(PageStart.this);
+                settingsDialog.setVisible(true);
             }
         });
         add(B_setting);

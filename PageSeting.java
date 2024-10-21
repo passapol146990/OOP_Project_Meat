@@ -18,7 +18,6 @@ public class PageSeting extends JPanel{
     }
 }
 
-
 class settingOutTheGame extends JPanel{
     private JSlider musicSlider;
     private JSlider audioSlider;
@@ -89,32 +88,31 @@ class settingOutTheGame extends JPanel{
 }
 
 class settingInTheGame extends JPanel{
-     private JSlider musicSlider;
-     private JSlider audioSlider;
-     private JLabel music;
-     private JLabel audio;
-     private Sound sound;
+    private JSlider musicSlider;
+    private JSlider audioSlider;
+    private JLabel music;
+    private JLabel audio;
+    private Sound sound;
 
-     public settingInTheGame(Sound sound,App app) {
+    public settingInTheGame(Sound sound,App app) {
         this.sound = sound;
         setLayout(null);
-
-         // สร้างแผงหลัก
+        // สร้างแผงหลัก
         JPanel panel = new JPanel();
         panel.setLayout(null);
-        panel.setBounds(170, 180, 900, 420);
+        panel.setBounds(500, 500, 100, 100);
         panel.setBackground(new Color(85, 85, 85));
 
-    //      //สร้างปุ่ม "Back to the game"
-          JButton backGameButton = Component.createCustomRoundedButton("Back to the game", Color.pink);
-          backGameButton.setBounds(200,530,300,50);
-          backGameButton.addActionListener(new ActionListener() {
+        //สร้างปุ่ม "Back to the game"
+        JButton backGameButton = Component.createCustomRoundedButton("Back to the game", Color.pink);
+        backGameButton.setBounds(200,530,300,50);
+        backGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.showPanel("start");
             }
         });
-          add(backGameButton);
+        add(backGameButton);
 
          // สร้างปุ่ม "Back to the menu"
          JButton backButton = Component.createCustomRoundedButton("Back to the menu", Color.pink);
@@ -129,28 +127,26 @@ class settingInTheGame extends JPanel{
                 }
             }
         });
-         add(backButton);
-
-
+        add(backButton);
         // สร้าง JSlider สำหรับ music และ audio
-            musicSlider = Component.createCustomSlider();
-            musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
-            musicSlider.addChangeListener(e ->{
+        musicSlider = Component.createCustomSlider();
+        musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
+        musicSlider.addChangeListener(e ->{
             sound.setVolume(musicSlider.getValue()); // เชื่อมต่อกับการเปลี่ยนแปลงค่า
             System.out.println(musicSlider.getValue());
-             });
-         music = new JLabel("Music");
-         music.setBounds(150, 100, 1000, 50);
-         music.setFont(new Font("Courier New", Font.BOLD, 50));
+        });
+        music = new JLabel("Music");
+        music.setBounds(150, 100, 1000, 50);
+        music.setFont(new Font("Courier New", Font.BOLD, 50));
 
-         audioSlider = Component.createCustomSlider();
-         audioSlider.setBounds(300, 250, 500, 50);
+        audioSlider = Component.createCustomSlider();
+        audioSlider.setBounds(300, 250, 500, 50);
+    
+        audio = new JLabel("Audio");
+        audio.setBounds(150, 250, 1000, 50);
+        audio.setFont(new Font("Courier New", Font.BOLD, 50));
         
-         audio = new JLabel("Audio");
-         audio.setBounds(150, 250, 1000, 50);
-         audio.setFont(new Font("Courier New", Font.BOLD, 50));
-         
-         ImageIcon Music = new ImageIcon("./image/music.png");
+        ImageIcon Music = new ImageIcon("./image/music.png");
         JLabel musicIcon = new JLabel(new ImageIcon(Music.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         musicIcon.setBounds(50, 100, 50, 50);
         
@@ -164,21 +160,17 @@ class settingInTheGame extends JPanel{
         panel.add(audioSlider);
         panel.add(audio);
         panel.add(volumeIcon); // เพิ่มไอคอนลงใน panel
-         add(panel);
- 
+        add(panel);
          // กำหนดขนาด panel
-         setPreferredSize(new Dimension(1200, 800));
-        }
-        
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            
-            // วาดพื้นหลังและไอคอน
-            ImageIcon icon = new ImageIcon("./image/bg-start.png");
-            g.drawImage(icon.getImage(), 0, 0, this);
-
-         ImageIcon bannerIcon = new ImageIcon("./image/BannerSeting.png");
-         g.drawImage(bannerIcon.getImage(), 300, 0, this);
-     }
- }
+        // setPreferredSize(new Dimension(1200, 800));
+    }
+    // @Override
+    // public void paintComponent(Graphics g) {
+    //     super.paintComponent(g);
+    //     // วาดพื้นหลังและไอคอน
+    //     ImageIcon icon = new ImageIcon("./image/bg-start.png");
+    //     g.drawImage(icon.getImage(), 0, 0, this);
+    //     ImageIcon bannerIcon = new ImageIcon("./image/BannerSeting.png");
+    //     g.drawImage(bannerIcon.getImage(), 300, 0, this);
+    // }
+}
