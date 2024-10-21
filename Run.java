@@ -4,15 +4,12 @@ class Run {
         App app = new App("The Meat",baseClient);
         PageMenu menu = new PageMenu(app);
         PageStart start = new PageStart(app);
-        PageSeting seting = new PageSeting(app);
-        PageAbout about = new PageAbout(app);
-        PageLobby lobby = new PageLobby(app);
-        app.addPanel(lobby, "lobby");
+        // PageSeting seting = new PageSeting(sound,app);
         app.addPanel(menu,"menu");
         app.addPanel(start,"start");
-        app.addPanel(seting, "seting");
-        app.addPanel(about, "about");
-        app.showPanel("lobby");
-        
+        // app.addPanel(seting, "seting");
+        app.showPanel("start");
+        // app.showPanel("menu");
+        // app.showPanel("seting");
     }    
 }

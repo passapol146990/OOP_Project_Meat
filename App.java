@@ -13,6 +13,7 @@ public class App extends JFrame{
     private PageSeting pageSeting;
     private PageAbout pageAbout;
     private BaseClient baseClient;
+    private Sound sound = new Sound();
     App(String title,BaseClient baseClient){
         this.baseClient = baseClient;
         this.cardLayout = new CardLayout();
@@ -42,6 +43,9 @@ public class App extends JFrame{
     }
     void setPageAboutClass(PageAbout page){
         this.pageAbout = page;
+    }
+    Sound getSound(){
+        return this.sound;
     }
     // PageAbout getPageAbout(){
     //     return this.pageAbout;
