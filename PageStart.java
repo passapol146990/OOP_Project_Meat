@@ -1,4 +1,33 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.BorderLayout;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import java.awt.image.BufferedImage;
+
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -153,22 +182,54 @@ public class PageStart extends JPanel {
         B_shop.setBounds(0, 140, 50, 50);
         B_shop.setOpaque(false);
         B_shop.setBorderPainted(false);
-        B_shop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Shop Clicked");
-                if(app.getBaseClient().getMoney()<=0){
-                    System.out.println("คุณมีเงิน "+app.getBaseClient().getMoney()+" ไม่สามารถซื้อเนื้อมาทำอาหารได้");
-                }else{
-                    app.getBaseClient().newMeat();
-                    app.getBaseClient().delMoney(50);
-                    // Meat and plate areas
-                    meatRect = new Rectangle(402, 160, 400, 300); // Meat size and position
-                    plateRect = new Rectangle(1000, -50, 100, 100); // Plate size and position
-                }
-            }
+        B_shop.addActionListener(e -> {
+            
+                // popup ร้านค้า            
+                JDialog shopDialog = new JDialog( (JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Shop",true);
+                shopDialog.setSize(800,470);
+                shopDialog.setLayout(new BorderLayout());
+                shopDialog.setUndecorated(true);//กันการขยับ popup
+
+                //พาแนลแสดงสินค้า
+                JPanel productPanel = new JPanel(new GridLayout(1,3,10,10));
+                productPanel.setBackground(Color.LIGHT_GRAY);
+            
+
+                //สินค้า 1
+                JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", "50$");
+                meatPanel.setPreferredSize(new Dimension(235,150));;
+                
+                productPanel.add(meatPanel);
+
+                // วากิว
+                JPanel wagyuPanel = createProductPanel("./image/meat7.png", "วากิว", "105$");
+                wagyuPanel.setPreferredSize(new Dimension(235,150));
+                productPanel.add(wagyuPanel);
+
+                // สันกลาง
+                JPanel ribeyePanel = createProductPanel("./image/medium rare-shadow.png", "สันกลาง", "90$");
+                ribeyePanel.setPreferredSize(new Dimension(235,150));
+                productPanel.add(ribeyePanel);
+
+
+                //ปุ่ม back
+                JButton backButton = new JButton("Back");
+                
+                backButton.addActionListener(e1 -> shopDialog.dispose());
+
+                // ตั้ง layout และเพิ่มเนื้อหา
+                shopDialog.add(productPanel, BorderLayout.CENTER);
+                shopDialog.add(backButton, BorderLayout.SOUTH);
+
+                //ตั้งpopup ให้อยู่ตรงกลาง
+                shopDialog.setLocationRelativeTo(PageStart.this);
+                shopDialog.setVisible(true);
+
+                
+            
         });
         add(B_shop);
+    
 
         
         runRepaint = new RunRepaint(this); 
@@ -252,7 +313,7 @@ public class PageStart extends JPanel {
             g.drawImage(icon_meat.getImage(), meatRect.x, meatRect.y, 500, 382, this);
         }
     }
-}
+
 class RunRepaint extends Thread{
     private boolean status = true;
     private JPanel panel;
@@ -276,5 +337,49 @@ class RunRepaint extends Thread{
     void kill(){
         this.status = false;
     }
+    
 }
+private JPanel createProductPanel(String imagePath, String productName, String price){
+JPanel panel = new JPanel();
+panel.setLayout(new BorderLayout());
 
+//เพิ่มรูป
+JLabel imagLabel = new JLabel();
+try {
+        // Load the original image
+        BufferedImage originalImage = ImageIO.read(new File(imagePath));
+        
+        // Resize the image (adjust the width and height as needed, e.g., 150x150)
+        Image resizedImage = originalImage.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+        
+        // Create ImageIcon using the resized image
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        
+        // Add the resized image to the JLabel
+        imagLabel.setIcon(resizedIcon);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    imagLabel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e){
+            System.out.println("Image clicked"+ productName);
+        }
+    });
+
+    // Add the JLabel containing the image to the panel
+    panel.add(imagLabel, BorderLayout.CENTER);
+
+    //ชื่อสินค้าและราคา
+    JLabel namLabel = new JLabel(productName, SwingConstants.CENTER);
+    JLabel pricLabel = new JLabel(price, SwingUtilities.CENTER);
+    pricLabel.setForeground(Color.GREEN);
+
+    JPanel textPanel = new JPanel(new GridLayout(2,1));
+    textPanel.add(namLabel);
+    textPanel.add(pricLabel);
+
+    panel.add(textPanel, BorderLayout.SOUTH);
+    return panel;
+}
+}
