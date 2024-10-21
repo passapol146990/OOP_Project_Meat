@@ -1,10 +1,14 @@
 import java.io.File;
+import java.io.IOException;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
     private Clip clip;
@@ -41,24 +45,27 @@ public class Sound {
         }
     }
 
-public class Sound {
-    private Clip clip;
-
     // โหลดเสียง
     public void playmusic(){
-        try {
             loadSound("./Sound/tvari-tokyo-cafe-159065.wav");
             play();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-        
     }
 
-    public void loadSound(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
-        clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
+    public void loadSound(String filePath){
+        AudioInputStream audioInputStream;
+        try {
+            audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
+            try {
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+            } catch (LineUnavailableException e) {
+                
+                e.printStackTrace();
+            }
+        } catch (UnsupportedAudioFileException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     // เล่นเสียง

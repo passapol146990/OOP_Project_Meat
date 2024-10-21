@@ -258,24 +258,6 @@ class RunRepaint extends Thread{
     private JPanel panel;
     private boolean isRunning = true;
     private Sound grillSound;  // เรียกไปยัง class sound
-
-    public MeatThread(JPanel panel, Rectangle meatRect) {
-        this.panel = panel;
-        this.meatRect = meatRect;
-        grillSound = new Sound();
-    }
-
-    @Override
-    public void run() {
-        grillSound.playGrillSound();  //เริ่มเล่นเสียงงง
-
-        while (isRunning) {
-            try {
-                Thread.sleep(16); 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            panel.repaint(); 
     RunRepaint(JPanel panel){
         this.panel = panel;
     }
@@ -291,9 +273,8 @@ class RunRepaint extends Thread{
     public void stopRunning() {
         isRunning = false;  //หยุดการทำงาน thread
     }
-}
-
     void kill(){
         this.status = false;
     }
 }
+
