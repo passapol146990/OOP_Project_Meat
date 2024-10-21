@@ -12,10 +12,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
     private Clip clip;
-
-    public Sound() {
-    }
-
     public void playGrillSound() {
         try {
             File audioFile = new File(System.getProperty("user.dir") + File.separator + "./sound/meat_audio.wav");
@@ -38,19 +34,16 @@ public class Sound {
             e.printStackTrace();
         }
     }
-
     public void stopSound() {
         if (clip != null && clip.isRunning()) {
             clip.stop();  // Stop the clip if it's running
         }
     }
-
     // โหลดเสียง
     public void playmusic(){
             loadSound("./Sound/tvari-tokyo-cafe-159065.wav");
             play();
     }
-
     public void loadSound(String filePath){
         AudioInputStream audioInputStream;
         try {
@@ -82,24 +75,25 @@ public class Sound {
             clip.stop();
             clip.close();
         }
+    // play sound 
 }
     public void setVolume(int value) {
-    if (clip != null) {
-        float volume;
-        FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        if(value == 0)
-        {
-            clip.stop(); // หยุดเสียง
-            volumeControl.setValue(-80.0f);
-        }
-        else{
-        volume = (float) (value - 100) * 0.5f;
-        volumeControl.setValue(volume); // ปรับระดับเสียง
-        if (!clip.isRunning()) {
-            clip.start(); // เริ่มเสียงถ้าหยุด
-        }
+        if (clip != null) {
+            float volume;
+            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            if(value == 0)
+            {
+                clip.stop(); // หยุดเสียง
+                volumeControl.setValue(-80.0f);
+            }
+            else{
+            volume = (float) (value - 100) * 0.5f;
+            volumeControl.setValue(volume); // ปรับระดับเสียง
+            if (!clip.isRunning()) {
+                clip.start(); // เริ่มเสียงถ้าหยุด
+            }
+            }
         }
     }
-}
 }
 
