@@ -7,12 +7,12 @@ import javax.swing.*;
 
 public class PageSeting extends JPanel{
     private Sound sound;
-
-    public PageSeting(Sound sound) {
+    private App app;
+    public PageSeting(Sound sound,App app) {
         this.sound = sound;
         setSize(1200, 800);
         setLayout(new BorderLayout());
-        settingOutTheGame settingPanel = new settingOutTheGame(sound);
+        settingOutTheGame settingPanel = new settingOutTheGame(sound,app);
         add(settingPanel, BorderLayout.CENTER);
         setVisible(true);   
     }
@@ -25,8 +25,8 @@ class settingOutTheGame extends JPanel{
     private JLabel music;
     private JLabel audio;
     private Sound sound;
-
-    public settingOutTheGame(Sound sound) {
+    private App app;
+    public settingOutTheGame(Sound sound,App app) {
         this.sound = sound;
         setLayout(null);
         // สร้างแผงหลัก
@@ -38,6 +38,12 @@ class settingOutTheGame extends JPanel{
         // สร้างปุ่ม "Back to the menu"
         JButton backButton = Component.createCustomRoundedButton("Back to the menu", Color.pink);
         backButton.setBounds(480, 530, 300, 50);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.showPanel("menu");
+            }
+        });
         add(backButton);
 
         // สร้าง JSlider สำหรับ music และ audio
