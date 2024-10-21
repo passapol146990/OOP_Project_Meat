@@ -12,7 +12,9 @@ public class App extends JFrame{
     private PageStart pageStart;
     private PageSeting pageSeting;
     private PageAbout pageAbout;
-    App(String title){
+    private BaseClient baseClient;
+    App(String title,BaseClient baseClient){
+        this.baseClient = baseClient;
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(cardLayout);
         setTitle(title);
@@ -22,6 +24,7 @@ public class App extends JFrame{
         add(this.mainPanel);
         setVisible(true);
     }
+    BaseClient getBaseClient(){return this.baseClient;}
     void addPanel(JPanel panel,String path){
         this.mainPanel.add(panel, path);
     }
