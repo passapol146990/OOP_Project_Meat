@@ -10,100 +10,87 @@ public class PageMenu extends JPanel {
     
     PageMenu(App app) {
         this.app = app;
+        // สร้าง JPanel และตั้ง Layout แบบ GridBagLayout
+        setBackground(Color.DARK_GRAY);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // ขยายช่องว่างระหว่างปุ่ม
-        
-        // ช่องสำหรับใส่ IP
-        JLabel ipLabel = new JLabel("Server IP:");
-        ipLabel.setForeground(Color.WHITE); // เปลี่ยนสีตัวหนังสือเป็นสีขาว
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.EAST; // จัดให้ชิดขวา
-        add(ipLabel, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0); // ตั้งค่า margin ระหว่างองค์ประกอบ
+        gbc.anchor = GridBagConstraints.CENTER; // จัดตำแหน่งให้อยู่ตรงกลาง
 
-        ipField = new JTextField(15);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST; // จัดให้ชิดซ้าย
+        // สร้างหัวข้อเกม
+        // JLabel gameLabel = new JLabel("Game");
+        // gameLabel.setForeground(Color.WHITE);
+        // gameLabel.setFont(new Font("Serif", Font.BOLD, 80));
+        // gbc.gridx = 0;
+        // gbc.gridy = 0;
+        // gbc.gridwidth = 2; // ขยายองค์ประกอบให้เต็มความกว้าง
+        // add(gameLabel, gbc);
+
+        // แสดง IP Address
+        JTextField ipField = new JTextField("172.16.0.191");
+        ipField.setHorizontalAlignment(JTextField.CENTER);
+        ipField.setBackground(Color.LIGHT_GRAY);
+        ipField.setForeground(Color.BLACK);
+        ipField.setPreferredSize(new Dimension(200, 30)); // ปรับขนาดช่องกรอก
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
         add(ipField, gbc);
 
-        // ช่องสำหรับใส่ชื่อร้าน
-        JLabel storeNameLabel = new JLabel("Store Name:");
-        storeNameLabel.setForeground(Color.WHITE); // เปลี่ยนสีตัวหนังสือเป็นสีขาว
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.EAST;
-        add(storeNameLabel, gbc);
-
-        storeNameField = new JTextField(15);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(storeNameField, gbc);
-
-        // ปุ่มเข้าสู่เกม
-        JButton loginButton = new JButton("Start");
-        gbc.gridx = 1;
+        // สร้างช่องกรอกชื่อ
+        JTextField nameField = new JTextField("ตั้งชื่อร้านของคุณ");
+        nameField.setFont(new Font("Tahoma", Font.BOLD, 14));
+        nameField.setHorizontalAlignment(JTextField.CENTER);
+        nameField.setBackground(Color.LIGHT_GRAY);
+        nameField.setForeground(Color.BLACK);
+        nameField.setPreferredSize(new Dimension(200, 30)); // ปรับขนาดช่องกรอก
         gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.CENTER; // จัดให้ตรงกลาง
-        loginButton.setPreferredSize(new Dimension(120, 40)); // กำหนดขนาดปุ่ม
-        add(loginButton, gbc);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String ip = ipField.getText();
-                String storeName = storeNameField.getText();
-                app.showPanel("start");
-            }
-        });
+        gbc.gridwidth = 2;
+        add(nameField, gbc);
 
-        // ปุ่ม Setting
+        // สร้างปุ่มและตั้งค่า GridBagConstraints ให้ปุ่มอยู่ตรงกลาง
+        JButton startButton = new JButton("Start");
         JButton settingButton = new JButton("Setting");
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        settingButton.setPreferredSize(new Dimension(120, 40));
-        add(settingButton, gbc);
-        settingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.showPanel("seting");
-            }
-        });
-
-        // ปุ่ม About
         JButton aboutButton = new JButton("About");
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        aboutButton.setPreferredSize(new Dimension(120, 40));
-        add(aboutButton, gbc);
-        aboutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.showPanel("about");
-            }
-        });
-
-        // ปุ่ม Exit
         JButton exitButton = new JButton("Exit");
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        exitButton.setPreferredSize(new Dimension(120, 40));
-        add(exitButton, gbc);
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
+
+        // ปรับขนาดปุ่ม
+        Dimension buttonSize = new Dimension(200, 40);
+        startButton.setPreferredSize(buttonSize);
+        settingButton.setPreferredSize(buttonSize);
+        aboutButton.setPreferredSize(buttonSize);
+        exitButton.setPreferredSize(buttonSize);
+
+        startButton.addActionListener(e->{
+            app.getBaseClient().setNameShop(nameField.getText());
+            ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
+            conn.start();
         });
+        settingButton.addActionListener(e->app.showPanel("seting"));
+        aboutButton.addActionListener(e->app.showPanel("about"));
+        exitButton.addActionListener(e->System.exit(0));
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        add(startButton, gbc);
+
+        gbc.gridy = 4;
+        add(settingButton, gbc);
+
+        gbc.gridy = 5;
+        add(aboutButton, gbc);
+
+        gbc.gridy = 6;
+        add(exitButton, gbc);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ImageIcon icon = new ImageIcon("./image/gif.gif");
+        ImageIcon bg = new ImageIcon("./image/gif.gif");
         ImageIcon plate = new ImageIcon("./image/plate.png");
-        g.drawImage(icon.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
-        g.drawImage(plate.getImage(), 50, -200, this.getWidth(), this.getHeight(), this);
+        g.drawImage(bg.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(plate.getImage(), 0, -200, this.getWidth(), this.getHeight(), this);
     }
 }

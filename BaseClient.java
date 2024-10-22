@@ -5,6 +5,8 @@ public class BaseClient{
     private Meat meat=null;
     private int time = 0;
     boolean statusCountTime = false;
+    boolean statusConnectServer = false;
+    private String nameShop;
     
     BaseClient(){}
     void newMeat(String type){
@@ -33,8 +35,9 @@ public class BaseClient{
         CountTime runTime = new CountTime(this);
         runTime.start();
     }
+    String getNameShop(){return this.nameShop;}
+    void setNameShop(String name ){this.nameShop = name;}
 }
-
 class Meat extends Thread{
     private int temp=0;
     private int meat_left = 0;
