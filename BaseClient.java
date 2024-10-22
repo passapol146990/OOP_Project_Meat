@@ -40,7 +40,7 @@ class Meat extends Thread{
     private int meat_left = 0;
     private int meat_rigth = 0;
     private boolean meat_on = true;
-    private String type_meat = "01";
+    private String type_meat;
     private String rank_meat = "rare";
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
@@ -48,6 +48,14 @@ class Meat extends Thread{
     Meat(String type){
         if(type=="เนื้อวัว"){
             this.type_meat = "01";
+        }
+        else if(type=="เนื้อวากิว"){
+            this.type_meat = "02";
+        }
+        else if(type=="เนื้อสันกลาง"){
+            this.type_meat = "03";
+        }else{
+            System.out.println("ไม่มีเนื้อ");
         }
     }
 
