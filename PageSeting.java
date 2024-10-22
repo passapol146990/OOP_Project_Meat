@@ -28,7 +28,7 @@ class settingOutTheGame extends JPanel{
         JPanel panel = new JPanel();    
         panel.setLayout(null);
         panel.setBounds(170, 180, 911, 420);
-        panel.setBackground(new Color(85,85,85));
+        panel.setBackground(new Color(	217, 217, 217));
 
         // สร้างปุ่ม "Back to the menu"
         JButton backButton = Component.createCustomRoundedButton("Back to the menu", Color.pink);
