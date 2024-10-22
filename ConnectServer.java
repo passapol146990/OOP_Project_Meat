@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -29,21 +30,57 @@ public class ConnectServer extends Thread{
         }
     }
 }
-class OpenPortClient extends Thread{
+class OpenPortClient_out_Game extends Thread{
     private App app;
     private int port;
     private String ip;
-    OpenPortClient(App app, String ip, int port){
+    OpenPortClient_out_Game(App app, String ip, int port){
         this.app = app;
         this.ip = ip;
         this.port = port;
     }
+    @SuppressWarnings("resource")
     public void run(){
-        while (true) {
+        ServerSocket serverSocket;
+        while(true){
             try{
-                ServerSocket server = new ServerSocket(3333);
-                server.accept();
-            }catch(IOException e){}
+                serverSocket = new ServerSocket(this.port);
+                Socket socket = serverSocket.accept();
+                ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
+                BaseClient baseClient = (BaseClient) req.readObject();
+                req.close();
+                socket.close();
+                try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+class OpenPortClient_in_Game extends Thread{
+    private App app;
+    private int port;
+    private String ip;
+    OpenPortClient_in_Game(App app, String ip, int port){
+        this.app = app;
+        this.ip = ip;
+        this.port = port;
+    }
+    @SuppressWarnings("resource")
+    public void run(){
+        ServerSocket serverSocket;
+        while(true){
+            try{
+                serverSocket = new ServerSocket(this.port);
+                Socket socket = serverSocket.accept();
+                ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
+                BaseClient baseClient = (BaseClient) req.readObject();
+                req.close();
+                socket.close();
+                try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
