@@ -63,6 +63,7 @@ public class PageMenu extends JPanel {
 
         startButton.addActionListener(e->{
             app.getBaseClient().setNameShop(nameField.getText());
+            app.getBaseClient().statusConnectServer = true;
             ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
             conn.start();
         });

@@ -13,16 +13,31 @@ public class ConnectServer extends Thread{
         this.port = port;
     }
     public void run(){
-        Socket socket;
+        System.out.println("Connect Server : "+this.ip+" "+this.port);
         try{
-            socket = new Socket(this.ip, this.port);
-            ObjectOutputStream send = new ObjectOutputStream(socket);
-            socket.close();
-        }catch(IOException e){e.printStackTrace();}
+            while (this.app.getBaseClient().statusConnectServer) {
+                Socket socket = new Socket(this.ip,this.port);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(this.app.getBaseClient());
+                out.close();
+                socket.close();
+                try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
+            }
+        } catch (Exception e) {
+            System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
+            this.app.getBaseClient().statusConnectServer = false;
+        }
     }
 }
 class OpenPortClient extends Thread{
-    OpenPortClient(){}
+    private App app;
+    private int port;
+    private String ip;
+    OpenPortClient(App app, String ip, int port){
+        this.app = app;
+        this.ip = ip;
+        this.port = port;
+    }
     public void run(){
         while (true) {
             try{
