@@ -40,7 +40,7 @@ class Meat extends Thread{
     private int meat_left = 0;
     private int meat_rigth = 0;
     private boolean meat_on = true;
-    private String type_meat = "01";
+    private String type_meat = "001";
     private String rank_meat = "rare";
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
