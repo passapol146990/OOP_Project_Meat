@@ -43,6 +43,8 @@ public class PageStart extends JPanel {
                 public void mouseClicked(MouseEvent e){
                     System.out.println("Image clicked"+ productName);
                     app.getBaseClient().newMeat(productName);
+                    meatRect = new Rectangle(402, 160, 400, 300);
+                    
                 }
             });
     
@@ -309,18 +311,19 @@ public class PageStart extends JPanel {
 
             //สินค้า 1
             JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", "50$");
-            meatPanel.setPreferredSize(new Dimension(235,150));;
+            meatPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             
             productPanel.add(meatPanel);
 
             // วากิว
-            JPanel wagyuPanel = createProductPanel("./image/meat7.png", "วากิว", "105$");
-            wagyuPanel.setPreferredSize(new Dimension(235,150));
+            JPanel wagyuPanel = createProductPanel("./image/wagyuu.png", "เนื้อวากิว", "105$");
+            wagyuPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             productPanel.add(wagyuPanel);
 
             // สันกลาง
-            JPanel ribeyePanel = createProductPanel("./image/medium rare-shadow.png", "สันกลาง", "90$");
+            JPanel ribeyePanel = createProductPanel("./image/sungarng.png", "เนื้อสันกลาง", "90$");
             ribeyePanel.setPreferredSize(new Dimension(235,150));
+            ribeyePanel.setLocation(meatRect.x, meatRect.y);
             productPanel.add(ribeyePanel);
 
 
