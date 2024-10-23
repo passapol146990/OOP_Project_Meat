@@ -18,6 +18,7 @@ public class PageStart extends JPanel {
     private RunRepaint runRepaint;
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
+    private  JDialog orderShow;
     private JPanel createProductPanel(String imagePath, String productName, String price){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -272,6 +273,25 @@ public class PageStart extends JPanel {
                 for(int order_count = 0;order_count<5;order_count++){
                     // สินค้า
                     JPanel item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
+                    item1.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+                                orderShow.setBounds(825, 75, 495, 80);
+                                orderShow.setLayout(new BorderLayout());
+                                orderShow.setUndecorated(true);
+                                JPanel contentPanel = new JPanel();
+                                contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
+                                contentPanel.setLayout(new BorderLayout());
+
+                                // เพิ่ม item1 เข้าไปใน contentPanel
+                                contentPanel.add(item1, BorderLayout.CENTER);
+
+                                // เพิ่ม contentPanel เข้าไปใน JDialog
+                                orderShow.setContentPane(contentPanel);
+                                orderShow.setVisible(true);
+                            }
+                    });
                     productPanel.add(item1);
                 }
                 // ปุ่ม back
@@ -372,6 +392,7 @@ public class PageStart extends JPanel {
                     if (meatRect.intersects(plateRect)) {
                         app.getBaseClient().getMeat().kill();
                         System.out.println("Finish! Meat on Dish.");
+                        orderShow.dispose();
                     }
                     else{
                         meatRect.x = 402;
