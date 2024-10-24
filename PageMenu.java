@@ -67,7 +67,7 @@ public class PageMenu extends JPanel {
                 app.getBaseClient().statusConnectServer = true;
                 ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
                 conn.start();
-                OpenPortClient_out_Game open_client = new OpenPortClient_out_Game(app,33344);
+                OpenPortClient_out_Game open_client = new OpenPortClient_out_Game(app,3344);
                 open_client.start();
             }
         });
@@ -99,3 +99,6 @@ public class PageMenu extends JPanel {
         g.drawImage(plate.getImage(), 0, -200, this.getWidth(), this.getHeight(), this);
     }
 }
+
+
+

@@ -45,11 +45,11 @@ class OpenPortClient_out_Game extends Thread{
                 serverSocket = new ServerSocket(this.port);
                 Socket socket = serverSocket.accept();
                 ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
-                BaseClient baseClient = (BaseClient) req.readObject();
+                // BaseClient baseClient = (BaseClient) req.readObject();
                 req.close();
                 socket.close();
                 try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -82,3 +82,6 @@ class OpenPortClient_in_Game extends Thread{
         }
     }
 }
+
+
+

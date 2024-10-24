@@ -34,21 +34,6 @@ class Server extends Thread{
         }
     }
 }
-class Countdown extends Thread {
-    BaseServer baseServer;
-    Countdown(BaseServer baseServer){
-        this.baseServer = baseServer;
-    }
-    public void run(){
-        while (this.baseServer.getTime() >= 0.0){
-            try{
-                this.baseServer.setTime(this.baseServer.getTime()-1);
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {throw new RuntimeException(e);}
-        }
-        // System.out.println("หยุดทำงาน");
-    }
-}
 class ServerRoby extends Thread{
     private ServerSocket serverSocket;
     private BaseServer baseServer;
@@ -64,14 +49,15 @@ class ServerRoby extends Thread{
                 String ipAddress = socket.getInetAddress().getHostAddress();
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 BaseClient baseClient = (BaseClient) in.readObject();
-                this.baseServer.setUser(baseClient, ipAddress);
-                if(this.baseServer.getUser().get(ipAddress)==null){
-                    SendClient send = new SendClient(ipAddress, baseServer);
-                    send.start();
+                if(this.baseServer.controller_client.get(ipAddress)==null){
+                    this.baseServer.setUser(baseClient, ipAddress);
+                    this.baseServer.controller_client.put(ipAddress, true);
+                    Controller_client control = new Controller_client(ipAddress,3344,this.baseServer);
+                    control.start();
                 }
                 in.close();
                 socket.close();
-                try {Thread.sleep(10);} catch (InterruptedException e) {throw new RuntimeException(e);}
+                try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -80,16 +66,30 @@ class ServerRoby extends Thread{
         }
     }
 }
+class Controller_client extends Thread{
+    private String ip;
+    private int port;
+    private BaseServer baseServer;
+    Controller_client(String ip, int port, BaseServer base){
+        this.ip = ip;
+        this.port = port;
+        this.baseServer = base;
+    }
+    public void run(){
+        System.out.println("Controller_client "+this.ip);
+        
+    }
+}
 class ResponseServerRoby implements Serializable{
-    private HashMap<String,BaseClient> data;
-    ResponseServerRoby(HashMap<String,BaseClient> data){
+    private HashMap<String,String> data;
+    ResponseServerRoby(HashMap<String,String> data){
         this.data = data;
     }
     ArrayList<String> getUsernameInRoby(){
         ArrayList<String> user = new ArrayList<String>();
-        for(String i : this.data.keySet()){
-            user.add(this.data.get(i).getName());
-        }
+        // for(String i : this.data.keySet()){
+        //     user.add(this.data.get(i).getName());
+        // }
         return user;
     }
 }
@@ -103,22 +103,22 @@ class ServerStartGamer extends Thread{
         this.baseClient = client;
     }
     public void run(){
-        while (this.baseClient.getStatusPlayGame()) {
-            if(this.baseServer.getTime()<=0){
-                this.baseClient.setStatusPlayGame(false);
-            }
-            try{
-                this.baseClient.setTime(this.baseServer.getTime());
-                Socket socket = new Socket(this.ipAddress,this.baseClient.getPortServerClient());
-                ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-                send.writeObject(this.baseClient);
-                send.flush();
+        // while (this.baseClient.getStatusPlayGame()) {
+        //     if(this.baseServer.getTime()<=0){
+        //         this.baseClient.setStatusPlayGame(false);
+        //     }
+        //     try{
+        //         this.baseClient.setTime(this.baseServer.getTime());
+        //         Socket socket = new Socket(this.ipAddress,this.baseClient.getPortServerClient());
+        //         ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
+        //         send.writeObject(this.baseClient);
+        //         send.flush();
 
-                send.close();
-                socket.close();
-            } catch (Exception e) {System.out.println(e);}
-            try {Thread.sleep(10);} catch (Exception e) {}
-        }
+        //         send.close();
+        //         socket.close();
+        //     } catch (Exception e) {System.out.println(e);}
+        //     try {Thread.sleep(10);} catch (Exception e) {}
+        // }
     }
 }
 class SendClient extends Thread{
@@ -132,18 +132,18 @@ class SendClient extends Thread{
     }
     public void run(){
         // ResultServer
-        while (this.statusSend) {
-            try{
-                Socket socket = new Socket(this.userip,this.userport);
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                out.writeObject(new ResponseServerRoby(this.baseServer.getUser()));
-                out.close();
-                socket.close();
-            }catch(IOException e){
-                System.out.println(e);
-                this.statusSend = false;
-            }
-        }
-        System.out.println(this.userip+" ไม่สามารถเชื่อมต่อได้");
+        // while (this.statusSend) {
+        //     try{
+        //         Socket socket = new Socket(this.userip,this.userport);
+        //         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        //         out.writeObject(new ResponseServerRoby(this.baseServer.getUser()));
+        //         out.close();
+        //         socket.close();
+        //     }catch(IOException e){
+        //         System.out.println(e);
+        //         this.statusSend = false;
+        //     }
+        // }
+        // System.out.println(this.userip+" ไม่สามารถเชื่อมต่อได้");
     }
 }
