@@ -63,22 +63,22 @@ class Meat extends Thread{
         while (this.meat_on){
             if(this.sted_meat==1){
                 this.meat_left += new Random().nextInt(1,5);
-                if(this.meat_rigth>200*100){
+                if(this.meat_rigth>200*10){
                     this.rank_meat = "over_cook";
-                }else if(this.meat_rigth>130*100){
+                }else if(this.meat_rigth>130*10){
                     this.rank_meat = "medium_well";
-                }else if(this.meat_rigth>70*100){
+                }else if(this.meat_rigth>70*10){
                     this.rank_meat = "medium_rare";
                 }else{
                     this.rank_meat = "rare";
                 }
             }else{
                 this.meat_rigth += new Random().nextInt(1,5);
-                if(this.meat_left>200*100){
+                if(this.meat_left>200*10){
                     this.rank_meat = "over_cook";
-                }else if(this.meat_left>130*100){
+                }else if(this.meat_left>130*10){
                     this.rank_meat = "medium_well";
-                }else if(this.meat_left>70*100){
+                }else if(this.meat_left>70*10){
                     this.rank_meat = "medium_rare";
                 }else{
                     this.rank_meat = "rare";
