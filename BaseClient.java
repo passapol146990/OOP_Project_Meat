@@ -63,22 +63,22 @@ class Meat extends Thread{
         while (this.meat_on){
             if(this.sted_meat==1){
                 this.meat_left += new Random().nextInt(1,5);
-                if(this.meat_rigth>200*10){
+                if(this.meat_rigth>200*50){
                     this.rank_meat = "over_cook";
-                }else if(this.meat_rigth>130*10){
+                }else if(this.meat_rigth>130*50){
                     this.rank_meat = "medium_well";
-                }else if(this.meat_rigth>70*10){
+                }else if(this.meat_rigth>70*50){
                     this.rank_meat = "medium_rare";
                 }else{
                     this.rank_meat = "rare";
                 }
             }else{
                 this.meat_rigth += new Random().nextInt(1,5);
-                if(this.meat_left>200*10){
+                if(this.meat_left>200*50){
                     this.rank_meat = "over_cook";
-                }else if(this.meat_left>130*10){
+                }else if(this.meat_left>130*50){
                     this.rank_meat = "medium_well";
-                }else if(this.meat_left>70*10){
+                }else if(this.meat_left>70*50){
                     this.rank_meat = "medium_rare";
                 }else{
                     this.rank_meat = "rare";
@@ -97,6 +97,12 @@ class Meat extends Thread{
     }
     int getSted_meat(){return this.sted_meat;}
     void setSted_meat(int sted){this.sted_meat = sted;}
+    //ดึงค่าอุณหภูมิ
+    public int getTemperature() {
+        return this.sted_meat == 1 ? this.meat_left : this.meat_rigth; // ถ้ากำลังย่างด้านซ้าย ให้คืนค่า meat_left มิฉะนั้นคืนค่า meat_right
+       
+    }
+    
 }
 class ClickMeat extends Thread{
     private Meat meat;
