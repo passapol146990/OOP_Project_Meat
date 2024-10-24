@@ -328,7 +328,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
                 System.out.println("Clicked Thermometer");
                 showTemp = true;
                 displayStartTime = System.currentTimeMillis(); // บันทึกเวลาเริ่มต้น
-                updateTemperatureDisplay(); // อัพเดตการแสดงผลอุณหภูมิ
+                
                 repaint(); // อัพเดต UI
             }
         });
@@ -444,7 +444,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         if (currentMeat != null) {
             temperature = currentMeat.getTemperature();
             // แสดงค่าอุณหภูมิที่นี่ (เช่นวาดข้อความใน UI หรือใช้ JLabel)
-            System.out.println("Current Temperature: " + temperature); // หรือใช้ JLabel เพื่อแสดงใน UI
+            // System.out.println("Current Temperature: " + temperature); // หรือใช้ JLabel เพื่อแสดงใน UI
         }
     }
     
@@ -468,10 +468,12 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         //อุณหภูมิ
         long currentTime = System.currentTimeMillis();
         if (showTemp && (currentTime - displayStartTime < DISPLAY_DURATION)) {
+            updateTemperatureDisplay(); // อัพเดตการแสดงผลอุณหภูมิ
             g.setColor(new Color(255, 255, 255));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
             String str_temp = Integer.toString(temperature);
             g.drawString(str_temp, 200, 250); 
+         
         } else {
             showTemp = false; // หยุดการแสดงข้อความหลังจากหมดเวลา
         }
