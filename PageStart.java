@@ -20,6 +20,7 @@ public class PageStart extends JPanel {
     private Point lastMousePosition;
     private  JDialog orderShow;
     private JPanel contentPanel;
+    private JPanel item1;
     private JPanel createProductPanel(String imagePath, String productName, String price){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -275,7 +276,7 @@ public class PageStart extends JPanel {
                 String path = "./image/meat/01/rare1.png.";
                 for(int order_count = 0;order_count<5;order_count++){
                     // สินค้า
-                    JPanel item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
+                    item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
                     // if(path == "./image/meat/01/rare1.png."){
                         app.getBaseClient().setorder_type("01");
                     // }
@@ -398,22 +399,23 @@ public class PageStart extends JPanel {
                     if (meatRect.intersects(plateRect)) {
                         int chk = app.getBaseClient().chkMeat();
                         if(chk == 1){
-                            contentPanel.setBackground(new Color(182,255,162));
-                            contentPanel.revalidate(); // ทำให้ layout ของ containerPanel ถูกประมวลผลใหม่
-                            contentPanel.repaint(); // วาด containerPanel ใหม่ทั้งหมด
+                            System.out.println("In chk");
+                            //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
+                            orderShow.remove(contentPanel);
+                            contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
+                            orderShow.add(contentPanel); // เพิ่ม contentPanel ใหม่
+                            orderShow.revalidate(); // อัปเดตเลย์เอาต์
+                            orderShow.repaint(); // รีเฟรชการแสดงผล
+                            // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
+                            orderShow.setVisible(true);
                         }
                         else
                         {
                             contentPanel.setBackground(Color.black);
-                            contentPanel.revalidate(); // ทำให้ layout ของ containerPanel ถูกประมวลผลใหม่
-                            contentPanel.repaint();
                         }
+                        contentPanel.revalidate();
+                        contentPanel.repaint();
                         app.getBaseClient().getMeat().kill();
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
                         orderShow.dispose();
                         //System.out.println("Finish! Meat on Dish.");
                     }
