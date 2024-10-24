@@ -1,16 +1,11 @@
-import java.awt.Color;
 import java.util.Random;
-
-import javax.swing.JDialog;
-import javax.swing.JPanel;
 
 public class BaseClient{
     private int money = 50;
     private Meat meat=null;
     private int time = 0;
     boolean statusCountTime = false;
-    private int orders_Temp;
-    private String orders_type;
+    
     BaseClient(){}
     void newMeat(String type){
         if(this.meat==null){
@@ -28,7 +23,6 @@ public class BaseClient{
     void addMoney(int money){this.money += money;}
     void delMoney(int money){this.money -= money;}
     int getTime(){return this.time;}
-    void setorder_type(String orders_type){this.orders_type = orders_type;}
     String getFormatTime() {
         int minutes = this.time / 60;
         int seconds = this.time % 60;
@@ -38,17 +32,6 @@ public class BaseClient{
     void runStartGame(){
         CountTime runTime = new CountTime(this);
         runTime.start();
-    }
-    public int chkMeat(){
-        if(this.meat.gettype_meat() == orders_type){
-            System.out.println("Correct");
-            return 1;
-        }
-        else
-        {
-            System.out.println("Wrong");
-            return 0;
-        }
     }
 }
 
@@ -112,7 +95,6 @@ class Meat extends Thread{
         this.meat_on = false;
         this.image_meat = null;
     }
-    String gettype_meat(){return this.type_meat;}
     int getSted_meat(){return this.sted_meat;}
     void setSted_meat(int sted){this.sted_meat = sted;}
 }
