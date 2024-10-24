@@ -19,6 +19,7 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     private  JDialog orderShow;
+    private JPanel contentPanel;
     private JPanel createProductPanel(String imagePath, String productName, String price){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -231,6 +232,8 @@ public class PageStart extends JPanel {
                 backToMenuButton.addActionListener(e1 -> {
                     // ปิด JDialog
                     settingsDialog.dispose(); 
+                    // ปิด ordersShow
+                    orderShow.dispose();
                     // เปลี่ยนไปยังหน้าต่างเมนู
                     app.showPanel("menu");
                 });
@@ -273,6 +276,9 @@ public class PageStart extends JPanel {
                 for(int order_count = 0;order_count<5;order_count++){
                     // สินค้า
                     JPanel item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
+                    // if(path == "./image/meat/01/rare1.png."){
+                        app.getBaseClient().setorder_type("01");
+                    // }
                     item1.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
@@ -280,13 +286,13 @@ public class PageStart extends JPanel {
                                 orderShow.setBounds(825, 75, 495, 80);
                                 orderShow.setLayout(new BorderLayout());
                                 orderShow.setUndecorated(true);
-                                JPanel contentPanel = new JPanel();
+                                contentPanel = new JPanel();
                                 contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
                                 contentPanel.setLayout(new BorderLayout());
 
                                 // เพิ่ม item1 เข้าไปใน contentPanel
                                 contentPanel.add(item1, BorderLayout.CENTER);
-
+                                
                                 // เพิ่ม contentPanel เข้าไปใน JDialog
                                 orderShow.setContentPane(contentPanel);
                                 orderShow.setVisible(true);
@@ -390,9 +396,26 @@ public class PageStart extends JPanel {
                     isHoldingMeat = false;
                     // Check if meat intersects with plate
                     if (meatRect.intersects(plateRect)) {
+                        int chk = app.getBaseClient().chkMeat();
+                        if(chk == 1){
+                            contentPanel.setBackground(new Color(182,255,162));
+                            contentPanel.revalidate(); // ทำให้ layout ของ containerPanel ถูกประมวลผลใหม่
+                            contentPanel.repaint(); // วาด containerPanel ใหม่ทั้งหมด
+                        }
+                        else
+                        {
+                            contentPanel.setBackground(Color.black);
+                            contentPanel.revalidate(); // ทำให้ layout ของ containerPanel ถูกประมวลผลใหม่
+                            contentPanel.repaint();
+                        }
                         app.getBaseClient().getMeat().kill();
-                        System.out.println("Finish! Meat on Dish.");
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
                         orderShow.dispose();
+                        //System.out.println("Finish! Meat on Dish.");
                     }
                     else{
                         meatRect.x = 402;
