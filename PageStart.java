@@ -289,7 +289,7 @@ public class PageStart extends JPanel {
                                 contentPanel = new JPanel();
                                 contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
                                 contentPanel.setLayout(new BorderLayout());
-
+                                //Test git reset
                                 // เพิ่ม item1 เข้าไปใน contentPanel
                                 contentPanel.add(item1, BorderLayout.CENTER);
                                 
