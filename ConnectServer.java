@@ -33,10 +33,8 @@ public class ConnectServer extends Thread{
 class OpenPortClient_out_Game extends Thread{
     private App app;
     private int port;
-    private String ip;
-    OpenPortClient_out_Game(App app, String ip, int port){
+    OpenPortClient_out_Game(App app, int port){
         this.app = app;
-        this.ip = ip;
         this.port = port;
     }
     @SuppressWarnings("resource")

@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Random;
 
-public class BaseClient{
+public class BaseClient implements Serializable{
     private int money = 50;
     private Meat meat=null;
     private int time = 0;
@@ -114,3 +115,7 @@ class ClickMeat extends Thread{
         }
     }
 }
+
+
+
+

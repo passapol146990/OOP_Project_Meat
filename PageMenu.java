@@ -62,10 +62,14 @@ public class PageMenu extends JPanel {
         exitButton.setPreferredSize(buttonSize);
 
         startButton.addActionListener(e->{
-            app.getBaseClient().setNameShop(nameField.getText());
-            app.getBaseClient().statusConnectServer = true;
-            ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
-            conn.start();
+            if(!app.getBaseClient().statusConnectServer){
+                app.getBaseClient().setNameShop(nameField.getText());
+                app.getBaseClient().statusConnectServer = true;
+                ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
+                conn.start();
+                OpenPortClient_out_Game open_client = new OpenPortClient_out_Game(app,33344);
+                open_client.start();
+            }
         });
         settingButton.addActionListener(e->app.showPanel("seting"));
         aboutButton.addActionListener(e->app.showPanel("about"));
