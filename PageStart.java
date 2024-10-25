@@ -329,7 +329,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
                 showTemp = true;
                 displayStartTime = System.currentTimeMillis(); // บันทึกเวลาเริ่มต้น
                 
-                repaint(); // อัพเดต UI
+                // repaint(); // อัพเดต UI
             }
         });
         add(B_thermometer);
@@ -465,7 +465,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, 500, 500, this);
         g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
         g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
-        //อุณหภูมิ
+        //วาดอุณหภูมิ
         long currentTime = System.currentTimeMillis();
         if (showTemp && (currentTime - displayStartTime < DISPLAY_DURATION)) {
             updateTemperatureDisplay(); // อัพเดตการแสดงผลอุณหภูมิ
