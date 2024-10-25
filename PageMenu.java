@@ -15,24 +15,15 @@ public class PageMenu extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 0, 10, 0); // ตั้งค่า margin ระหว่างองค์ประกอบ
-        gbc.anchor = GridBagConstraints.CENTER; // จัดตำแหน่งให้อยู่ตรงกลาง
-
-        // สร้างหัวข้อเกม
-        // JLabel gameLabel = new JLabel("Game");
-        // gameLabel.setForeground(Color.WHITE);
-        // gameLabel.setFont(new Font("Serif", Font.BOLD, 80));
-        // gbc.gridx = 0;
-        // gbc.gridy = 0;
-        // gbc.gridwidth = 2; // ขยายองค์ประกอบให้เต็มความกว้าง
-        // add(gameLabel, gbc);
+        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
 
         // แสดง IP Address
-        JTextField ipField = new JTextField("172.16.0.191");
+        JTextField ipField = new JTextField("127.0.0.1");
         ipField.setHorizontalAlignment(JTextField.CENTER);
         ipField.setBackground(Color.LIGHT_GRAY);
         ipField.setForeground(Color.BLACK);
-        ipField.setPreferredSize(new Dimension(200, 30)); // ปรับขนาดช่องกรอก
+        ipField.setPreferredSize(new Dimension(200, 30));
         gbc.gridy = 1;
         gbc.gridwidth = 2;
         add(ipField, gbc);
@@ -43,7 +34,7 @@ public class PageMenu extends JPanel {
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setBackground(Color.LIGHT_GRAY);
         nameField.setForeground(Color.BLACK);
-        nameField.setPreferredSize(new Dimension(200, 30)); // ปรับขนาดช่องกรอก
+        nameField.setPreferredSize(new Dimension(200, 30));
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         add(nameField, gbc);
@@ -67,8 +58,6 @@ public class PageMenu extends JPanel {
                 app.getBaseClient().statusConnectServer = true;
                 ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
                 conn.start();
-                OpenPortClient_out_Game open_client = new OpenPortClient_out_Game(app,3344);
-                open_client.start();
             }
         });
         settingButton.addActionListener(e->app.showPanel("seting"));

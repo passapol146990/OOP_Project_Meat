@@ -7,7 +7,7 @@ public class BaseClient implements Serializable{
     private int time = 0;
     boolean statusCountTime = false;
     boolean statusConnectServer = false;
-    // boolean statusConnectServer = false;
+    boolean statusReady = false;
     private String nameShop;
     
     BaseClient(){}

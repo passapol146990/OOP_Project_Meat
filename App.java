@@ -3,17 +3,15 @@ import java.awt.CardLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.util.*;
 
 import java.awt.Toolkit;
 public class App extends JFrame{
     private CardLayout cardLayout;
     private JPanel mainPanel;
-    private PageMenu  pageMenu;
-    private PageStart pageStart;
-    private PageSeting pageSeting;
-    private PageAbout pageAbout;
     private BaseClient baseClient;
     private Sound sound = new Sound();
+    private HashMap<String,JPanel> panels = new HashMap<String,JPanel>();
     App(String title,BaseClient baseClient){
         this.baseClient = baseClient;
         this.cardLayout = new CardLayout();
@@ -27,30 +25,16 @@ public class App extends JFrame{
     }
     BaseClient getBaseClient(){return this.baseClient;}
     void addPanel(JPanel panel,String path){
+        this.panels.put(path, panel);
         this.mainPanel.add(panel, path);
     }
     void showPanel(String path){
         this.cardLayout.show(this.mainPanel,path);
     }
-    void setPageMenuClass(PageMenu page){
-        this.pageMenu = page;
-    }
-    void setPageStartClass(PageStart page){
-        this.pageStart = page;
-    }
-    void setPageSetingClass(PageSeting page){
-        this.pageSeting = page;
-    }
-    void setPageAboutClass(PageAbout page){
-        this.pageAbout = page;
+    JPanel getPanel(String path){
+        return this.panels.get(path);
     }
     Sound getSound(){
         return this.sound;
     }
-    // PageAbout getPageAbout(){
-    //     return this.pageAbout;
-    // }
-    // PageStart getPageStart(){
-    //     return this.pageStart;
-    // }
 }

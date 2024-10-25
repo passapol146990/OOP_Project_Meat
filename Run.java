@@ -3,6 +3,7 @@ class Run {
         BaseClient baseClient = new BaseClient();
         App app = new App("The Meat",baseClient);
         ControlClient controlClient = new ControlClient(app);
+        OpenPortClient openPortClient = new OpenPortClient(baseClient, 4444);
         PageMenu menu = new PageMenu(app);
         PageLobby lobby = new PageLobby(app);
         PageStart start = new PageStart(app);
@@ -14,6 +15,7 @@ class Run {
         app.addPanel(seting, "seting");
         app.addPanel(about, "about");
         app.showPanel("menu");
+        openPortClient.start();
         controlClient.start();
     }    
 }
