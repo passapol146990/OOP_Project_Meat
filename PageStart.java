@@ -371,7 +371,15 @@ public class PageStart extends JPanel {
         
         runRepaint = new RunRepaint(this); 
         runRepaint.start();
-        
+
+        int displayDuration = 2000;
+        Timer timer = new Timer(displayDuration, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                orderShow.setVisible(false); // ซ่อน orderShow
+                contentPanel.setBackground(null); // คืนค่าพื้นหลังให้กลับเป็นค่าเริ่มต้นหรือตามที่ต้องการ
+            }
+        });
         addMouseListener(new MouseAdapter() {
             //กดพลิกเนื้อ ยังไม่ได้ทำเพิ่มนะ
             public void mouseClicked(MouseEvent e) {
@@ -401,22 +409,20 @@ public class PageStart extends JPanel {
                         if(chk == 1){
                             System.out.println("In chk");
                             //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
-                            orderShow.remove(contentPanel);
+                            //orderShow.remove(contentPanel);
                             contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
-                            orderShow.add(contentPanel); // เพิ่ม contentPanel ใหม่
-                            orderShow.revalidate(); // อัปเดตเลย์เอาต์
-                            orderShow.repaint(); // รีเฟรชการแสดงผล
                             // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
                             orderShow.setVisible(true);
                         }
                         else
                         {
-                            contentPanel.setBackground(Color.black);
+                            contentPanel.setBackground(new Color(255, 89, 68));
                         }
-                        contentPanel.revalidate();
-                        contentPanel.repaint();
-                        app.getBaseClient().getMeat().kill();
-                        orderShow.dispose();
+                            contentPanel.revalidate();
+                            contentPanel.repaint();
+                            app.getBaseClient().getMeat().kill();
+                            timer.setRepeats(false); // ให้ Timer ทำงานครั้งเดียวแล้วหยุด
+                            timer.start(); // เริ่ม Timer
                         //System.out.println("Finish! Meat on Dish.");
                     }
                     else{
