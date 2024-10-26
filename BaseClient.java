@@ -9,8 +9,12 @@ public class BaseClient implements Serializable{
     boolean statusReady = false;
     private String nameShop;
     private String orders_type;
+    String idClient;
+    ArrayList<> orders = new ArrayList<>();
     
-    BaseClient(){}
+    BaseClient(){
+        this.idClient = ".....";
+    }
     void newMeat(String type,int price){
         String typeMeat = "";
         if(this.money>=price){
