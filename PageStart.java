@@ -8,6 +8,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import java.awt.*;
+import java.util.Random;
 public class PageStart extends JPanel {
     private App app;
     private JButton B_setting;
@@ -21,6 +23,11 @@ public class PageStart extends JPanel {
     private  JDialog orderShow;
     boolean showTemp = false;
 
+    private JPanel contentPanel;
+    private JPanel item1[] = new JPanel[5];
+    private int price[] = new int[5];
+    private Random random = new Random();
+    private int indexs;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -245,65 +252,88 @@ public class PageStart extends JPanel {
         B_order.setBounds(0, 70, 50, 50);
         B_order.setOpaque(false);
         B_order.setBorderPainted(false);
-        B_order.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // สร้าง popup modal สำหรับการสั่งซื้อ
-                JDialog orderDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Order", true);
-                orderDialog.setSize(350, 500);
-                orderDialog.setLayout(new BorderLayout());
-                orderDialog.setUndecorated(true); // ป้องกันการขยับ popup
+        B_order.addActionListener(e-> {
+            // สร้าง popup modal สำหรับการสั่งซื้อ
+            JDialog orderDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Order", true);
+            orderDialog.setSize(350, 500);
+            orderDialog.setLayout(new BorderLayout());
+            orderDialog.setUndecorated(true); // ป้องกันการขยับ popup
 
-                JLabel orderLabel = new JLabel("SHOP", SwingConstants.CENTER);
-                orderDialog.add(orderLabel, BorderLayout.NORTH);
-                JButton order = new JButton("close");
-                orderDialog.add(order, BorderLayout.CENTER);
+            JLabel orderLabel = new JLabel("SHOP", SwingConstants.CENTER);
+            orderDialog.add(orderLabel, BorderLayout.NORTH);
+            JButton order = new JButton("close");
+            orderDialog.add(order, BorderLayout.CENTER);
 
-                // พาเนลแสดงสินค้า
-                JPanel outerPanel = new JPanel(new BorderLayout());
-                outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // ตั้ง padding ซ้าย 20 และขวา 20
+            // พาเนลแสดงสินค้า
+            JPanel outerPanel = new JPanel(new BorderLayout());
+            outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // ตั้ง padding ซ้าย 20 และขวา 20
 
-                JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
-                String path = "./image/meat/01/rare1.png.";
-                for(int order_count = 0;order_count<5;order_count++){
-                    // สินค้า
-                    JPanel item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
-                    item1.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-                                orderShow.setBounds(825, 75, 495, 80);
-                                orderShow.setLayout(new BorderLayout());
-                                orderShow.setUndecorated(true);
-                                JPanel contentPanel = new JPanel();
-                                contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
-                                contentPanel.setLayout(new BorderLayout());
+            JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+            String path = "./image/meat/01/rare1.png.";
+            for(int order_count = 0;order_count<5;order_count++){
+                // สินค้า
+                JPanel item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
+                item1.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+                            orderShow.setBounds(825, 75, 495, 80);
+                            orderShow.setLayout(new BorderLayout());
+                            orderShow.setUndecorated(true);
+                            JPanel contentPanel = new JPanel();
+                            contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
+                            contentPanel.setLayout(new BorderLayout());
 
-                                // เพิ่ม item1 เข้าไปใน contentPanel
-                                contentPanel.add(item1, BorderLayout.CENTER);
+                            // เพิ่ม item1 เข้าไปใน contentPanel
+                            contentPanel.add(item1, BorderLayout.CENTER);
 
-                                // เพิ่ม contentPanel เข้าไปใน JDialog
-                                orderShow.setContentPane(contentPanel);
-                                orderShow.setVisible(true);
-                            }
-                    });
-                    productPanel.add(item1);
-                }
-                // ปุ่ม back
-                JButton backButton = new JButton("back");
-                backButton.addActionListener(e1 -> orderDialog.dispose());
-
-                // ตั้ง layout และเพิ่มเนื้อหา
-                // เพิ่ม productPanel เข้าไปใน outerPanel
-                outerPanel.add(productPanel, BorderLayout.CENTER);
-                // ตั้ง outerPanel เป็นเนื้อหาหลักแทน
-                orderDialog.add(outerPanel, BorderLayout.CENTER);
-                orderDialog.add(backButton, BorderLayout.SOUTH);
-
-                // ตั้ง popup ให้อยู่ตรงกลาง
-                orderDialog.setLocationRelativeTo(PageStart.this);
-                orderDialog.setVisible(true);
+                            // เพิ่ม contentPanel เข้าไปใน JDialog
+                            orderShow.setContentPane(contentPanel);
+                            orderShow.setVisible(true);
+                        }
+                });
+                productPanel.add(item1);
+                // price[order_count] = random.nextInt(350 - 100);
+                // item1[order_count] = new JPanel();
+                // item1[order_count].setLayout(new BorderLayout());
+                // item1[order_count] = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา","+" + price[order_count] + "$");
+                // // if(path == "./image/meat/01/rare1.png."){
+                //     app.getBaseClient().setorder_type("01");
+                // // }
+                // final int index = order_count;
+                //     item1[order_count].addMouseListener(new MouseAdapter() {
+                //             @Override
+                //             public void mouseClicked(MouseEvent e) {
+                //                 orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+                //                 orderShow.setBounds(825, 75, 495, 80);
+                //                 orderShow.setLayout(new BorderLayout());
+                //                 orderShow.setUndecorated(true);
+                //                 contentPanel = new JPanel();
+                //                 contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
+                //                 contentPanel.setLayout(new BorderLayout());
+                //                 // เพิ่ม item1 เข้าไปใน contentPanel
+                //                 contentPanel.add(item1[index], BorderLayout.CENTER);
+                //                 indexs = index;
+                //                 // เพิ่ม contentPanel เข้าไปใน JDialog
+                //                 orderShow.setContentPane(contentPanel);
+                //                 orderShow.setVisible(true);
+                //             }
+                //     });
+                // productPanel.add(item1[order_count]);
             }
+            // ปุ่ม back
+            JButton backButton = new JButton("back");
+            backButton.addActionListener(e1 -> orderDialog.dispose());
+
+            // เพิ่ม productPanel เข้าไปใน outerPanel
+            outerPanel.add(productPanel, BorderLayout.CENTER);
+            // ตั้ง outerPanel เป็นเนื้อหาหลักแทน
+            orderDialog.add(outerPanel, BorderLayout.CENTER);
+            orderDialog.add(backButton, BorderLayout.SOUTH);
+
+            // ตั้ง popup ให้อยู่ตรงกลาง
+            orderDialog.setLocationRelativeTo(PageStart.this);
+            orderDialog.setVisible(true);
         });
         add(B_order);
         // ปุ่มอุณหภูมิ
@@ -370,7 +400,15 @@ public class PageStart extends JPanel {
         
         runRepaint = new RunRepaint(this); 
         runRepaint.start();
-        
+
+        int displayDuration = 2000;
+        Timer timer = new Timer(displayDuration, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                orderShow.setVisible(false); // ซ่อน orderShow
+                contentPanel.setBackground(null); // คืนค่าพื้นหลังให้กลับเป็นค่าเริ่มต้นหรือตามที่ต้องการ
+            }
+        });
         addMouseListener(new MouseAdapter() {
             //กดพลิกเนื้อ ยังไม่ได้ทำเพิ่มนะ
             public void mouseClicked(MouseEvent e) {
@@ -397,6 +435,26 @@ public class PageStart extends JPanel {
                     if (meatRect.intersects(plateRect)) {
                         app.getBaseClient().getMeat().kill();
                         orderShow.dispose();
+                        int chk = app.getBaseClient().chkMeat();
+                        if(chk == 1){
+                            System.out.println("In chk");
+                            //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
+                            //orderShow.remove(contentPanel);
+                            contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
+                            // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
+                            orderShow.setVisible(true);
+                            app.getBaseClient().addMoney(price[indexs]);
+                        }
+                        else
+                        {
+                            contentPanel.setBackground(new Color(255, 89, 68));
+                        }
+                            contentPanel.revalidate();
+                            contentPanel.repaint();
+                            app.getBaseClient().getMeat().kill();
+                            timer.setRepeats(false); // ให้ Timer ทำงานครั้งเดียวแล้วหยุด
+                            timer.start(); // เริ่ม Timer
+                        //System.out.println("Finish! Meat on Dish.");
                     }
                     else{
                         meatRect.x = 402;
@@ -422,7 +480,6 @@ public class PageStart extends JPanel {
         });
         
     }
-    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
