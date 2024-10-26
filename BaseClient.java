@@ -8,6 +8,7 @@ public class BaseClient implements Serializable{
     boolean statusConnectServer = false;
     boolean statusReady = false;
     private String nameShop;
+    private String orders_type;
     
     BaseClient(){}
     void newMeat(String type,int price){
@@ -47,6 +48,17 @@ public class BaseClient implements Serializable{
     void setTime(int time){this.time = time;}
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
+    public int chkMeat(){
+        if(this.meat.gettype_meat() == orders_type){
+            System.out.println("Correct");
+            return 1;
+        }
+        else
+        {
+            System.out.println("Wrong");
+            return 0;
+        }
+    }
 }
 class Meat extends Thread implements Serializable{
     private int temp=0;
@@ -106,7 +118,7 @@ class Meat extends Thread implements Serializable{
         return this.temp;
        
     }
-    
+    String gettype_meat(){return this.type_meat;}
 }
 class ClickMeat extends Thread implements Serializable{
     private Meat meat;

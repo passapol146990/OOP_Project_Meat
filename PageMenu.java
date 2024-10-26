@@ -57,7 +57,7 @@ public class PageMenu extends JPanel {
                 app.getBaseClient().setNameShop(nameField.getText());
                 app.getBaseClient().statusConnectServer = true;
                 PageLobby lobby = new PageLobby(app);
-                app.addPanel(lobby,"lobby");
+                app.addPanel(lobby, "lobby");
                 ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
                 conn.start();
             }

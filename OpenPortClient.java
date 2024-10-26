@@ -20,10 +20,6 @@ class OpenPortClient extends Thread{
                     Socket socket = serverSocket.accept();
                     ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
                     this.app.baseServer = (BaseServer) req.readObject();
-                    // ArrayList<HashMap<String,String>> x = baseServer.getPlayerInRobby();
-                    // for(int i=0;i<x.size();i++){
-                    //     System.out.println("ชื่อร้าน : "+x.get(i).get("name")+", สถานะ : "+x.get(i).get("status"));
-                    // }
                     req.close();
                     socket.close();
                 }
