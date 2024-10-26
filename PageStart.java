@@ -19,13 +19,9 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     private  JDialog orderShow;
-    private boolean showTemp = false;
-    private int temperature;
-    
-private long displayStartTime; // เวลาที่เริ่มแสดงข้อความ
-private static final long DISPLAY_DURATION = 5000; // เวลาที่จะแสดง (5 วินาที)
+    boolean showTemp = false;
 
-    private JPanel createProductPanel(String imagePath, String productName, String price){
+    private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         //เพิ่มรูป
@@ -48,10 +44,9 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
             imagLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    System.out.println("Image clicked"+ productName);
-                    app.getBaseClient().newMeat(productName);
+                    app.getBaseClient().newMeat(productName,price);
                     meatRect = new Rectangle(402, 160, 400, 300);
-                    
+                    Jdialog.dispose();
                 }
             });
     
@@ -60,7 +55,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
     
             //ชื่อสินค้าและราคา
             JLabel namLabel = new JLabel(productName, SwingConstants.CENTER);
-            JLabel pricLabel = new JLabel(price, SwingUtilities.CENTER);
+            JLabel pricLabel = new JLabel(String.format("%d$", price), SwingUtilities.CENTER);
             pricLabel.setForeground(Color.GREEN);
     
             JPanel textPanel = new JPanel(new GridLayout(2,1));
@@ -127,7 +122,6 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         this.app = app;
         setLayout(null);
         app.getBaseClient().setTime(300);
-        app.getBaseClient().runStartGame();
         // app.getSound().playmusic();
 
         // Meat and plate areas
@@ -139,119 +133,114 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         B_setting.setBounds(0, 0, 50, 50);
         B_setting.setOpaque(false);
         B_setting.setBorderPainted(false);
-        B_setting.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Setting Clicked");
-                // สร้าง popup modal สำหรับการสั่งซื้อ
-                JDialog settingsDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Setting", true);
-                settingsDialog.setSize(400, 250);
-                settingsDialog.setLayout(new BorderLayout());
-                settingsDialog.setUndecorated(true);
+        B_setting.addActionListener(e-> {
+            // สร้าง popup modal สำหรับการสั่งซื้อ
+            JDialog settingsDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Setting", true);
+            settingsDialog.setSize(400, 250);
+            settingsDialog.setLayout(new BorderLayout());
+            settingsDialog.setUndecorated(true);
 
-                JLabel orderLabel = new JLabel("Setting", SwingConstants.CENTER);
-                settingsDialog.add(orderLabel, BorderLayout.NORTH);
+            JLabel orderLabel = new JLabel("Setting", SwingConstants.CENTER);
+            settingsDialog.add(orderLabel, BorderLayout.NORTH);
 
-                // สร้าง JPanel สำหรับการตั้งค่า
-                JPanel settingsPanel = new JPanel();
-                settingsPanel.setLayout(new GridBagLayout());
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.insets = new Insets(10, 10, 10, 10);
-                gbc.fill = GridBagConstraints.HORIZONTAL;
+            // สร้าง JPanel สำหรับการตั้งค่า
+            JPanel settingsPanel = new JPanel();
+            settingsPanel.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
 
-                // โหลดไอคอนและปรับขนาดให้พอดี (เช่น 50x50)
-                ImageIcon AmusicIcon = new ImageIcon("./image/music.png");
-                Image musicImage = AmusicIcon.getImage(); // แปลงจาก ImageIcon เป็น Image
-                Image resizedMusicImage = musicImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            // โหลดไอคอนและปรับขนาดให้พอดี (เช่น 50x50)
+            ImageIcon AmusicIcon = new ImageIcon("./image/music.png");
+            Image musicImage = AmusicIcon.getImage(); // แปลงจาก ImageIcon เป็น Image
+            Image resizedMusicImage = musicImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
-                // โหลดไอคอน audio และปรับขนาด
-                ImageIcon AaudioIcon = new ImageIcon("./image/volume.png");
-                Image audioImage = AaudioIcon.getImage();
-                Image resizedAudioImage = audioImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-                
-                // Icon สำหรับ Music และ Audio
-                JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage));
-                JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage));
+            // โหลดไอคอน audio และปรับขนาด
+            ImageIcon AaudioIcon = new ImageIcon("./image/volume.png");
+            Image audioImage = AaudioIcon.getImage();
+            Image resizedAudioImage = audioImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            
+            // Icon สำหรับ Music และ Audio
+            JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage));
+            JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage));
 
-                // Slider สำหรับปรับระดับเสียง
-                JSlider musicSlider = new JSlider(0, 100, 50);
-                musicSlider.setForeground(Color.BLUE);
-                musicSlider.addChangeListener(e1 ->{
-                    app.getSound().setVolume(musicSlider.getValue());
-                    System.out.println(musicSlider.getValue());
-                });
-                
-                JSlider audioSlider = new JSlider(0, 100, 50);
-                audioSlider.setForeground(Color.BLUE);
-                audioSlider.addChangeListener(e1 ->{
-                    System.out.println(musicSlider.getValue());
-                });
-                
-                // Labels สำหรับ slider
-                JLabel musicLabel = new JLabel("Music");
-                JLabel audioLabel = new JLabel("Audio");
+            // Slider สำหรับปรับระดับเสียง
+            JSlider musicSlider = new JSlider(0, 100, 50);
+            musicSlider.setForeground(Color.BLUE);
+            musicSlider.addChangeListener(e1 ->{
+                app.getSound().setVolume(musicSlider.getValue());
+                System.out.println(musicSlider.getValue());
+            });
+            
+            JSlider audioSlider = new JSlider(0, 100, 50);
+            audioSlider.setForeground(Color.BLUE);
+            audioSlider.addChangeListener(e1 ->{
+                System.out.println(musicSlider.getValue());
+            });
+            
+            // Labels สำหรับ slider
+            JLabel musicLabel = new JLabel("Music");
+            JLabel audioLabel = new JLabel("Audio");
 
-                // ปุ่มสำหรับย้อนกลับ
-                JButton backToGameButton = new JButton("Back to the Game");
-                JButton backToMenuButton = new JButton("Back to the Menu");
+            // ปุ่มสำหรับย้อนกลับ
+            JButton backToGameButton = new JButton("Back to the Game");
+            JButton backToMenuButton = new JButton("Back to the Menu");
 
-                // เพิ่ม Music Icon และ Slider
-                gbc.gridx = 0;
-                gbc.gridy = 0;
-                settingsPanel.add(musicIcon, gbc);
-                
-                gbc.gridx = 1;
-                gbc.gridy = 0;
-                settingsPanel.add(musicLabel, gbc);
-                
-                gbc.gridx = 0;
-                gbc.gridy = 1;
-                gbc.gridwidth = 2;
-                settingsPanel.add(musicSlider, gbc);
+            // เพิ่ม Music Icon และ Slider
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            settingsPanel.add(musicIcon, gbc);
+            
+            gbc.gridx = 1;
+            gbc.gridy = 0;
+            settingsPanel.add(musicLabel, gbc);
+            
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            gbc.gridwidth = 2;
+            settingsPanel.add(musicSlider, gbc);
 
-                // เพิ่ม Audio Icon และ Slider
-                gbc.gridx = 0;
-                gbc.gridy = 2;
-                gbc.gridwidth = 1;
-                settingsPanel.add(audioIcon, gbc);
-                
-                gbc.gridx = 1;
-                gbc.gridy = 2;
-                settingsPanel.add(audioLabel, gbc);
-                
-                gbc.gridx = 0;
-                gbc.gridy = 3;
-                gbc.gridwidth = 2;
-                settingsPanel.add(audioSlider, gbc);
+            // เพิ่ม Audio Icon และ Slider
+            gbc.gridx = 0;
+            gbc.gridy = 2;
+            gbc.gridwidth = 1;
+            settingsPanel.add(audioIcon, gbc);
+            
+            gbc.gridx = 1;
+            gbc.gridy = 2;
+            settingsPanel.add(audioLabel, gbc);
+            
+            gbc.gridx = 0;
+            gbc.gridy = 3;
+            gbc.gridwidth = 2;
+            settingsPanel.add(audioSlider, gbc);
 
-                // เพิ่มปุ่มกลับ
-                gbc.gridx = 0;
-                gbc.gridy = 4;
-                gbc.gridwidth = 1;
-                settingsPanel.add(backToGameButton, gbc);
-                backToGameButton.addActionListener(e1 -> settingsDialog.dispose());
-                
-                gbc.gridx = 1;
-                gbc.gridy = 4;
-                settingsPanel.add(backToMenuButton, gbc);
-                backToMenuButton.addActionListener(e1 -> {
-                    // ปิด JDialog
-                    settingsDialog.dispose(); 
-                    // เปลี่ยนไปยังหน้าต่างเมนู
-                    app.showPanel("menu");
-                });
+            // เพิ่มปุ่มกลับ
+            gbc.gridx = 0;
+            gbc.gridy = 4;
+            gbc.gridwidth = 1;
+            settingsPanel.add(backToGameButton, gbc);
+            backToGameButton.addActionListener(e1 -> settingsDialog.dispose());
+            
+            gbc.gridx = 1;
+            gbc.gridy = 4;
+            settingsPanel.add(backToMenuButton, gbc);
+            backToMenuButton.addActionListener(e1 -> {
+                app.getBaseClient().statusConnectServer = false;
+                app.getBaseClient().statusReady = false;
+                settingsDialog.dispose();
+            });
 
-                // เพิ่ม settingsPanel ลงใน JFrame
-                settingsDialog.add(settingsPanel);
+            // เพิ่ม settingsPanel ลงใน JFrame
+            settingsDialog.add(settingsPanel);
 
-                // ตั้ง popup ให้อยู่ตรงกลาง
-                settingsDialog.setLocationRelativeTo(PageStart.this);
-                settingsDialog.setVisible(true);
-            }
+            // ตั้ง popup ให้อยู่ตรงกลาง
+            settingsDialog.setLocationRelativeTo(PageStart.this);
+            settingsDialog.setVisible(true);
         });
         add(B_setting);
 
-        // ปุ่ม Order
+        // ปุ่ม รับเดอร์/Order
         B_order = new JButton("Order");
         B_order.setBounds(0, 70, 50, 50);
         B_order.setOpaque(false);
@@ -322,18 +311,15 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         B_thermometer.setBounds(0, 250, 80, 80);
         B_thermometer.setOpaque(false);
         B_thermometer.setBorderPainted(false);
-        B_thermometer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Clicked Thermometer");
-                showTemp = true;
-                displayStartTime = System.currentTimeMillis(); // บันทึกเวลาเริ่มต้น
-                
-                // repaint(); // อัพเดต UI
+        B_thermometer.addActionListener(e-> {
+            if(!this.showTemp){
+                this.showTemp = true;
+                CountDownShowTemp countDownShowTemp = new CountDownShowTemp(this);
+                countDownShowTemp.start();
             }
         });
         add(B_thermometer);
-        // Shop button
+        // Shop ร้านค้า
         B_shop = new JButton("Shop");
         B_shop.setBounds(0, 140, 50, 50);
         B_shop.setOpaque(false);
@@ -343,26 +329,25 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
             JDialog shopDialog = new JDialog( (JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Shop",true);
             shopDialog.setSize(800,470);
             shopDialog.setLayout(new BorderLayout());
-            shopDialog.setUndecorated(true);//กันการขยับ popup
-
+            shopDialog.setUndecorated(true);
             //พาแนลแสดงสินค้า
             JPanel productPanel = new JPanel(new GridLayout(1,3,10,10));
             productPanel.setBackground(Color.LIGHT_GRAY);
         
 
             //สินค้า 1
-            JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", "50$");
+            JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", 5,shopDialog);
             meatPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             
             productPanel.add(meatPanel);
 
             // วากิว
-            JPanel wagyuPanel = createProductPanel("./image/wagyuu.png", "เนื้อวากิว", "105$");
+            JPanel wagyuPanel = createProductPanel("./image/wagyuu.png", "เนื้อวากิว", 15,shopDialog);
             wagyuPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             productPanel.add(wagyuPanel);
 
             // สันกลาง
-            JPanel ribeyePanel = createProductPanel("./image/sungarng.png", "เนื้อสันกลาง", "90$");
+            JPanel ribeyePanel = createProductPanel("./image/sungarng.png", "เนื้อสันกลาง", 10,shopDialog);
             ribeyePanel.setPreferredSize(new Dimension(235,150));
             ribeyePanel.setLocation(meatRect.x, meatRect.y);
             productPanel.add(ribeyePanel);
@@ -391,7 +376,6 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if(meatRect.contains(e.getPoint())){
-                    System.out.println("click meat");
                     ClickMeat clickMeat = new ClickMeat(app.getBaseClient().getMeat());
                     clickMeat.start();
                 }
@@ -412,7 +396,6 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
                     // Check if meat intersects with plate
                     if (meatRect.intersects(plateRect)) {
                         app.getBaseClient().getMeat().kill();
-                        System.out.println("Finish! Meat on Dish.");
                         orderShow.dispose();
                     }
                     else{
@@ -439,14 +422,6 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         });
         
     }
-    private void updateTemperatureDisplay() {
-        Meat currentMeat = app.getBaseClient().getMeat(); // baseClient คือ instance ของ BaseClient
-        if (currentMeat != null) {
-            temperature = currentMeat.getTemperature();
-            // แสดงค่าอุณหภูมิที่นี่ (เช่นวาดข้อความใน UI หรือใช้ JLabel)
-            // System.out.println("Current Temperature: " + temperature); // หรือใช้ JLabel เพื่อแสดงใน UI
-        }
-    }
     
     @Override
     public void paint(Graphics g) {
@@ -466,16 +441,11 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
         g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
         //วาดอุณหภูมิ
-        long currentTime = System.currentTimeMillis();
-        if (showTemp && (currentTime - displayStartTime < DISPLAY_DURATION)) {
-            updateTemperatureDisplay(); // อัพเดตการแสดงผลอุณหภูมิ
+        if (showTemp) {
             g.setColor(new Color(255, 255, 255));
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
-            String str_temp = Integer.toString(temperature);
+            String str_temp = Integer.toString(app.getBaseClient().getMeat().getTemperature()/100);
             g.drawString(str_temp, 200, 250); 
-         
-        } else {
-            showTemp = false; // หยุดการแสดงข้อความหลังจากหมดเวลา
         }
         // เงิน
         g.setColor(new Color(255,255,255));
@@ -496,28 +466,21 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         int startY = 480; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
 
-    // วาดข้อความสำหรับแต่ละรายการใน lists
-    for (int i = 0; i < lists.size(); i++) {
-        String s = lists.get(i);
-        int rank = i + 1;
-        g.setColor(new Color(85,85,85));
-        int rectHeight = lineHeight; // ปรับขนาดกรอบให้มีความสูงพอดีกับข้อความ
-        g.drawRect(x, startY + i * lineHeight - 20, s.length() * 30, rectHeight); // วาดกรอบสำหรับข้อความ
-        g.setColor(new Color(0, 0, 0)); // ตั้งค่าสี
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
-        // วาดบรรทัด
-        g.drawString(rank + "   " + s + "   " + app.getBaseClient().getMoney() + "$", x, startY + i * lineHeight);
-    }
+        // วาดข้อความสำหรับแต่ละรายการใน lists
+        for (int i = 0; i < lists.size(); i++) {
+            String s = lists.get(i);
+            int rank = i + 1;
+            g.setColor(new Color(85,85,85));
+            int rectHeight = lineHeight; // ปรับขนาดกรอบให้มีความสูงพอดีกับข้อความ
+            g.drawRect(x, startY + i * lineHeight - 20, s.length() * 30, rectHeight); // วาดกรอบสำหรับข้อความ
+            g.setColor(new Color(0, 0, 0)); // ตั้งค่าสี
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
+            // วาดบรรทัด
+            g.drawString(rank + "   " + s + "   " + app.getBaseClient().getMoney() + "$", x, startY + i * lineHeight);
+        }
         // วาดข้อความการจัดอันดับรวม
         String rankingText = "Your ranking: " + app.getBaseClient().getMoney() + "$";
         g.drawString(rankingText, x, startY + lists.size() * lineHeight + 30); // วางหลังรายการ
-
-        for(int i=0;i<3;i++){
-            // ผู้เล่น
-            g.setColor(new Color(0,0,0));
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString(app.getBaseClient().getFormatTime(), 1000, 480+i*50);
-        }
         if(this.app.getBaseClient().getMeat()!=null&&this.app.getBaseClient().getMeat().getImage()!=null){
             ImageIcon icon_meat = new ImageIcon(this.app.getBaseClient().getMeat().getImage());
             g.drawImage(icon_meat.getImage(), meatRect.x, meatRect.y, 500, 382, this);
@@ -527,7 +490,6 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
 class RunRepaint extends Thread{
     private boolean status = true;
     private JPanel panel;
-    private boolean isRunning = true;
     private Sound grillSound;  // เรียกไปยัง class sound
     RunRepaint(JPanel panel){
         this.panel = panel;
@@ -540,15 +502,20 @@ class RunRepaint extends Thread{
 
         grillSound.stopSound();  // ปิดเสียงเมื่อ ออก loop
     }
-
-    public void stopRunning() {
-        isRunning = false;  //หยุดการทำงาน thread
-    }
     void kill(){
         this.status = false;
     }
     
 }
 
-
+class CountDownShowTemp extends Thread{
+    private PageStart pageStart;
+    CountDownShowTemp(PageStart pageStart){
+        this.pageStart = pageStart;
+    }
+    public void run(){
+        try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
+        this.pageStart.showTemp = false;
+    }
+}
 

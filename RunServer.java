@@ -14,31 +14,45 @@ import java.util.HashMap;
 public class RunServer {
     public static void main(String[] args) {
         BaseServer baseServer = new BaseServer();
-        ServerRoby roby = new ServerRoby(baseServer);
+        Server roby = new Server(baseServer);
         roby.start();
     }
 }
 
-class ServerRoby extends Thread{
+class Server extends Thread{
     private ServerSocket serverSocket;
     private BaseServer baseServer;
-    ServerRoby(BaseServer baseServer){
+    Server(BaseServer baseServer){
         this.baseServer = baseServer;
     }
     public void run(){
         try{
             serverSocket = new ServerSocket(this.baseServer.port);
             System.out.println("Start Server PORT : "+this.baseServer.port);
-            while (this.baseServer.getStatusInRoby()){
+            while (true){
                 Socket socket = serverSocket.accept();
                 String ipAddress = socket.getInetAddress().getHostAddress();
                 ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
-                BaseClient baseClient = (BaseClient) req.readObject();
-                this.baseServer.setClient(baseClient, ipAddress);
+                // อัพเดทข้อมูลของผู้เล่น
+                this.baseServer.setClient((BaseClient) req.readObject(), ipAddress);
+                // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
+                if(this.baseServer.CountPlayerOnServer==0){
+                    this.baseServer.setStatusInRoby(true);
+                }
+                // ถ้ายังไม่มี ip ผู้เล่นคนนี้หรือผู้เล่นคนนี้หลุดการเชื่อมต่อจะให้ทำงานตรงนี้ ถ้ามีแล้วจะไม่ทำงาน
                 if(this.baseServer.controller_client.get(ipAddress)==null||!this.baseServer.controller_client.get(ipAddress)){
+                    // เก็บข้อมูลว่าผู้เล่นคนนี้เชื่อมต่ออยู่
                     this.baseServer.controller_client.put(ipAddress, true);
+                    // บวก 1 สำหรับคนที่ออนไลน์
+                    this.baseServer.CountPlayerOnServer += 1;
+                    // สร้าง Thread ส่ง BaseServer กลับไปหาผู้เล่นคนนั้น
                     SendClient client = new SendClient(ipAddress,4444,this.baseServer);
                     client.start();
+                }
+                // ถ้ายังอยู่ที่ lobby จะให้มาทำงานที่นี่
+                if(this.baseServer.getStatusInRoby()){
+                    // ตรวจสอบว่าคนที่อยู่ใน lobby กดพร้อมและจำนวนคนเล่นครบตาม server กำหนดหรือยัง
+                    this.baseServer.checkReadyPlayer();
                 }
                 req.close();
                 socket.close();
@@ -49,6 +63,7 @@ class ServerRoby extends Thread{
         }
     }
 }
+// คราสสำหรับส่งข้อมูลกลับไปให้ผู้เล่น
 class SendClient extends Thread{
     private String ipAddress;
     private int port;
@@ -59,7 +74,6 @@ class SendClient extends Thread{
         this.baseServer = baseServer;
     }
     public void run(){
-        // try {Thread.sleep(1000);} catch (InterruptedException e) {throw new RuntimeException(e);}
         while(this.baseServer.controller_client.get(this.ipAddress)){
             try{
                 Socket socket = new Socket(this.ipAddress,this.port);
@@ -69,9 +83,10 @@ class SendClient extends Thread{
                 res.reset();
                 res.close();
                 socket.close();
-                try {Thread.sleep(100);} catch (InterruptedException e) {throw new RuntimeException(e);}
+                try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             } catch (Exception e) {
                 this.baseServer.controller_client.put(this.ipAddress,false);
+                this.baseServer.CountPlayerOnServer -= 1;
             }
         }
     }

@@ -5,21 +5,33 @@ public class BaseClient implements Serializable{
     private int money = 50;
     private Meat meat=null;
     private int time = 0;
-    boolean statusCountTime = false;
     boolean statusConnectServer = false;
     boolean statusReady = false;
     private String nameShop;
     
     BaseClient(){}
-    void newMeat(String type){
-        if(this.meat==null){
-            this.meat = new Meat(type);
-            this.meat.start();
-        }else{
-            // ป้องการ thead ซ้อมบี้
-            this.meat.kill();
-            this.meat = new Meat(type);
-            this.meat.start();
+    void newMeat(String type,int price){
+        String typeMeat = "";
+        if(this.money>=price){
+            this.money -= price;
+            if(type=="เนื้อวัว"){
+                typeMeat = "01";
+            }
+            else if(type=="เนื้อวากิว"){
+                typeMeat = "02";
+            }
+            else if(type=="เนื้อสันกลาง"){
+                typeMeat = "03";
+            }
+            if(this.meat==null){
+                this.meat = new Meat(typeMeat);
+                this.meat.start();
+            }else{
+                // ป้องการ thead ซ้อมบี้
+                this.meat.kill();
+                this.meat = new Meat(typeMeat);
+                this.meat.start();
+            }
         }
     }
     Meat getMeat(){return this.meat;}
@@ -33,14 +45,10 @@ public class BaseClient implements Serializable{
         return String.format("%02d:%02d", minutes, seconds);
     }
     void setTime(int time){this.time = time;}
-    void runStartGame(){
-        CountTime runTime = new CountTime(this);
-        runTime.start();
-    }
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
 }
-class Meat extends Thread{
+class Meat extends Thread implements Serializable{
     private int temp=0;
     private int meat_left = 0;
     private int meat_rigth = 0;
@@ -51,17 +59,7 @@ class Meat extends Thread{
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
     boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
     Meat(String type){
-        if(type=="เนื้อวัว"){
-            this.type_meat = "01";
-        }
-        else if(type=="เนื้อวากิว"){
-            this.type_meat = "02";
-        }
-        else if(type=="เนื้อสันกลาง"){
-            this.type_meat = "03";
-        }else{
-            System.out.println("ไม่มีเนื้อ");
-        }
+        this.type_meat = type;
     }
 
     public void run(){
@@ -89,6 +87,7 @@ class Meat extends Thread{
                     this.rank_meat = "rare";
                 }
             }
+            this.temp = (this.meat_left+this.meat_rigth)/2;
             this.image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
             try {Thread.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}  
         }
@@ -104,12 +103,12 @@ class Meat extends Thread{
     void setSted_meat(int sted){this.sted_meat = sted;}
     //ดึงค่าอุณหภูมิ
     public int getTemperature() {
-        return this.sted_meat == 1 ? this.meat_left : this.meat_rigth; // ถ้ากำลังย่างด้านซ้าย ให้คืนค่า meat_left มิฉะนั้นคืนค่า meat_right
+        return this.temp;
        
     }
     
 }
-class ClickMeat extends Thread{
+class ClickMeat extends Thread implements Serializable{
     private Meat meat;
     ClickMeat(Meat meat){
         this.meat = meat;

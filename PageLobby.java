@@ -25,7 +25,15 @@ public class PageLobby extends JPanel {
         JButton ready = new JButton("พร้อม");
         ready.setFont(new Font("Tahoma", Font.BOLD, 14));
         ready.setBounds(600, 600, 150, 60);
-        ready.addActionListener(e -> app.getBaseClient().statusReady = true);
+        ready.addActionListener(e -> {
+            if(app.getBaseClient().statusReady){
+                app.getBaseClient().statusReady = false;
+                ready.setText("พร้อม");
+            }else{
+                app.getBaseClient().statusReady = true;
+                ready.setText("ยังไม่พร้อม");
+            }
+        });
         add(ready);
 
         // Player Panel
@@ -63,7 +71,6 @@ class PlayerPanel extends JPanel {
 
     public void startUpdatingPlayers() {
         new Thread(() -> {
-            System.out.println(this.app.getBaseClient().statusConnectServer);
             while (this.app.getBaseClient().statusConnectServer) {
                 SwingUtilities.invokeLater(this::updatePlayerList);
                 try {
@@ -76,18 +83,20 @@ class PlayerPanel extends JPanel {
     }
 
     private void updatePlayerList() {
-        playerListPanel.removeAll();
         
-        ArrayList<HashMap<String, String>> players = this.app.baseServer.getPlayerInRobby();
-        for (HashMap<String, String> playerData : players) {
-            String playerName = playerData.get("name");
-            String playerStatus = playerData.get("status");
-            JLabel playerLabel = new JLabel(playerName + " - " + playerStatus);
-            playerLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-            playerListPanel.add(playerLabel);
+        if(this.app.baseServer!=null){
+            playerListPanel.removeAll();
+            ArrayList<HashMap<String, String>> players = this.app.baseServer.getPlayerInRobby();
+            for (HashMap<String, String> playerData : players) {
+                String playerName = playerData.get("name");
+                String playerStatus = playerData.get("status");
+                JLabel playerLabel = new JLabel(playerName + " - " + playerStatus);
+                playerLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+                playerListPanel.add(playerLabel);
+            }
+            playerListPanel.revalidate();
+            playerListPanel.repaint();
         }
 
-        playerListPanel.revalidate();
-        playerListPanel.repaint();
     }
 }
