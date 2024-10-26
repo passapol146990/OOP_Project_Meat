@@ -7,7 +7,7 @@ import java.util.List;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.awt.*;
-
+import java.util.Random;
 public class PageStart extends JPanel {
     private App app;
     private JButton B_setting;
@@ -21,6 +21,8 @@ public class PageStart extends JPanel {
     private  JDialog orderShow;
     private JPanel contentPanel;
     private JPanel item1;
+    private int price;
+    private Random random = new Random();
     private JPanel createProductPanel(String imagePath, String productName, String price){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -276,7 +278,8 @@ public class PageStart extends JPanel {
                 String path = "./image/meat/01/rare1.png.";
                 for(int order_count = 0;order_count<5;order_count++){
                     // สินค้า
-                    item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา", "+100$");
+                    price = random.nextInt(350 - 100);
+                    item1 = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา","+" + price + "$");
                     // if(path == "./image/meat/01/rare1.png."){
                         app.getBaseClient().setorder_type("01");
                     // }
@@ -413,6 +416,7 @@ public class PageStart extends JPanel {
                             contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
                             // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
                             orderShow.setVisible(true);
+                            app.getBaseClient().addMoney(price);
                         }
                         else
                         {
