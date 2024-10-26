@@ -1,12 +1,12 @@
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 
 public class PageStart extends JPanel {
     private App app;
@@ -19,6 +19,12 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     private  JDialog orderShow;
+    private boolean showTemp = false;
+    private int temperature;
+    
+private long displayStartTime; // เวลาที่เริ่มแสดงข้อความ
+private static final long DISPLAY_DURATION = 5000; // เวลาที่จะแสดง (5 วินาที)
+
     private JPanel createProductPanel(String imagePath, String productName, String price){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -311,7 +317,22 @@ public class PageStart extends JPanel {
             }
         });
         add(B_order);
-
+        // ปุ่มอุณหภูมิ
+        JButton B_thermometer = new JButton("thermometer");
+        B_thermometer.setBounds(0, 250, 80, 80);
+        B_thermometer.setOpaque(false);
+        B_thermometer.setBorderPainted(false);
+        B_thermometer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Clicked Thermometer");
+                showTemp = true;
+                displayStartTime = System.currentTimeMillis(); // บันทึกเวลาเริ่มต้น
+                
+                // repaint(); // อัพเดต UI
+            }
+        });
+        add(B_thermometer);
         // Shop button
         B_shop = new JButton("Shop");
         B_shop.setBounds(0, 140, 50, 50);
@@ -416,7 +437,17 @@ public class PageStart extends JPanel {
                 }
             }
         });
+        
     }
+    private void updateTemperatureDisplay() {
+        Meat currentMeat = app.getBaseClient().getMeat(); // baseClient คือ instance ของ BaseClient
+        if (currentMeat != null) {
+            temperature = currentMeat.getTemperature();
+            // แสดงค่าอุณหภูมิที่นี่ (เช่นวาดข้อความใน UI หรือใช้ JLabel)
+            // System.out.println("Current Temperature: " + temperature); // หรือใช้ JLabel เพื่อแสดงใน UI
+        }
+    }
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -426,13 +457,26 @@ public class PageStart extends JPanel {
         ImageIcon icon_shop = new ImageIcon("./image/shop -white.png");
         ImageIcon icon_dish = new ImageIcon("./image/dish.png");
         ImageIcon icon_Rank = new ImageIcon("./image/rank.png");
+        ImageIcon icon_thermometer = new ImageIcon("./image/thermometer_icon.png");
         g.drawImage(icon.getImage(), 0, 0, this);
         g.drawImage(icon_setting.getImage(), 0, 0, 50, 50, this);
         g.drawImage(icon_order.getImage(), 0, 70, 50, 50, this);
         g.drawImage(icon_shop.getImage(), 0, 140, 50, 50, this);
         g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, 500, 500, this);
         g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
-
+        g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
+        //วาดอุณหภูมิ
+        long currentTime = System.currentTimeMillis();
+        if (showTemp && (currentTime - displayStartTime < DISPLAY_DURATION)) {
+            updateTemperatureDisplay(); // อัพเดตการแสดงผลอุณหภูมิ
+            g.setColor(new Color(255, 255, 255));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
+            String str_temp = Integer.toString(temperature);
+            g.drawString(str_temp, 200, 250); 
+         
+        } else {
+            showTemp = false; // หยุดการแสดงข้อความหลังจากหมดเวลา
+        }
         // เงิน
         g.setColor(new Color(255,255,255));
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -505,4 +549,6 @@ class RunRepaint extends Thread{
     }
     
 }
+
+
 
