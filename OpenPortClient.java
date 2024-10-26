@@ -20,6 +20,7 @@ class OpenPortClient extends Thread{
                     Socket socket = serverSocket.accept();
                     ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
                     this.app.baseServer = (BaseServer) req.readObject();
+                    this.app.getBaseClient().orders = this.app.baseServer.getClientId(this.app.getBaseClient().getId);
                     req.close();
                     socket.close();
                 }
