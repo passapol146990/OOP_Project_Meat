@@ -6,14 +6,12 @@ public class BaseServer implements Serializable{
     int port = 3333;
     int time = 300;
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
-    private HashMap<String,BaseClient> clientId = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     private boolean statusStartGame = false;
     private boolean statusInRoby = true;
     private boolean statusInGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 2;
-    ArrayList<> orderServer = new ArrayList<>()
+    private int CountPlayerIsReady = 1;
     void setStatusInRoby(Boolean status){
         if(status){
             this.time = 0;
@@ -63,13 +61,6 @@ public class BaseServer implements Serializable{
             }
         }
 
-    }
-    void checkOrdersPlayer(){
-        for(String key : this.client.keySet()){
-            if(this.client.get(key).orders.size()<5){
-                this.client.get(key).orders.add(New Random())
-            }
-        }
     }
 }
 class CountTimeServer extends Thread{
