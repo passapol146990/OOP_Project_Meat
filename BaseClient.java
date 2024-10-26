@@ -10,11 +10,11 @@ public class BaseClient implements Serializable{
     private String nameShop;
     private String orders_type;
     String idClient;
-    ArrayList<> orders = new ArrayList<>();
+    //ArrayList<> orders = new ArrayList<>();
     
-    BaseClient(){
-        this.idClient = ".....";
-    }
+    // BaseClient(){
+    //     this.idClient = ".....";
+    // }
     void newMeat(String type,int price){
         String typeMeat = "";
         if(this.money>=price){
@@ -73,6 +73,7 @@ class Meat extends Thread implements Serializable{
     private String rank_meat = "rare";
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
+    private String id;
     boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
     Meat(String type){
         this.type_meat = type;
@@ -120,9 +121,9 @@ class Meat extends Thread implements Serializable{
     //ดึงค่าอุณหภูมิ
     public int getTemperature() {
         return this.temp;
-       
     }
     String gettype_meat(){return this.type_meat;}
+    String getid(){return this.id;}
 }
 class ClickMeat extends Thread implements Serializable{
     private Meat meat;
