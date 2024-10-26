@@ -4,8 +4,10 @@ import java.util.*;;
 class OpenPortClient extends Thread{
     private ServerSocket serverSocket;
     private BaseClient baseClient;
+    private App app;
     private int port;
-    OpenPortClient(BaseClient baseClient, int port){
+    OpenPortClient(App app,BaseClient baseClient, int port){
+        this.app = app;
         this.baseClient = baseClient;
         this.port = port;
     }
@@ -17,11 +19,11 @@ class OpenPortClient extends Thread{
                 if(this.baseClient.statusConnectServer){
                     Socket socket = serverSocket.accept();
                     ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
-                    BaseServer baseServer = (BaseServer) req.readObject();
-                    ArrayList<HashMap<String,String>> x = baseServer.getPlayerInRobby();
-                    for(int i=0;i<x.size();i++){
-                        System.out.println("ชื่อร้าน : "+x.get(i).get("name")+", สถานะ : "+x.get(i).get("status"));
-                    }
+                    this.app.baseServer = (BaseServer) req.readObject();
+                    // ArrayList<HashMap<String,String>> x = baseServer.getPlayerInRobby();
+                    // for(int i=0;i<x.size();i++){
+                    //     System.out.println("ชื่อร้าน : "+x.get(i).get("name")+", สถานะ : "+x.get(i).get("status"));
+                    // }
                     req.close();
                     socket.close();
                 }

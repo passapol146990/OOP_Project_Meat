@@ -56,12 +56,22 @@ public class PageMenu extends JPanel {
             if(!app.getBaseClient().statusConnectServer){
                 app.getBaseClient().setNameShop(nameField.getText());
                 app.getBaseClient().statusConnectServer = true;
+                PageLobby lobby = new PageLobby(app);
+                app.addPanel(lobby,"lobby");
                 ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
                 conn.start();
             }
         });
-        settingButton.addActionListener(e->app.showPanel("seting"));
-        aboutButton.addActionListener(e->app.showPanel("about"));
+        settingButton.addActionListener(e->{
+            PageSeting seting = new PageSeting(app);
+            app.addPanel(seting, "seting");
+            app.showPanel("seting");
+        });
+        aboutButton.addActionListener(e->{
+            PageAbout about = new PageAbout(app);
+            app.addPanel(about, "about");
+            app.showPanel("about");
+        });
         exitButton.addActionListener(e->System.exit(0));
 
         gbc.gridwidth = 1;

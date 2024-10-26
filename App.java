@@ -10,6 +10,7 @@ public class App extends JFrame{
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private BaseClient baseClient;
+    BaseServer baseServer;
     private Sound sound = new Sound();
     private HashMap<String,JPanel> panels = new HashMap<String,JPanel>();
     App(String title,BaseClient baseClient){
