@@ -1,10 +1,14 @@
+import java.io.Serializable;
 import java.util.Random;
 
-public class BaseClient{
+public class BaseClient implements Serializable{
     private int money = 50;
     private Meat meat=null;
     private int time = 0;
     boolean statusCountTime = false;
+    boolean statusConnectServer = false;
+    boolean statusReady = false;
+    private String nameShop;
     
     BaseClient(){}
     void newMeat(String type){
@@ -33,8 +37,9 @@ public class BaseClient{
         CountTime runTime = new CountTime(this);
         runTime.start();
     }
+    String getNameShop(){return this.nameShop;}
+    void setNameShop(String name ){this.nameShop = name;}
 }
-
 class Meat extends Thread{
     private int temp=0;
     private int meat_left = 0;
@@ -125,3 +130,6 @@ class ClickMeat extends Thread{
         }
     }
 }
+
+
+

@@ -128,11 +128,11 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
         setLayout(null);
         app.getBaseClient().setTime(300);
         app.getBaseClient().runStartGame();
-        app.getSound().playmusic();
+        // app.getSound().playmusic();
 
         // Meat and plate areas
-        meatRect = new Rectangle(402, 160, 400, 300); // Meat size and position
-        plateRect = new Rectangle(1000, -50, 100, 100); // Plate size and position
+        meatRect = new Rectangle(402, 160, 400, 300); 
+        plateRect = new Rectangle(1000, -50, 100, 100);
 
         // Setting button
         B_setting = new JButton();
@@ -147,7 +147,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
                 JDialog settingsDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "Setting", true);
                 settingsDialog.setSize(400, 250);
                 settingsDialog.setLayout(new BorderLayout());
-                settingsDialog.setUndecorated(true); // ป้องกันการขยับ popup
+                settingsDialog.setUndecorated(true);
 
                 JLabel orderLabel = new JLabel("Setting", SwingConstants.CENTER);
                 settingsDialog.add(orderLabel, BorderLayout.NORTH);
@@ -162,7 +162,7 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
                 // โหลดไอคอนและปรับขนาดให้พอดี (เช่น 50x50)
                 ImageIcon AmusicIcon = new ImageIcon("./image/music.png");
                 Image musicImage = AmusicIcon.getImage(); // แปลงจาก ImageIcon เป็น Image
-                Image resizedMusicImage = musicImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH); // ปรับขนาด
+                Image resizedMusicImage = musicImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
                 // โหลดไอคอน audio และปรับขนาด
                 ImageIcon AaudioIcon = new ImageIcon("./image/volume.png");
@@ -170,8 +170,8 @@ private static final long DISPLAY_DURATION = 5000; // เวลาที่จ�
                 Image resizedAudioImage = audioImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
                 
                 // Icon สำหรับ Music และ Audio
-                JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage)); // ตั้งค่าเส้นทาง icon ของ music
-                JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage)); // ตั้งค่าเส้นทาง icon ของ audio
+                JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage));
+                JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage));
 
                 // Slider สำหรับปรับระดับเสียง
                 JSlider musicSlider = new JSlider(0, 100, 50);
