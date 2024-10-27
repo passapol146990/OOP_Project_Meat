@@ -113,12 +113,19 @@ public class PageStart extends JPanel {
         panel.add(priceLabel, BorderLayout.EAST);
 
         // เพิ่ม MouseListener ให้กับพาเนลเพื่อตรวจจับการคลิก
-        panel.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                System.out.println("Selected Price: " + price); // พิมพ์ราคาที่เลือกเมื่อคลิก
-            }
-        });
+        // panel.addMouseListener(new java.awt.event.MouseAdapter() {
+        //     @Override
+        //     public void mouseClicked(java.awt.event.MouseEvent e) {
+        //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+        //         orderShow.setBounds(825, 75, 495, 80);
+        //         orderShow.setLayout(new BorderLayout());
+        //         orderShow.setUndecorated(true);
+        //         JPanel selectItem = createOrderItemPanel(String.format("+%s$", price));
+        //         app.getBaseClient().setOrders_type(dataOrder,index);
+        //         orderShow.add(selectItem,BorderLayout.CENTER);
+        //         orderShow.setVisible(true);
+        //     }
+        // });
     
         // เพิ่มเส้นขอบโค้ง
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // เพิ่มระยะห่างจากขอบพาเนลเล็กน้อย
@@ -261,8 +268,8 @@ public class PageStart extends JPanel {
 
             JLabel orderLabel = new JLabel("SHOP", SwingConstants.CENTER);
             orderDialog.add(orderLabel, BorderLayout.NORTH);
-            JButton order = new JButton("close");
-            orderDialog.add(order, BorderLayout.CENTER);
+            JButton btnClose = new JButton("close");
+            orderDialog.add(btnClose, BorderLayout.CENTER);
 
             // พาเนลแสดงสินค้า
             JPanel outerPanel = new JPanel(new BorderLayout());
@@ -272,54 +279,20 @@ public class PageStart extends JPanel {
 
             dataOrder =  this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
-                JPanel item = createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
-                productPanel.add(item);
-                final int index = i;
-                item.addMouseListener(new MouseAdapter() {
-                   @Override
-                   public void mouseClicked(MouseEvent e) {
-                       System.out.println(index);
-                       orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-                       orderShow.setBounds(825, 75, 495, 80);
-                       orderShow.setLayout(new BorderLayout());
-                       orderShow.setUndecorated(true); // ป้องกันการขยับ popup
-                       JPanel selectItem = createOrderItemPanel(
-                           dataOrder.get(index).get("image"),
-                           dataOrder.get(index).get("title"),
-                           String.format("+%s$", dataOrder.get(index).get("price")));
-                           app.getBaseClient().setOrders_type(dataOrder,index);
-                        orderShow.add(selectItem,BorderLayout.CENTER);
-                       orderShow.setVisible(true);
-                   } 
-                });
+                JPanel order = this.createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
+                productPanel.add(order);
+                // order.addMouseListener(new MouseAdapter() {
+                //     public void mouseClicked(MouseEvent e) {
+                //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+                //         orderShow.setBounds(825, 75, 495, 80);
+                //         orderShow.setLayout(new BorderLayout());
+                //         orderShow.setUndecorated(true);
+                //         JPanel selectItem = createOrderItemPanel("./image/meat/01/medium_rare1.png","test", String.format("+%s$", "70"));
+                //         orderShow.add(selectItem,BorderLayout.CENTER);
+                //         orderShow.setVisible(true);
+                //     }
+                // });
             }
-            // String path = "./image/meat/01/medium_rare1.png";
-            // for(int order_count = 0;order_count<5;order_count++){
-            //     // สินค้า
-            //     price[order_count] = random.nextInt(350 - 100);
-            //     item1[order_count] = new JPanel();
-            //     item1[order_count].setLayout(new BorderLayout());
-            //     item1[order_count] = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา",String.format("+%d$", price[order_count]));
-            //     int index = order_count;
-            //     item1[order_count].addMouseListener(new MouseAdapter() {
-            //         @Override
-            //         public void mouseClicked(MouseEvent e) {
-            //             orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-            //             orderShow.setBounds(825, 75, 495, 80);
-            //             orderShow.setLayout(new BorderLayout());
-            //             orderShow.setUndecorated(true);
-            //             contentPanel = new JPanel();
-            //             contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
-            //             contentPanel.setLayout(new BorderLayout());
-            //             contentPanel.add(item1[index], BorderLayout.CENTER);
-            //             indexs = index;
-            //             orderShow.setContentPane(contentPanel);
-            //             orderShow.setVisible(true);
-            //         }
-            //     });
-            //     productPanel.add(item1[order_count]);
-            // }
-
             // ปุ่ม back
             JButton backButton = new JButton("back");
             backButton.addActionListener(e1 -> orderDialog.dispose());
@@ -476,8 +449,9 @@ public class PageStart extends JPanel {
         });
         
     }
-    public ArrayList<HashMap<String, String>> getDataOrder() {
-        return dataOrder;
+    String[] getFormatTitleOrder(String text){
+        String[] data = new String[text.length()];
+        return data;
     }
     @Override
     public void paint(Graphics g) {
@@ -496,51 +470,70 @@ public class PageStart extends JPanel {
         g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, 500, 500, this);
         g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
         g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
+        g.setColor(new Color(255, 255, 255));
         //วาดอุณหภูมิ
         if (showTemp) {
-            g.setColor(new Color(255, 255, 255));
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
+            g.setFont(new Font("Tahoma", Font.PLAIN, 50)); 
             String str_temp = Integer.toString(app.getBaseClient().getMeat().getTemperature()/100);
             g.drawString(str_temp, 200, 250); 
         }
         // เงิน
-        g.setColor(new Color(255,255,255));
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.setFont(new Font("Tahoma", Font.PLAIN, 30));
         g.drawString(app.getBaseClient().getMoney()+"$", 10, 660);
         // เวลา
-        g.setColor(new Color(255,255,255));
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.setFont(new Font("Tahoma", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
-
-        List<String> lists = new ArrayList<String>();
-        lists.add("Test1");
-        lists.add("Test2");
-        lists.add("Test3");
-        lists.add("Test4");
-        lists.add("Test5");
+        // ออเดอร์
+        g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
+        g.drawImage(new ImageIcon("./image/meat/01/medium_rare1.png").getImage(), 910, 2, 100,100,this);
+        g.setFont(new Font("Tahoma",Font.CENTER_BASELINE,12));
+        String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
+        
+        g.drawString("เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา",1010,40);
+        
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
 
-        // วาดข้อความสำหรับแต่ละรายการใน lists
-        for (int i = 0; i < lists.size(); i++) {
-            String s = lists.get(i);
+       // ดึงข้อมูลผู้เล่นเรียงตามอันดับจาก getPlayerRankings()
+        ArrayList<BaseClient> rankedPlayers = app.baseServer.getPlayerRankings();
+
+        // วาดข้อความสำหรับแต่ละรายการใน rankedPlayers
+        for (int i = 0; i < rankedPlayers.size(); i++) {
+            BaseClient player = rankedPlayers.get(i);
+            String playerName = player.getNameShop();
+            double playerMoney = player.getMoney();
             int rank = i + 1;
-            g.setColor(new Color(85,85,85));
-            int rectHeight = lineHeight; // ปรับขนาดกรอบให้มีความสูงพอดีกับข้อความ
-            g.drawRect(x, startY + i * lineHeight - 20, s.length() * 30, rectHeight); // วาดกรอบสำหรับข้อความ
-            g.setColor(new Color(0, 0, 0)); // ตั้งค่าสี
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
-            // วาดบรรทัด
-            g.drawString(rank + "   " + s + "   " + app.getBaseClient().getMoney() + "$", x, startY + i * lineHeight);
+
+            // ตั้งค่าและวาดกรอบรอบข้อความ
+            g.setColor(new Color(85, 85, 85));
+            int rectHeight = lineHeight;
+            int rectWidth = playerName.length() * 15 + 100; // กำหนดขนาดตามความยาวชื่อผู้เล่น
+            int rectX = x;
+            int rectY = startY + i * lineHeight - 20;
+            g.drawRect(rectX, rectY, rectWidth, rectHeight);
+
+            // วาดข้อมูลผู้เล่นในกรอบ
+            g.setColor(new Color(0, 0, 0)); // ตั้งสีสำหรับข้อความ
+            g.setFont(new Font("Tahoma", Font.PLAIN, 20)); // ตั้งฟอนต์
+
+            // ข้อความที่จะแสดง (อันดับ ชื่อ และจำนวนเงิน)
+            String displayText = rank + ". " + playerName + " = " + playerMoney + "$";
+            int textX = x + 10; // กำหนดตำแหน่ง X ของข้อความให้มีระยะจากกรอบ
+            int textY = startY + i * lineHeight;
+            g.drawString(displayText, textX, textY);
         }
-        // วาดข้อความการจัดอันดับรวม
+
+        // แสดงอันดับของผู้เล่นปัจจุบัน
         String rankingText = "Your ranking: " + app.getBaseClient().getMoney() + "$";
-        g.drawString(rankingText, x, startY + lists.size() * lineHeight + 30); // วางหลังรายการ
-        if(this.app.getBaseClient().getMeat()!=null&&this.app.getBaseClient().getMeat().getImage()!=null){
+        g.drawString(rankingText, x, startY + rankedPlayers.size() * lineHeight + 30); // วางหลังรายการ
+
+        // วาดรูปภาพเนื้อ ถ้ามี
+        if (this.app.getBaseClient().getMeat() != null && this.app.getBaseClient().getMeat().getImage() != null) {
             ImageIcon icon_meat = new ImageIcon(this.app.getBaseClient().getMeat().getImage());
             g.drawImage(icon_meat.getImage(), meatRect.x, meatRect.y, 500, 382, this);
         }
+
     }
 }
 class RunRepaint extends Thread{

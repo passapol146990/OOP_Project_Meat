@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import java.util.Random;
 
 public class BaseServer implements Serializable{
@@ -95,6 +97,21 @@ public class BaseServer implements Serializable{
             }
         }
     }
+    //เปรียบเทียบค่าเงิน แล้วเก็บไว้ใน arraylist
+    ArrayList<BaseClient> getPlayerRankings() {
+        ArrayList<BaseClient> onlinePlayers = new ArrayList<>();
+    
+        // กรองเฉพาะผู้เล่นที่ออนไลน์
+        for (String ip : client.keySet()) {
+            if (controller_client.getOrDefault(ip, false)) { // ตรวจสอบว่าออนไลน์อยู่
+                onlinePlayers.add(client.get(ip));
+            }
+        }
+        // จัดเรียงตามจำนวนเงินจากมากไปน้อย
+        onlinePlayers.sort(Comparator.comparingDouble(BaseClient::getMoney).reversed());
+        return onlinePlayers;
+    }
+    
 }
 class CountTimeServer extends Thread{
     private BaseServer base;
