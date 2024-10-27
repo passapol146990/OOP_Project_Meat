@@ -93,5 +93,6 @@ class SendClient extends Thread{
                 this.baseServer.CountPlayerOnServer -= 1;
             }
         }
+        System.out.println(this.ipAddress+" ออกจากเซิฟไปแล้ว");
     }
 }
