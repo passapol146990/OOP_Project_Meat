@@ -25,8 +25,8 @@ public class PageStart extends JPanel {
     boolean showTemp = false;
 
     private JPanel contentPanel;
-    private JPanel item1[] = new JPanel[5];
-    private int price[] = new int[5];
+    // private JPanel item1[] = new JPanel[5];
+     private int price[] = new int[5];
     private Random random = new Random();
     private int indexs;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
@@ -273,7 +273,26 @@ public class PageStart extends JPanel {
 
             ArrayList<HashMap<String,String>> dataOrder =  this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
-                productPanel.add(createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
+                JPanel item = createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
+                productPanel.add(item);
+                final int index = i;
+                item.addMouseListener(new MouseAdapter() {
+                   @Override
+                   public void mouseClicked(MouseEvent e) {
+                       System.out.println(index);
+                       app.getBaseClient().setOrders_type(index);
+                       orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+                       orderShow.setBounds(825, 75, 495, 80);
+                       orderShow.setLayout(new BorderLayout());
+                       orderShow.setUndecorated(true); // ป้องกันการขยับ popup
+                       JPanel selectItem = createOrderItemPanel(
+                        dataOrder.get(index).get("image"),
+                        dataOrder.get(index).get("title"),
+                        String.format("+%s$", dataOrder.get(index).get("price")));
+                        orderShow.add(selectItem,BorderLayout.CENTER);
+                       orderShow.setVisible(true);
+                   } 
+                });
             }
             // String path = "./image/meat/01/medium_rare1.png";
             // for(int order_count = 0;order_count<5;order_count++){
@@ -301,6 +320,7 @@ public class PageStart extends JPanel {
             //     });
             //     productPanel.add(item1[order_count]);
             // }
+
             // ปุ่ม back
             JButton backButton = new JButton("back");
             backButton.addActionListener(e1 -> orderDialog.dispose());
@@ -418,17 +438,18 @@ public class PageStart extends JPanel {
                         int chk = app.getBaseClient().chkMeat();
                         if(chk == 1){
                             System.out.println("In chk");
-                            //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
-                            //orderShow.remove(contentPanel);
-                            contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
-                            // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
-                            orderShow.setVisible(true);
-                            app.getBaseClient().addMoney(price[indexs]);
+                            // System.out.println("ContentPanel Parent: " + contentPanel.getParent());
+                            // orderShow.remove(contentPanel);
+                            // contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
+                            // // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
+                            // orderShow.setVisible(true);
+                            // app.getBaseClient().addMoney(price[indexs]);
                         }
                         else{contentPanel.setBackground(new Color(255, 89, 68));}
-                        contentPanel.revalidate();
-                        contentPanel.repaint();
+                        // contentPanel.revalidate();
+                        // contentPanel.repaint();
                         app.getBaseClient().getMeat().kill();
+                        orderShow.dispose();
                         timer.setRepeats(false);
                         timer.start();
                     }

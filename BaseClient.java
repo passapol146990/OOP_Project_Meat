@@ -65,9 +65,11 @@ public class BaseClient implements Serializable{
         return String.format("%02d:%02d", minutes, seconds);
     }
     void setTime(int time){this.time = time;}
+    void setOrders_type(int index){this.orders_type = orders.get(index).get("type");}
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
     public int chkMeat(){
+        System.out.println(this.meat.gettype_meat() + " : " + orders_type );
         if(this.meat.gettype_meat() == orders_type){
             System.out.println("Correct");
             return 1;
@@ -90,6 +92,7 @@ class Meat extends Thread implements Serializable{
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
     private String id;
     boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
+
     Meat(String type){
         this.type_meat = type;
     }
