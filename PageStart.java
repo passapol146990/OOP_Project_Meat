@@ -22,18 +22,11 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     boolean showTemp = false;
-<<<<<<< HEAD
-    boolean showOrder = false;
-    private JPanel contentPanel;
-=======
 
->>>>>>> origin/orders_server_to_client
     private JPanel item1[] = new JPanel[5];
     private int price[] = new int[5];
     private Random random = new Random();
     private int indexs;
-    private String img;
-    private long startTime;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -278,26 +271,7 @@ public class PageStart extends JPanel {
 
             ArrayList<HashMap<String,String>> dataOrder = this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
-<<<<<<< HEAD
-                JPanel order = this.createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
-                productPanel.add(order);
-                final int index = i;
-                 order.addMouseListener(new MouseAdapter() {
-                     public void mouseClicked(MouseEvent e) {
-                           showOrder = true;
-                           img = dataOrder.get(index).get("image");
-                //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-                //         orderShow.setBounds(825, 75, 495, 80);
-                //         orderShow.setLayout(new BorderLayout());
-                //         orderShow.setUndecorated(true);
-                //         JPanel selectItem = createOrderItemPanel("./image/meat/01/medium_rare1.png","test", String.format("+%s$", "70"));
-                //         orderShow.add(selectItem,BorderLayout.CENTER);
-                //         orderShow.setVisible(true);
-                     }
-                 });
-=======
                 productPanel.add(this.createOrderItemPanel(i,dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
->>>>>>> origin/orders_server_to_client
             }
             // ปุ่ม back
             JButton backButton = new JButton("back");
@@ -401,36 +375,10 @@ public class PageStart extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
-<<<<<<< HEAD
-                    // Check if meat intersects with plate
-                    if (meatRect.intersects(plateRect)) {
-                        long duration = System.currentTimeMillis() - startTime;
-                        app.getBaseClient().getMeat().kill();
-                        orderShow.dispose();
-                        int chk = app.getBaseClient().chkMeat();
-                        if(chk == 1 && duration == 2000){
-                            System.out.println("In chk");
-                            //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
-                            //orderShow.remove(contentPanel);
-                            contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
-                            // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
-                            orderShow.setVisible(true);
-                            app.getBaseClient().addMoney(price[indexs]);
-                        }
-                        else{contentPanel.setBackground(new Color(255, 89, 68));}
-                        contentPanel.revalidate();
-                        contentPanel.repaint();
-                        app.getBaseClient().getMeat().kill();
-                        timer.setRepeats(false);
-                        timer.start();
-                    }
-                    else{
-=======
                     if(meatRect.intersects(plateRect)) {
                         app.getBaseClient().getMeat().kill();
                         app.getBaseClient().sendOrder();
                     }else{
->>>>>>> origin/orders_server_to_client
                         meatRect.x = 402;
                         meatRect.y = 160;
                     }
@@ -501,15 +449,6 @@ public class PageStart extends JPanel {
         g.setFont(new Font("Tahoma", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
         // ออเดอร์
-<<<<<<< HEAD
-        if(showOrder){
-            g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
-            g.drawImage(new ImageIcon(img).getImage(), 910, 2, 100,100,this);
-            g.setFont(new Font("Tahoma",Font.CENTER_BASELINE,12));
-            String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
-            
-            g.drawString(text,1010,40);
-=======
         if(this.app.getBaseClient().checkOrdering()){
             HashMap<String,String> isorders = this.app.getBaseClient().getOrdering();
             g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
@@ -525,7 +464,6 @@ public class PageStart extends JPanel {
             g.setFont(new Font("Tahoma",Font.BOLD,20));
             g.setColor(new Color(4,93,40));
             g.drawString(String.format("+%s$", isorders.get("price")),1180,55);
->>>>>>> origin/orders_server_to_client
         }
         
         int x = 1000; // ตำแหน่ง x
@@ -596,7 +534,6 @@ class RunRepaint extends Thread{
 
 class CountDownShowTemp extends Thread{
     private PageStart pageStart;
-    long startTime = System.currentTimeMillis();
     CountDownShowTemp(PageStart pageStart){
         this.pageStart = pageStart;
     }

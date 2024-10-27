@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import java.util.ArrayList;
@@ -24,13 +25,23 @@ public class BaseClient implements Serializable{
         }
     }
     void sendOrder(){
+        System.out.println("in");
         float give = 0;
-        if(this.Ordering.get("typeMeat")==this.meat.gettype_meat()){
+        System.out.println(this.Ordering.get("typeMeat") + " : " + this.meat.gettype_meat());
+        if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
             give += Integer.parseInt(this.Ordering.get("price"))*0.6;
+            System.out.println(give);
         }
-        if(1==0){}
+        if(Integer.parseInt(this.Ordering.get("tempMeat")) == this.meat.getTemperature()){
+            give += Integer.parseInt(this.Ordering.get("price"))*0.4;
+        }
+        if(Integer.parseInt(this.Ordering.get("tempMeat")) > this.meat.getTemperature()*1.2 || Integer.parseInt(this.Ordering.get("tempMeat"))*1.2 < this.meat.getTemperature()){
+        }
         // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
+        this.money += give;
         this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
+        this.Ordering = null;
+        System.out.println(money);
     }
     boolean checkOrdering(){
         boolean status = false;
@@ -90,10 +101,8 @@ public class BaseClient implements Serializable{
         return String.format("%02d:%02d", minutes, seconds);
     }
     void setTime(int time){this.time = time;}
-    void setOrders_type(ArrayList<HashMap<String,String>> ordersGet,int index){this.orders_type = ordersGet.get(index).get("typeMeat");
-    System.out.println(ordersGet);
-    System.out.println(orders.get(index).get("typeMeat"));}
-    String getOrders_type(){return this.orders_type;}
+    //void setOrders_type(ArrayList<HashMap<String,String>> ordersGet,int index){this.orders_type = ordersGet.get(index).get("typeMeat");
+    //String getOrders_type(){return this.orders_type;}
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
 }
