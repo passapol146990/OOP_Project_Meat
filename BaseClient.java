@@ -1,7 +1,10 @@
 import java.io.Serializable;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BaseClient implements Serializable{
+    String id = "";
     private int money = 50;
     private Meat meat=null;
     private int time = 0;
@@ -9,8 +12,20 @@ public class BaseClient implements Serializable{
     boolean statusReady = false;
     private String nameShop;
     private String orders_type;
+    private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     
-    BaseClient(){}
+    BaseClient(){
+        String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
+        for(int i=0;i<55;i++){
+            this.id += string.split("")[new Random().nextInt(0,string.length())];
+        }
+    }
+    void addOrder(HashMap<String,String> order){
+        this.orders.add(order);
+    }
+    ArrayList<HashMap<String,String>> getOrder(){
+        return this.orders;
+    }
     void newMeat(String type,int price){
         String typeMeat = "";
         if(this.money>=price){
