@@ -41,9 +41,12 @@ class Server extends Thread{
                     this.baseServer.setStatusInRoby(true);
                 }
                 // ถ้ายังไม่มี ip ผู้เล่นคนนี้หรือผู้เล่นคนนี้หลุดการเชื่อมต่อจะให้ทำงานตรงนี้ ถ้ามีแล้วจะไม่ทำงาน
-                if(this.baseServer.controller_client.get(ipAddress)==null||!this.baseServer.controller_client.get(ipAddress)){
+                // if(this.baseServer.controller_client.get(ipAddress)==null||!this.baseServer.controller_client.get(ipAddress)){
+                if(this.baseServer.controller_client.get(ipAddress)==null||this.baseServer.controller_client.get(ipAddress)==false){
+                    System.out.println(baseClient.getNameShop()+", IP : "+ipAddress+" เข้าร่วมเซิฟเวอร์");
                     // เก็บข้อมูลว่าผู้เล่นคนนี้เชื่อมต่ออยู่
                     this.baseServer.controller_client.put(ipAddress, true);
+                    System.out.println(this.baseServer.controller_client.get(ipAddress));
                     this.baseServer.IDClientGETIPAddress.put(baseClient.id,ipAddress);
                     // บวก 1 สำหรับคนที่ออนไลน์
                     this.baseServer.CountPlayerOnServer += 1;
@@ -87,8 +90,9 @@ class SendClient extends Thread{
                 res.reset();
                 res.close();
                 socket.close();
-                try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
+                try {Thread.sleep(100);} catch (InterruptedException e) {throw new RuntimeException(e);}
             } catch (Exception e) {
+                System.out.println(e);
                 this.baseServer.controller_client.put(this.ipAddress,false);
                 this.baseServer.CountPlayerOnServer -= 1;
             }
