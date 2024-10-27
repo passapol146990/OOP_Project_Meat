@@ -34,7 +34,8 @@ class Server extends Thread{
                 String ipAddress = socket.getInetAddress().getHostAddress();
                 ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
                 // อัพเดทข้อมูลของผู้เล่น
-                this.baseServer.setClient((BaseClient) req.readObject(), ipAddress);
+                BaseClient baseClient = (BaseClient) req.readObject();
+                this.baseServer.setClient(baseClient, ipAddress);
                 // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
                 if(this.baseServer.CountPlayerOnServer==0){
                     this.baseServer.setStatusInRoby(true);
@@ -43,6 +44,7 @@ class Server extends Thread{
                 if(this.baseServer.controller_client.get(ipAddress)==null||!this.baseServer.controller_client.get(ipAddress)){
                     // เก็บข้อมูลว่าผู้เล่นคนนี้เชื่อมต่ออยู่
                     this.baseServer.controller_client.put(ipAddress, true);
+                    this.baseServer.IDClientGETIPAddress.put(baseClient.id,ipAddress);
                     // บวก 1 สำหรับคนที่ออนไลน์
                     this.baseServer.CountPlayerOnServer += 1;
                     // สร้าง Thread ส่ง BaseServer กลับไปหาผู้เล่นคนนั้น
@@ -53,6 +55,8 @@ class Server extends Thread{
                 if(this.baseServer.getStatusInRoby()){
                     // ตรวจสอบว่าคนที่อยู่ใน lobby กดพร้อมและจำนวนคนเล่นครบตาม server กำหนดหรือยัง
                     this.baseServer.checkReadyPlayer();
+                }else if(this.baseServer.getStatusInGame()){
+                    this.baseServer.checkDataBasePlayerInGame();
                 }
                 req.close();
                 socket.close();
