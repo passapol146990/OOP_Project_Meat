@@ -28,7 +28,7 @@ public class ConnectServer extends Thread{
                 res.reset();
                 res.close();
                 socket.close();
-                try {Thread.sleep(100);} catch (InterruptedException e) {throw new RuntimeException(e);}
+                try {Thread.sleep(500);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
         } catch (Exception e) {
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);

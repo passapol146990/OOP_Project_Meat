@@ -46,7 +46,6 @@ class Server extends Thread{
                     System.out.println(baseClient.getNameShop()+", IP : "+ipAddress+" เข้าร่วมเซิฟเวอร์");
                     // เก็บข้อมูลว่าผู้เล่นคนนี้เชื่อมต่ออยู่
                     this.baseServer.controller_client.put(ipAddress, true);
-                    System.out.println(this.baseServer.controller_client.get(ipAddress));
                     this.baseServer.IDClientGETIPAddress.put(baseClient.id,ipAddress);
                     // บวก 1 สำหรับคนที่ออนไลน์
                     this.baseServer.CountPlayerOnServer += 1;
@@ -90,7 +89,7 @@ class SendClient extends Thread{
                 res.reset();
                 res.close();
                 socket.close();
-                try {Thread.sleep(100);} catch (InterruptedException e) {throw new RuntimeException(e);}
+                try {Thread.sleep(500);} catch (InterruptedException e) {throw new RuntimeException(e);}
             } catch (Exception e) {
                 System.out.println(e);
                 this.baseServer.controller_client.put(this.ipAddress,false);
