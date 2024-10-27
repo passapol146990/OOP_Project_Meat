@@ -21,10 +21,8 @@ public class PageStart extends JPanel {
     private RunRepaint runRepaint;
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
-    private  JDialog orderShow;
     boolean showTemp = false;
 
-    private JPanel contentPanel;
     private JPanel item1[] = new JPanel[5];
     private int price[] = new int[5];
     private Random random = new Random();
@@ -73,7 +71,7 @@ public class PageStart extends JPanel {
             panel.add(textPanel, BorderLayout.SOUTH);
             return panel;
         }
-    private JPanel createOrderItemPanel(String imagePath, String description, String price) {
+    private JPanel createOrderItemPanel(int index,String imagePath, String description, String price) {
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -114,19 +112,12 @@ public class PageStart extends JPanel {
         panel.add(priceLabel, BorderLayout.EAST);
 
         // เพิ่ม MouseListener ให้กับพาเนลเพื่อตรวจจับการคลิก
-        // panel.addMouseListener(new java.awt.event.MouseAdapter() {
-        //     @Override
-        //     public void mouseClicked(java.awt.event.MouseEvent e) {
-        //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-        //         orderShow.setBounds(825, 75, 495, 80);
-        //         orderShow.setLayout(new BorderLayout());
-        //         orderShow.setUndecorated(true);
-        //         JPanel selectItem = createOrderItemPanel(String.format("+%s$", price));
-        //         app.getBaseClient().setOrders_type(dataOrder,index);
-        //         orderShow.add(selectItem,BorderLayout.CENTER);
-        //         orderShow.setVisible(true);
-        //     }
-        // });
+        panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                app.getBaseClient().setOrdering(app.getBaseClient().getOrder().get(index),index);
+            }
+        });
     
         // เพิ่มเส้นขอบโค้ง
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // เพิ่มระยะห่างจากขอบพาเนลเล็กน้อย
@@ -278,21 +269,9 @@ public class PageStart extends JPanel {
 
             JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
 
-            ArrayList<HashMap<String,String>> dataOrder =  this.app.getBaseClient().getOrder();
+            ArrayList<HashMap<String,String>> dataOrder = this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
-                JPanel order = this.createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
-                productPanel.add(order);
-                // order.addMouseListener(new MouseAdapter() {
-                //     public void mouseClicked(MouseEvent e) {
-                //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-                //         orderShow.setBounds(825, 75, 495, 80);
-                //         orderShow.setLayout(new BorderLayout());
-                //         orderShow.setUndecorated(true);
-                //         JPanel selectItem = createOrderItemPanel("./image/meat/01/medium_rare1.png","test", String.format("+%s$", "70"));
-                //         orderShow.add(selectItem,BorderLayout.CENTER);
-                //         orderShow.setVisible(true);
-                //     }
-                // });
+                productPanel.add(this.createOrderItemPanel(i,dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
             }
             // ปุ่ม back
             JButton backButton = new JButton("back");
@@ -374,14 +353,6 @@ public class PageStart extends JPanel {
         runRepaint = new RunRepaint(this); 
         runRepaint.start();
 
-        int displayDuration = 2000;
-        Timer timer = new Timer(displayDuration, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                orderShow.setVisible(false); // ซ่อน orderShow
-                contentPanel.setBackground(null); // คืนค่าพื้นหลังให้กลับเป็นค่าเริ่มต้นหรือตามที่ต้องการ
-            }
-        });
         addMouseListener(new MouseAdapter() {
             //กดพลิกเนื้อ ยังไม่ได้ทำเพิ่มนะ
             public void mouseClicked(MouseEvent e) {
@@ -404,28 +375,10 @@ public class PageStart extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
-                    // Check if meat intersects with plate
-                    if (meatRect.intersects(plateRect)) {
+                    if(meatRect.intersects(plateRect)) {
                         app.getBaseClient().getMeat().kill();
-                        orderShow.dispose();
-                        int chk = app.getBaseClient().chkMeat();
-                        if(chk == 1){
-                            System.out.println("In chk");
-                            //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
-                            //orderShow.remove(contentPanel);
-                            contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
-                            // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
-                            orderShow.setVisible(true);
-                            app.getBaseClient().addMoney(price[indexs]);
-                        }
-                        else{contentPanel.setBackground(new Color(255, 89, 68));}
-                        contentPanel.revalidate();
-                        contentPanel.repaint();
-                        app.getBaseClient().getMeat().kill();
-                        timer.setRepeats(false);
-                        timer.start();
-                    }
-                    else{
+                        app.getBaseClient().sendOrder();
+                    }else{
                         meatRect.x = 402;
                         meatRect.y = 160;
                     }
@@ -443,7 +396,7 @@ public class PageStart extends JPanel {
                     meatRect.x += dx;
                     meatRect.y += dy;
                     lastMousePosition = e.getPoint();
-                    repaint(); // Refresh the screen when dragging
+                    repaint();
                 }
             }
         });
@@ -496,20 +449,22 @@ public class PageStart extends JPanel {
         g.setFont(new Font("Tahoma", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
         // ออเดอร์
-        g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
-        g.drawImage(new ImageIcon("./image/meat/01/medium_rare1.png").getImage(), 910, 2, 100,100,this);
-        g.setColor(new Color(0,0,0));
-        g.setFont(new Font("Tahoma",Font.ITALIC,15));
-        String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
-        String[] titleOrder = getFormatTitleOrder(text,20);
-        int positionTitleShowOrder = 20;
-        for(int i=0;i<titleOrder.length;i++){
-            g.drawString(titleOrder[i],1010,positionTitleShowOrder);
-            positionTitleShowOrder+=20;
+        if(this.app.getBaseClient().checkOrdering()){
+            HashMap<String,String> isorders = this.app.getBaseClient().getOrdering();
+            g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
+            g.drawImage(new ImageIcon(isorders.get("image")).getImage(), 910, 2, 100,100,this);
+            g.setColor(new Color(0,0,0));
+            g.setFont(new Font("Tahoma",Font.ITALIC,15));
+            String[] titleOrder = getFormatTitleOrder(isorders.get("title"),20);
+            int positionTitleShowOrder = 20;
+            for(int i=0;i<titleOrder.length;i++){
+                g.drawString(titleOrder[i],1010,positionTitleShowOrder);
+                positionTitleShowOrder+=20;
+            }
+            g.setFont(new Font("Tahoma",Font.BOLD,20));
+            g.setColor(new Color(4,93,40));
+            g.drawString(String.format("+%s$", isorders.get("price")),1180,55);
         }
-        g.setFont(new Font("Tahoma",Font.BOLD,20));
-        g.setColor(new Color(4,93,40));
-        g.drawString("+54$",1180,55);
         
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น

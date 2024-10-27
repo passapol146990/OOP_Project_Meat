@@ -12,13 +12,35 @@ public class BaseClient implements Serializable{
     boolean statusConnectServer = false;
     boolean statusReady = false;
     private String nameShop;
-    private String orders_type;
     private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
-    
+    private HashMap<String,String> Ordering;
     BaseClient(){
         String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
         for(int i=0;i<55;i++){
             this.id += string.split("")[new Random().nextInt(0,string.length())];
+        }
+    }
+    void sendOrder(){
+        float give = 0;
+        if(this.Ordering.get("typeMeat")==this.meat.gettype_meat()){
+            give += Integer.parseInt(this.Ordering.get("price"))*0.6;
+        }
+        if(1==0){}
+        // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
+        this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
+    }
+    boolean checkOrdering(){
+        boolean status = false;
+        if(this.Ordering!=null){status=true;}
+        return status;
+    }
+    HashMap<String,String> getOrdering(){
+        return this.Ordering;
+    }
+    void setOrdering(HashMap<String,String> isorder,int index){
+        if(this.Ordering==null){
+            this.Ordering = isorder;
+            this.Ordering.put("index", String.valueOf(index));
         }
     }
     void addOrder(HashMap<String,String> order){
@@ -67,20 +89,9 @@ public class BaseClient implements Serializable{
     void setTime(int time){this.time = time;}
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
-    public int chkMeat(){
-        if(this.meat.gettype_meat() == orders_type){
-            System.out.println("Correct");
-            return 1;
-        }
-        else
-        {
-            System.out.println("Wrong");
-            return 0;
-        }
-    }
 }
 class Meat extends Thread implements Serializable{
-    private int temp=0;
+    private int temp = 0;
     private int meat_left = 0;
     private int meat_rigth = 0;
     private boolean meat_on = true;
