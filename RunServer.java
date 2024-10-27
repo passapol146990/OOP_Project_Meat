@@ -55,6 +55,8 @@ class Server extends Thread{
                 if(this.baseServer.getStatusInRoby()){
                     // ตรวจสอบว่าคนที่อยู่ใน lobby กดพร้อมและจำนวนคนเล่นครบตาม server กำหนดหรือยัง
                     this.baseServer.checkReadyPlayer();
+                }else if(this.baseServer.getStatusInGame()){
+                    this.baseServer.checkDataBasePlayerInGame();
                 }
                 req.close();
                 socket.close();

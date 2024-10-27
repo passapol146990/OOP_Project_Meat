@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BaseClient implements Serializable{
+    private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     String id = "";
     private int money = 50;
     private Meat meat=null;
@@ -22,6 +23,9 @@ public class BaseClient implements Serializable{
     }
     void addOrder(HashMap<String,String> order){
         this.orders.add(order);
+    }
+    void setOrder(ArrayList<HashMap<String,String>> order){
+        this.orders = order;
     }
     ArrayList<HashMap<String,String>> getOrder(){
         return this.orders;

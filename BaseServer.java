@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class BaseServer implements Serializable{
+    private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     int port = 3333;
     int time = 300;
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
