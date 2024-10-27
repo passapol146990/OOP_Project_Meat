@@ -114,12 +114,19 @@ public class PageStart extends JPanel {
         panel.add(priceLabel, BorderLayout.EAST);
 
         // เพิ่ม MouseListener ให้กับพาเนลเพื่อตรวจจับการคลิก
-        panel.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                System.out.println("Selected Price: " + price); // พิมพ์ราคาที่เลือกเมื่อคลิก
-            }
-        });
+        // panel.addMouseListener(new java.awt.event.MouseAdapter() {
+        //     @Override
+        //     public void mouseClicked(java.awt.event.MouseEvent e) {
+        //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+        //         orderShow.setBounds(825, 75, 495, 80);
+        //         orderShow.setLayout(new BorderLayout());
+        //         orderShow.setUndecorated(true);
+        //         JPanel selectItem = createOrderItemPanel(String.format("+%s$", price));
+        //         app.getBaseClient().setOrders_type(dataOrder,index);
+        //         orderShow.add(selectItem,BorderLayout.CENTER);
+        //         orderShow.setVisible(true);
+        //     }
+        // });
     
         // เพิ่มเส้นขอบโค้ง
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // เพิ่มระยะห่างจากขอบพาเนลเล็กน้อย
@@ -262,8 +269,8 @@ public class PageStart extends JPanel {
 
             JLabel orderLabel = new JLabel("SHOP", SwingConstants.CENTER);
             orderDialog.add(orderLabel, BorderLayout.NORTH);
-            JButton order = new JButton("close");
-            orderDialog.add(order, BorderLayout.CENTER);
+            JButton btnClose = new JButton("close");
+            orderDialog.add(btnClose, BorderLayout.CENTER);
 
             // พาเนลแสดงสินค้า
             JPanel outerPanel = new JPanel(new BorderLayout());
@@ -273,34 +280,20 @@ public class PageStart extends JPanel {
 
             ArrayList<HashMap<String,String>> dataOrder =  this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
-                productPanel.add(createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
+                JPanel order = this.createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
+                productPanel.add(order);
+                // order.addMouseListener(new MouseAdapter() {
+                //     public void mouseClicked(MouseEvent e) {
+                //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+                //         orderShow.setBounds(825, 75, 495, 80);
+                //         orderShow.setLayout(new BorderLayout());
+                //         orderShow.setUndecorated(true);
+                //         JPanel selectItem = createOrderItemPanel("./image/meat/01/medium_rare1.png","test", String.format("+%s$", "70"));
+                //         orderShow.add(selectItem,BorderLayout.CENTER);
+                //         orderShow.setVisible(true);
+                //     }
+                // });
             }
-            // String path = "./image/meat/01/medium_rare1.png";
-            // for(int order_count = 0;order_count<5;order_count++){
-            //     // สินค้า
-            //     price[order_count] = random.nextInt(350 - 100);
-            //     item1[order_count] = new JPanel();
-            //     item1[order_count].setLayout(new BorderLayout());
-            //     item1[order_count] = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา",String.format("+%d$", price[order_count]));
-            //     int index = order_count;
-            //     item1[order_count].addMouseListener(new MouseAdapter() {
-            //         @Override
-            //         public void mouseClicked(MouseEvent e) {
-            //             orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-            //             orderShow.setBounds(825, 75, 495, 80);
-            //             orderShow.setLayout(new BorderLayout());
-            //             orderShow.setUndecorated(true);
-            //             contentPanel = new JPanel();
-            //             contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
-            //             contentPanel.setLayout(new BorderLayout());
-            //             contentPanel.add(item1[index], BorderLayout.CENTER);
-            //             indexs = index;
-            //             orderShow.setContentPane(contentPanel);
-            //             orderShow.setVisible(true);
-            //         }
-            //     });
-            //     productPanel.add(item1[order_count]);
-            // }
             // ปุ่ม back
             JButton backButton = new JButton("back");
             backButton.addActionListener(e1 -> orderDialog.dispose());

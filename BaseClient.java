@@ -7,7 +7,7 @@ public class BaseClient implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     String id = "";
     private int money = 50;
-    private Meat meat=null;
+    private Meat meat = null;
     private int time = 0;
     boolean statusConnectServer = false;
     boolean statusReady = false;
