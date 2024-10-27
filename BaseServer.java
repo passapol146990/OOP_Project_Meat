@@ -12,6 +12,19 @@ public class BaseServer implements Serializable{
     private boolean statusInGame = false;
     int CountPlayerOnServer = 0;
     private int CountPlayerIsReady = 1;
+    ArrayList<HashMap<String,String>> orders = new ArrayList<>();
+    BaseServer(){
+        this.orders.add(getOrderFormat("./image/meat/01/medium_rare1.png", "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "49", "01","130"));
+    }
+    HashMap<String,String> getOrderFormat(String img,String title,String price,String typeMeat,String tempMeat){
+        HashMap<String,String> order = new HashMap<String,String>();
+        order.put("image", img);
+        order.put("title", title);
+        order.put("price", price);
+        order.put("typeMeat", typeMeat);
+        order.put("tempMeat", tempMeat);
+        return order;
+    }
     void setStatusInRoby(Boolean status){
         if(status){
             this.time = 0;
