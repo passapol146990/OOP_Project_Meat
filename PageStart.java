@@ -29,7 +29,6 @@ public class PageStart extends JPanel {
     // private JPanel item1[] = new JPanel[5];
      private int price[] = new int[5];
     private Random random = new Random();
-    private int indexs;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
