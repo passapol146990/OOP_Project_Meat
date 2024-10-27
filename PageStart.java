@@ -22,6 +22,7 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     private  JDialog orderShow;
+    private ArrayList<HashMap<String,String>> dataOrder;
     boolean showTemp = false;
 
     private JPanel contentPanel;
@@ -83,7 +84,6 @@ public class PageStart extends JPanel {
                 super.paintComponent(g);
             }
         };
-        
         panel.setOpaque(false); // ทำให้พาเนลโปร่งใสเพื่อแสดงขอบโค้งได้ชัดเจน
         panel.setLayout(new BorderLayout());
     
@@ -271,7 +271,7 @@ public class PageStart extends JPanel {
 
             JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
 
-            ArrayList<HashMap<String,String>> dataOrder =  this.app.getBaseClient().getOrder();
+            dataOrder =  this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
                 JPanel item = createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
                 productPanel.add(item);
@@ -280,15 +280,15 @@ public class PageStart extends JPanel {
                    @Override
                    public void mouseClicked(MouseEvent e) {
                        System.out.println(index);
-                       app.getBaseClient().setOrders_type(index);
                        orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
                        orderShow.setBounds(825, 75, 495, 80);
                        orderShow.setLayout(new BorderLayout());
                        orderShow.setUndecorated(true); // ป้องกันการขยับ popup
                        JPanel selectItem = createOrderItemPanel(
-                        dataOrder.get(index).get("image"),
-                        dataOrder.get(index).get("title"),
-                        String.format("+%s$", dataOrder.get(index).get("price")));
+                           dataOrder.get(index).get("image"),
+                           dataOrder.get(index).get("title"),
+                           String.format("+%s$", dataOrder.get(index).get("price")));
+                           app.getBaseClient().setOrders_type(dataOrder,index);
                         orderShow.add(selectItem,BorderLayout.CENTER);
                        orderShow.setVisible(true);
                    } 
@@ -476,6 +476,9 @@ public class PageStart extends JPanel {
             }
         });
         
+    }
+    public ArrayList<HashMap<String, String>> getDataOrder() {
+        return dataOrder;
     }
     @Override
     public void paint(Graphics g) {

@@ -1,5 +1,8 @@
 import java.io.Serializable;
 import java.util.Random;
+
+import javax.swing.JPanel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,7 +17,6 @@ public class BaseClient implements Serializable{
     private String nameShop;
     private String orders_type;
     private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
-    
     BaseClient(){
         String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
         for(int i=0;i<55;i++){
@@ -65,12 +67,15 @@ public class BaseClient implements Serializable{
         return String.format("%02d:%02d", minutes, seconds);
     }
     void setTime(int time){this.time = time;}
-    void setOrders_type(int index){this.orders_type = orders.get(index).get("type");}
+    void setOrders_type(ArrayList<HashMap<String,String>> ordersGet,int index){this.orders_type = ordersGet.get(index).get("typeMeat");
+    System.out.println(ordersGet);
+    System.out.println(orders.get(index).get("typeMeat"));}
+    String getOrders_type(){return this.orders_type;}
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
     public int chkMeat(){
-        System.out.println(this.meat.gettype_meat() + " : " + orders_type );
-        if(this.meat.gettype_meat() == orders_type){
+        System.out.println(this.meat.gettype_meat() + " : " + orders_type);
+        if(this.meat.gettype_meat().equals(getOrders_type())){
             System.out.println("Correct");
             return 1;
         }
