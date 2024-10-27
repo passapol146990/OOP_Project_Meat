@@ -482,13 +482,7 @@ public class PageStart extends JPanel {
         g.setColor(new Color(255,255,255));
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
-
-        // List<String> lists = new ArrayList<String>();
-        // lists.add("Test1");
-        // lists.add("Test2");
-        // lists.add("Test3");
-        // lists.add("Test4");
-        // lists.add("Test5");
+        
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
