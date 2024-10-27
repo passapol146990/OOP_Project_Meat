@@ -22,11 +22,12 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     boolean showTemp = false;
-
     private JPanel item1[] = new JPanel[5];
     private int price[] = new int[5];
     private Random random = new Random();
     private int indexs;
+    private String img;
+    private long startTime;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -534,6 +535,7 @@ class RunRepaint extends Thread{
 
 class CountDownShowTemp extends Thread{
     private PageStart pageStart;
+    long startTime = System.currentTimeMillis();
     CountDownShowTemp(PageStart pageStart){
         this.pageStart = pageStart;
     }

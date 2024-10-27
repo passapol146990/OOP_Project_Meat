@@ -1,5 +1,8 @@
 import java.io.Serializable;
 import java.util.Random;
+
+import javax.swing.JPanel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -99,7 +102,9 @@ class Meat extends Thread implements Serializable{
     private String rank_meat = "rare";
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
+    private String id;
     boolean clickMeat = false;//เอาไว้ตรวจสอบว่ากดพลิกเนื้อหรือยังป้องกันมันบั๊ค
+
     Meat(String type){
         this.type_meat = type;
     }
@@ -146,9 +151,9 @@ class Meat extends Thread implements Serializable{
     //ดึงค่าอุณหภูมิ
     public int getTemperature() {
         return this.temp;
-       
     }
     String gettype_meat(){return this.type_meat;}
+    String getid(){return this.id;}
 }
 class ClickMeat extends Thread implements Serializable{
     private Meat meat;
