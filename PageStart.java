@@ -22,13 +22,15 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     private  JDialog orderShow;
-    private ArrayList<HashMap<String,String>> dataOrder;
     boolean showTemp = false;
-
+    boolean showOrder = false;
     private JPanel contentPanel;
-    // private JPanel item1[] = new JPanel[5];
-     private int price[] = new int[5];
+    private JPanel item1[] = new JPanel[5];
+    private int price[] = new int[5];
     private Random random = new Random();
+    private int indexs;
+    private String img;
+    private long startTime;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -83,6 +85,7 @@ public class PageStart extends JPanel {
                 super.paintComponent(g);
             }
         };
+        
         panel.setOpaque(false); // ทำให้พาเนลโปร่งใสเพื่อแสดงขอบโค้งได้ชัดเจน
         panel.setLayout(new BorderLayout());
     
@@ -277,12 +280,15 @@ public class PageStart extends JPanel {
 
             JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
 
-            dataOrder =  this.app.getBaseClient().getOrder();
+            ArrayList<HashMap<String,String>> dataOrder =  this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
                 JPanel order = this.createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price")));
                 productPanel.add(order);
-                // order.addMouseListener(new MouseAdapter() {
-                //     public void mouseClicked(MouseEvent e) {
+                final int index = i;
+                 order.addMouseListener(new MouseAdapter() {
+                     public void mouseClicked(MouseEvent e) {
+                           showOrder = true;
+                           img = dataOrder.get(index).get("image");
                 //         orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
                 //         orderShow.setBounds(825, 75, 495, 80);
                 //         orderShow.setLayout(new BorderLayout());
@@ -290,8 +296,8 @@ public class PageStart extends JPanel {
                 //         JPanel selectItem = createOrderItemPanel("./image/meat/01/medium_rare1.png","test", String.format("+%s$", "70"));
                 //         orderShow.add(selectItem,BorderLayout.CENTER);
                 //         orderShow.setVisible(true);
-                //     }
-                // });
+                     }
+                 });
             }
             // ปุ่ม back
             JButton backButton = new JButton("back");
@@ -405,23 +411,23 @@ public class PageStart extends JPanel {
                     isHoldingMeat = false;
                     // Check if meat intersects with plate
                     if (meatRect.intersects(plateRect)) {
+                        long duration = System.currentTimeMillis() - startTime;
                         app.getBaseClient().getMeat().kill();
                         orderShow.dispose();
                         int chk = app.getBaseClient().chkMeat();
-                        if(chk == 1){
+                        if(chk == 1 && duration == 2000){
                             System.out.println("In chk");
-                            // System.out.println("ContentPanel Parent: " + contentPanel.getParent());
-                            // orderShow.remove(contentPanel);
-                            // contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
-                            // // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
-                            // orderShow.setVisible(true);
-                            // app.getBaseClient().addMoney(price[indexs]);
+                            //System.out.println("ContentPanel Parent: " + contentPanel.getParent());
+                            //orderShow.remove(contentPanel);
+                            contentPanel.setBackground(new Color(182, 255, 162)); // เปลี่ยนสีพื้นหลัง
+                            // หากต้องการให้ orderShow มองเห็น ให้ตั้งค่าเป็น true
+                            orderShow.setVisible(true);
+                            app.getBaseClient().addMoney(price[indexs]);
                         }
                         else{contentPanel.setBackground(new Color(255, 89, 68));}
-                        // contentPanel.revalidate();
-                        // contentPanel.repaint();
+                        contentPanel.revalidate();
+                        contentPanel.repaint();
                         app.getBaseClient().getMeat().kill();
-                        orderShow.dispose();
                         timer.setRepeats(false);
                         timer.start();
                     }
@@ -484,12 +490,14 @@ public class PageStart extends JPanel {
         g.setFont(new Font("Tahoma", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
         // ออเดอร์
-        g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
-        g.drawImage(new ImageIcon("./image/meat/01/medium_rare1.png").getImage(), 910, 2, 100,100,this);
-        g.setFont(new Font("Tahoma",Font.CENTER_BASELINE,12));
-        String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
-        
-        g.drawString("เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา",1010,40);
+        if(showOrder){
+            g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
+            g.drawImage(new ImageIcon(img).getImage(), 910, 2, 100,100,this);
+            g.setFont(new Font("Tahoma",Font.CENTER_BASELINE,12));
+            String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
+            
+            g.drawString(text,1010,40);
+        }
         
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
@@ -559,6 +567,7 @@ class RunRepaint extends Thread{
 
 class CountDownShowTemp extends Thread{
     private PageStart pageStart;
+    long startTime = System.currentTimeMillis();
     CountDownShowTemp(PageStart pageStart){
         this.pageStart = pageStart;
     }
