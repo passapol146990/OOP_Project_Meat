@@ -483,35 +483,55 @@ public class PageStart extends JPanel {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
 
-        List<String> lists = new ArrayList<String>();
-        lists.add("Test1");
-        lists.add("Test2");
-        lists.add("Test3");
-        lists.add("Test4");
-        lists.add("Test5");
+        // List<String> lists = new ArrayList<String>();
+        // lists.add("Test1");
+        // lists.add("Test2");
+        // lists.add("Test3");
+        // lists.add("Test4");
+        // lists.add("Test5");
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
 
-        // วาดข้อความสำหรับแต่ละรายการใน lists
-        for (int i = 0; i < lists.size(); i++) {
-            String s = lists.get(i);
+       // ดึงข้อมูลผู้เล่นเรียงตามอันดับจาก getPlayerRankings()
+        ArrayList<BaseClient> rankedPlayers = app.baseServer.getPlayerRankings();
+
+        // วาดข้อความสำหรับแต่ละรายการใน rankedPlayers
+        for (int i = 0; i < rankedPlayers.size(); i++) {
+            BaseClient player = rankedPlayers.get(i);
+            String playerName = player.getNameShop();
+            double playerMoney = player.getMoney();
             int rank = i + 1;
-            g.setColor(new Color(85,85,85));
-            int rectHeight = lineHeight; // ปรับขนาดกรอบให้มีความสูงพอดีกับข้อความ
-            g.drawRect(x, startY + i * lineHeight - 20, s.length() * 30, rectHeight); // วาดกรอบสำหรับข้อความ
-            g.setColor(new Color(0, 0, 0)); // ตั้งค่าสี
+
+            // ตั้งค่าและวาดกรอบรอบข้อความ
+            g.setColor(new Color(85, 85, 85));
+            int rectHeight = lineHeight;
+            int rectWidth = playerName.length() * 15 + 100; // กำหนดขนาดตามความยาวชื่อผู้เล่น
+            int rectX = x;
+            int rectY = startY + i * lineHeight - 20;
+            g.drawRect(rectX, rectY, rectWidth, rectHeight);
+
+            // วาดข้อมูลผู้เล่นในกรอบ
+            g.setColor(new Color(0, 0, 0)); // ตั้งสีสำหรับข้อความ
             g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
-            // วาดบรรทัด
-            g.drawString(rank + "   " + s + "   " + app.getBaseClient().getMoney() + "$", x, startY + i * lineHeight);
+
+            // ข้อความที่จะแสดง (อันดับ ชื่อ และจำนวนเงิน)
+            String displayText = rank + ". " + playerName + " = " + playerMoney + "$";
+            int textX = x + 10; // กำหนดตำแหน่ง X ของข้อความให้มีระยะจากกรอบ
+            int textY = startY + i * lineHeight;
+            g.drawString(displayText, textX, textY);
         }
-        // วาดข้อความการจัดอันดับรวม
+
+        // แสดงอันดับของผู้เล่นปัจจุบัน
         String rankingText = "Your ranking: " + app.getBaseClient().getMoney() + "$";
-        g.drawString(rankingText, x, startY + lists.size() * lineHeight + 30); // วางหลังรายการ
-        if(this.app.getBaseClient().getMeat()!=null&&this.app.getBaseClient().getMeat().getImage()!=null){
+        g.drawString(rankingText, x, startY + rankedPlayers.size() * lineHeight + 30); // วางหลังรายการ
+
+        // วาดรูปภาพเนื้อ ถ้ามี
+        if (this.app.getBaseClient().getMeat() != null && this.app.getBaseClient().getMeat().getImage() != null) {
             ImageIcon icon_meat = new ImageIcon(this.app.getBaseClient().getMeat().getImage());
             g.drawImage(icon_meat.getImage(), meatRect.x, meatRect.y, 500, 382, this);
         }
+
     }
 }
 class RunRepaint extends Thread{

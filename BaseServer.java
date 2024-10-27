@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class BaseServer implements Serializable{
     int port = 3333;
@@ -62,6 +64,13 @@ public class BaseServer implements Serializable{
         }
 
     }
+    //เปรียบเทียบค่าเงิน แล้วเก็บไว้ใน arraylist
+        ArrayList<BaseClient> getPlayerRankings() {
+            return this.client.values().stream()
+                    .sorted(Comparator.comparingDouble(BaseClient::getMoney).reversed())
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+    
 }
 class CountTimeServer extends Thread{
     private BaseServer base;
