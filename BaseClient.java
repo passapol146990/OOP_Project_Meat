@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import java.util.ArrayList;
@@ -25,12 +26,16 @@ public class BaseClient implements Serializable{
     }
     void sendOrder(){
         float give = 0;
-        if(this.Ordering.get("typeMeat")==this.meat.gettype_meat()){
+        System.out.println(this.Ordering.get("typeMeat") + " : " + this.meat.gettype_meat());
+        if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
             give += Integer.parseInt(this.Ordering.get("price"))*0.6;
+            give += Integer.parseInt(this.Ordering.get("price"))*0.4;
         }
-        if(1==0){}
         // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
+        this.money += give;
         this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
+        this.Ordering = null;
+        System.out.println(money);
     }
     boolean checkOrdering(){
         boolean status = false;
