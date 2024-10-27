@@ -25,17 +25,23 @@ public class BaseClient implements Serializable{
         }
     }
     void sendOrder(){
-        float give = 0;
-        System.out.println(this.Ordering.get("typeMeat") + " : " + this.meat.gettype_meat());
-        if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
-            give += Integer.parseInt(this.Ordering.get("price"))*0.6;
-            give += Integer.parseInt(this.Ordering.get("price"))*0.4;
+        if(this.Ordering!=null&&this.meat!=null){
+            float give = 0;
+            if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
+                give += Integer.parseInt(this.Ordering.get("price"))*0.6;
+                give += (Integer.parseInt(this.Ordering.get("price"))*0.4)*calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature());
+            }
+            // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
+            this.money += give;
+            this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
+            this.Ordering = null;
         }
-        // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
-        this.money += give;
-        this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
-        this.Ordering = null;
-        System.out.println(money);
+    }
+    double calculatePercentage(int A, int B) {
+        int maxDiff = 100; // ความต่างสูงสุดที่กำหนดได้เอง
+        int diff = Math.abs(A - B); // คำนวณค่าความต่างระหว่าง A และ B
+        double percentage = Math.max(0, 100 - ((double) diff / maxDiff) * 100);
+        return percentage;
     }
     boolean checkOrdering(){
         boolean status = false;

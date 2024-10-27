@@ -412,7 +412,7 @@ public class PageStart extends JPanel {
         for(int i=0;i<len;i++){
             end = Math.min(start + maxString, text.length());
             if(i!=0){start+=1;}
-            data[i] = text.substring(start, end+1);
+            data[i] = text.substring(start, end);
             start = end;
         }
         return data;
@@ -436,7 +436,7 @@ public class PageStart extends JPanel {
         g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
         g.setColor(new Color(255, 255, 255));
         //วาดอุณหภูมิ
-        if (showTemp) {
+        if (showTemp&&this.app.getBaseClient().getMeat()!=null) {
             g.setFont(new Font("Tahoma", Font.PLAIN, 50)); 
             String str_temp = Integer.toString(app.getBaseClient().getMeat().getTemperature()/100);
             g.drawString(str_temp, 200, 250); 
