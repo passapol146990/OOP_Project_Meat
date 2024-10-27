@@ -449,8 +449,20 @@ public class PageStart extends JPanel {
         });
         
     }
-    String[] getFormatTitleOrder(String text){
-        String[] data = new String[text.length()];
+    String[] getFormatTitleOrder(String text, int maxString) {
+        if (text == null || text.isEmpty() || maxString <= 0) {
+            return new String[]{};
+        }
+        int len = (int) Math.ceil(text.length()/maxString);
+        String[] data = new String[len];
+        int start = 0;
+        int end = maxString;
+        for(int i=0;i<len;i++){
+            end = Math.min(start + maxString, text.length());
+            if(i!=0){start+=1;}
+            data[i] = text.substring(start, end+1);
+            start = end;
+        }
         return data;
     }
     @Override
@@ -486,10 +498,18 @@ public class PageStart extends JPanel {
         // ออเดอร์
         g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
         g.drawImage(new ImageIcon("./image/meat/01/medium_rare1.png").getImage(), 910, 2, 100,100,this);
-        g.setFont(new Font("Tahoma",Font.CENTER_BASELINE,12));
+        g.setColor(new Color(0,0,0));
+        g.setFont(new Font("Tahoma",Font.ITALIC,15));
         String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
-        
-        g.drawString("เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา",1010,40);
+        String[] titleOrder = getFormatTitleOrder(text,20);
+        int positionTitleShowOrder = 20;
+        for(int i=0;i<titleOrder.length;i++){
+            g.drawString(titleOrder[i],1010,positionTitleShowOrder);
+            positionTitleShowOrder+=20;
+        }
+        g.setFont(new Font("Tahoma",Font.BOLD,20));
+        g.setColor(new Color(4,93,40));
+        g.drawString("+54$",1180,55);
         
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
