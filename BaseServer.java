@@ -21,8 +21,8 @@ public class BaseServer implements Serializable{
         this.orders.add(getOrderFormat("./image/meat/02/medium_rare1.png", "เนื้อวากิล แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "60", "02","130"));
         this.orders.add(getOrderFormat("./image/meat/03/medium_rare1.png", "เนื้อสันกลาง แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "50", "03","130"));
         this.orders.add(getOrderFormat("./image/meat/01/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "47", "01","150"));
-        this.orders.add(getOrderFormat("./image/meat/02/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "58", "02","150"));
-        this.orders.add(getOrderFormat("./image/meat/03/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "52", "03","150"));
+        this.orders.add(getOrderFormat("./image/meat/02/medium_well1.png", "เนื้อวากิล แบบมีเดียมเวล อุณหภูมิ 150 องศา", "58", "02","150"));
+        this.orders.add(getOrderFormat("./image/meat/03/medium_well1.png", "เนื้อสันกลาง แบบมีเดียมเวล อุณหภูมิ 150 องศา", "52", "03","150"));
     }
     HashMap<String,String> getOrderFormat(String img,String title,String price,String typeMeat,String tempMeat){
         HashMap<String,String> order = new HashMap<String,String>();
