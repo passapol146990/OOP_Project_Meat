@@ -449,6 +449,10 @@ public class PageStart extends JPanel {
         });
         
     }
+    String[] getFormatTitleOrder(String text){
+        String[] data = new String[text.length()];
+        return data;
+    }
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -466,21 +470,26 @@ public class PageStart extends JPanel {
         g.drawImage(icon_dish.getImage(), plateRect.x, plateRect.y, 500, 500, this);
         g.drawImage(icon_Rank.getImage(), 980, 400, 287, 304, this);
         g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
+        g.setColor(new Color(255, 255, 255));
         //วาดอุณหภูมิ
         if (showTemp) {
-            g.setColor(new Color(255, 255, 255));
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
+            g.setFont(new Font("Tahoma", Font.PLAIN, 50)); 
             String str_temp = Integer.toString(app.getBaseClient().getMeat().getTemperature()/100);
             g.drawString(str_temp, 200, 250); 
         }
         // เงิน
-        g.setColor(new Color(255,255,255));
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.setFont(new Font("Tahoma", Font.PLAIN, 30));
         g.drawString(app.getBaseClient().getMoney()+"$", 10, 660);
         // เวลา
-        g.setColor(new Color(255,255,255));
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.setFont(new Font("Tahoma", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
+        // ออเดอร์
+        g.drawImage(new ImageIcon("./image/Component/bg_order.png").getImage(), 900, 0, 400,100,this);
+        g.drawImage(new ImageIcon("./image/meat/01/medium_rare1.png").getImage(), 910, 2, 100,100,this);
+        g.setFont(new Font("Tahoma",Font.CENTER_BASELINE,12));
+        String text = "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา";
+        
+        g.drawString("เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา",1010,40);
         
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
@@ -506,7 +515,7 @@ public class PageStart extends JPanel {
 
             // วาดข้อมูลผู้เล่นในกรอบ
             g.setColor(new Color(0, 0, 0)); // ตั้งสีสำหรับข้อความ
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); // ตั้งฟอนต์
+            g.setFont(new Font("Tahoma", Font.PLAIN, 20)); // ตั้งฟอนต์
 
             // ข้อความที่จะแสดง (อันดับ ชื่อ และจำนวนเงิน)
             String displayText = rank + ". " + playerName + " = " + playerMoney + "$";
