@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.util.Random;
 
 public class BaseServer implements Serializable{
+    private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     int port = 3333;
     int time = 300;
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
+    HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
     private boolean statusStartGame = false;
     private boolean statusInRoby = true;
     private boolean statusInGame = false;
@@ -15,6 +18,11 @@ public class BaseServer implements Serializable{
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
         this.orders.add(getOrderFormat("./image/meat/01/medium_rare1.png", "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "49", "01","130"));
+        this.orders.add(getOrderFormat("./image/meat/02/medium_rare1.png", "เนื้อวากิล แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "60", "02","130"));
+        this.orders.add(getOrderFormat("./image/meat/03/medium_rare1.png", "เนื้อสันกลาง แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "50", "03","130"));
+        this.orders.add(getOrderFormat("./image/meat/01/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "47", "01","150"));
+        this.orders.add(getOrderFormat("./image/meat/02/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "58", "02","150"));
+        this.orders.add(getOrderFormat("./image/meat/03/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "52", "03","150"));
     }
     HashMap<String,String> getOrderFormat(String img,String title,String price,String typeMeat,String tempMeat){
         HashMap<String,String> order = new HashMap<String,String>();
@@ -24,6 +32,9 @@ public class BaseServer implements Serializable{
         order.put("typeMeat", typeMeat);
         order.put("tempMeat", tempMeat);
         return order;
+    }
+    HashMap<String,String> getRandomOrder(){
+        return orders.get(new Random().nextInt(0,orders.size()));
     }
     void setStatusInRoby(Boolean status){
         if(status){
@@ -37,8 +48,8 @@ public class BaseServer implements Serializable{
     void setClient(BaseClient baseClient, String ip){
         this.client.put(ip,baseClient);
     }
-    HashMap<String,BaseClient> getClient(){
-        return client;
+    BaseClient getClientByID(String ID){
+        return client.get(IDClientGETIPAddress.get(ID));
     }
     ArrayList<HashMap<String,String>> getPlayerInRobby(){
         ArrayList<HashMap<String,String>> data = new ArrayList<>();
@@ -73,7 +84,16 @@ public class BaseServer implements Serializable{
                 countime.start(); 
             }
         }
-
+    }
+    void checkDataBasePlayerInGame(){
+        if(this.statusInGame){
+            for(String key : this.client.keySet()){
+                // ตรวจสอบออเดอร์ของผู้เล่น
+                if(this.client.get(key).getOrder().size()<5){
+                    this.client.get(key).addOrder(getRandomOrder());
+                }
+            }
+        }
     }
 }
 class CountTimeServer extends Thread{

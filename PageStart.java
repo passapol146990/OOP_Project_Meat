@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -269,32 +270,37 @@ public class PageStart extends JPanel {
             outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // ตั้ง padding ซ้าย 20 และขวา 20
 
             JPanel productPanel = new JPanel(new GridLayout(5, 1, 10, 10));
-            String path = "./image/meat/01/medium_rare1.png";
-            for(int order_count = 0;order_count<5;order_count++){
-                // สินค้า
-                price[order_count] = random.nextInt(350 - 100);
-                item1[order_count] = new JPanel();
-                item1[order_count].setLayout(new BorderLayout());
-                item1[order_count] = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา",String.format("+%d$", price[order_count]));
-                int index = order_count;
-                item1[order_count].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
-                        orderShow.setBounds(825, 75, 495, 80);
-                        orderShow.setLayout(new BorderLayout());
-                        orderShow.setUndecorated(true);
-                        contentPanel = new JPanel();
-                        contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
-                        contentPanel.setLayout(new BorderLayout());
-                        contentPanel.add(item1[index], BorderLayout.CENTER);
-                        indexs = index;
-                        orderShow.setContentPane(contentPanel);
-                        orderShow.setVisible(true);
-                    }
-                });
-                productPanel.add(item1[order_count]);
+
+            ArrayList<HashMap<String,String>> dataOrder =  this.app.getBaseClient().getOrder();
+            for(int i=0;i<dataOrder.size();i++){
+                productPanel.add(createOrderItemPanel(dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
             }
+            // String path = "./image/meat/01/medium_rare1.png";
+            // for(int order_count = 0;order_count<5;order_count++){
+            //     // สินค้า
+            //     price[order_count] = random.nextInt(350 - 100);
+            //     item1[order_count] = new JPanel();
+            //     item1[order_count].setLayout(new BorderLayout());
+            //     item1[order_count] = createOrderItemPanel(path, "เนื้อวัวย่าง ระดับความสุขที่ medium rare อุณหภูมิ 150 องศา",String.format("+%d$", price[order_count]));
+            //     int index = order_count;
+            //     item1[order_count].addMouseListener(new MouseAdapter() {
+            //         @Override
+            //         public void mouseClicked(MouseEvent e) {
+            //             orderShow = new JDialog((JFrame) SwingUtilities.getWindowAncestor(PageStart.this), "OrderShow", false);
+            //             orderShow.setBounds(825, 75, 495, 80);
+            //             orderShow.setLayout(new BorderLayout());
+            //             orderShow.setUndecorated(true);
+            //             contentPanel = new JPanel();
+            //             contentPanel.setBackground(new Color(255,203,151)); // เปลี่ยนสีตามที่ต้องการ
+            //             contentPanel.setLayout(new BorderLayout());
+            //             contentPanel.add(item1[index], BorderLayout.CENTER);
+            //             indexs = index;
+            //             orderShow.setContentPane(contentPanel);
+            //             orderShow.setVisible(true);
+            //         }
+            //     });
+            //     productPanel.add(item1[order_count]);
+            // }
             // ปุ่ม back
             JButton backButton = new JButton("back");
             backButton.addActionListener(e1 -> orderDialog.dispose());
