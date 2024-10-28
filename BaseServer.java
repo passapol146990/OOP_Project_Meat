@@ -16,23 +16,49 @@ public class BaseServer implements Serializable{
     private boolean statusInRoby = true;
     private boolean statusInGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 1;
+    private int CountPlayerIsReady = 3;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
-        this.orders.add(getOrderFormat("./image/meat/01/medium_rare1.png", "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "49", "01","130"));
-        this.orders.add(getOrderFormat("./image/meat/02/medium_rare1.png", "เนื้อวากิล แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "60", "02","130"));
-        this.orders.add(getOrderFormat("./image/meat/03/medium_rare1.png", "เนื้อสันกลาง แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "50", "03","130"));
-        this.orders.add(getOrderFormat("./image/meat/01/medium_well1.png", "เนื้อวัว แบบมีเดียมเวล อุณหภูมิ 150 องศา", "47", "01","150"));
-        this.orders.add(getOrderFormat("./image/meat/02/medium_well1.png", "เนื้อวากิล แบบมีเดียมเวล อุณหภูมิ 150 องศา", "58", "02","150"));
-        this.orders.add(getOrderFormat("./image/meat/03/medium_well1.png", "เนื้อสันกลาง แบบมีเดียมเวล อุณหภูมิ 150 องศา", "52", "03","150"));
+        this.orders.add(getOrderFormat("49", "01",140));
+        this.orders.add(getOrderFormat("60", "02",140));
+        this.orders.add(getOrderFormat("50", "03",140));
+        this.orders.add(getOrderFormat("47", "01",210));
+        this.orders.add(getOrderFormat("58", "02",210));
+        this.orders.add(getOrderFormat("52", "03",201));
     }
-    HashMap<String,String> getOrderFormat(String img,String title,String price,String typeMeat,String tempMeat){
+    HashMap<String,String> getOrderFormat(String price,String typeMeat,int tempMeat){
         HashMap<String,String> order = new HashMap<String,String>();
-        order.put("image", img);
-        order.put("title", title);
+        String titleFormat = "";
+        String image = "./image/meat/"+typeMeat+"/";
+        String image_rigth = "./image/meat/"+typeMeat+"/";
+        /////////////////////////////////////////
+        if(typeMeat=="01"){
+            titleFormat += "เนื้อวัว ";
+        }else if(typeMeat=="02"){
+            titleFormat += "เนื้อวากิล ";
+        }else if(typeMeat=="03"){
+            titleFormat += "เนื้อสันกลาง ";
+        }
+        /////////////////////////////////////////
+        if(tempMeat>200){
+            titleFormat += "แบบมีเดียมเวล ";
+            image+="medium_well1.png";
+            image_rigth+="medium_well7.png";
+        }else if(tempMeat>130){
+            titleFormat += "แบบมีเดียมแรร์ ";
+            image+="medium_rare1.png";
+            image_rigth+="medium_rare7.png";
+        }
+        /////////////////////////////////////////
+        titleFormat += "อุณหภูมิ "+String.valueOf(tempMeat)+" °C";
+
+        /////////////////////////////////////////
+        order.put("image", image);
+        order.put("image_rigth", image_rigth);
+        order.put("title", titleFormat);
         order.put("price", price);
         order.put("typeMeat", typeMeat);
-        order.put("tempMeat", tempMeat);
+        order.put("tempMeat", String.valueOf(tempMeat));
         return order;
     }
     HashMap<String,String> getRandomOrder(){
@@ -113,7 +139,8 @@ public class BaseServer implements Serializable{
     }
     
 }
-class CountTimeServer extends Thread{
+class CountTimeServer extends Thread implements Serializable{
+    private static final long serialVersionUID = 1L;
     private BaseServer base;
     CountTimeServer(BaseServer base){
         this.base = base;

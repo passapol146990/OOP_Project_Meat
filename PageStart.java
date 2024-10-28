@@ -71,7 +71,7 @@ public class PageStart extends JPanel {
             panel.add(textPanel, BorderLayout.SOUTH);
             return panel;
         }
-    private JPanel createOrderItemPanel(int index,String imagePath, String description, String price) {
+    private JPanel createOrderItemPanel(JDialog orderDialog, int index,String imagePath, String description, String price) {
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -116,6 +116,7 @@ public class PageStart extends JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 app.getBaseClient().setOrdering(app.getBaseClient().getOrder().get(index),index);
+                orderDialog.dispose();
             }
         });
     
@@ -128,7 +129,7 @@ public class PageStart extends JPanel {
         this.app = app;
         setLayout(null);
         app.getBaseClient().setTime(300);
-        app.getSound().playmusic();
+        app.getSound().playMusic();
 
         // Meat and plate areas
         meatRect = new Rectangle(402, 160, 400, 300); 
@@ -272,7 +273,7 @@ public class PageStart extends JPanel {
 
             ArrayList<HashMap<String,String>> dataOrder = this.app.getBaseClient().getOrder();
             for(int i=0;i<dataOrder.size();i++){
-                productPanel.add(this.createOrderItemPanel(i,dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
+                productPanel.add(this.createOrderItemPanel(orderDialog,i,dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
             }
             // ปุ่ม back
             JButton backButton = new JButton("back");
@@ -378,7 +379,6 @@ public class PageStart extends JPanel {
                     isHoldingMeat = false;
                     if(meatRect.intersects(plateRect)) {
                         app.getSound().closeEffect();
-                        app.getBaseClient().getMeat().kill();
                         app.getBaseClient().sendOrder();
                     }else{
                         meatRect.x = 402;
@@ -441,7 +441,7 @@ public class PageStart extends JPanel {
         //วาดอุณหภูมิ
         if (showTemp&&this.app.getBaseClient().getMeat()!=null) {
             g.setFont(new Font("Tahoma", Font.PLAIN, 20)); 
-            g.drawString("อุณหภูมิตรงกลางของเนื้อคือ: " + app.getBaseClient().getMeat().getTemperature() + " °C", 200, 250); 
+            g.drawString("อุณหภูมิตรงกลางของเนื้อคือ: " + app.getBaseClient().getMeat().getTemperature() + " °C", 500, 650); 
         }
         // เงิน
         g.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -524,8 +524,7 @@ class RunRepaint extends Thread{
             this.panel.repaint();
             try {Thread.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
         }
-
-        grillSound.stopSound();  // ปิดเสียงเมื่อ ออก loop
+        grillSound.stopMusic();  // ปิดเสียงเมื่อ ออก loop
     }
     void kill(){
         this.status = false;
