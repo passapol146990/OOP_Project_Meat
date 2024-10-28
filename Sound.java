@@ -12,20 +12,22 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
     private Clip clip;
+    private Clip clip2;
+
     public void playGrillSound() {
         try {
             File audioFile = new File(System.getProperty("user.dir") + File.separator + "./sound/meat_audio.wav");
             AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
             AudioFormat format = stream.getFormat();
             DataLine.Info info = new DataLine.Info(Clip.class, format);
-            clip = (Clip) AudioSystem.getLine(info);
-            clip.open(stream);
+            clip2 = (Clip) AudioSystem.getLine(info);
+            clip2.open(stream);
 
             // Adjust volume using FloatControl
-            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            FloatControl volumeControl = (FloatControl) clip2.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(-20.0f);  // ปรับเสียงง
 
-            clip.start();
+            clip2.start();
             
             // Loop the clip continuously
             // clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -74,6 +76,12 @@ public class Sound {
             clip.close();
         }
     }
+    public void closeEffect() {
+        if (clip2 != null) {
+            clip2.stop();
+            clip2.close();
+        }
+    }
     public void setVolume(int value) {
         if (clip != null) {
             float volume;
@@ -88,6 +96,24 @@ public class Sound {
             volumeControl.setValue(volume); // ปรับระดับเสียง
             if (!clip.isRunning()) {
                 clip.start(); // เริ่มเสียงถ้าหยุด
+            }
+            }
+        }
+    }
+    public void setVolumeEffect(int value) {
+        if (clip2 != null) {
+            float volume;
+            FloatControl volumeControl = (FloatControl) clip2.getControl(FloatControl.Type.MASTER_GAIN);
+            if(value == 0)
+            {
+                clip2.stop(); // หยุดเสียง
+                volumeControl.setValue(-80.0f);
+            }
+            else{
+            volume = (float) (value - 100) * 0.5f;
+            volumeControl.setValue(volume); // ปรับระดับเสียง
+            if (!clip2.isRunning()) {
+                clip2.start(); // เริ่มเสียงถ้าหยุด
             }
             }
         }

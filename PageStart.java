@@ -49,6 +49,7 @@ public class PageStart extends JPanel {
             imagLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e){
+                    app.getSound().playGrillSound();
                     app.getBaseClient().newMeat(productName,price);
                     meatRect = new Rectangle(402, 160, 400, 300);
                     Jdialog.dispose();
@@ -127,7 +128,7 @@ public class PageStart extends JPanel {
         this.app = app;
         setLayout(null);
         app.getBaseClient().setTime(300);
-        // app.getSound().playmusic();
+        app.getSound().playmusic();
 
         // Meat and plate areas
         meatRect = new Rectangle(402, 160, 400, 300); 
@@ -180,7 +181,8 @@ public class PageStart extends JPanel {
             JSlider audioSlider = new JSlider(0, 100, 50);
             audioSlider.setForeground(Color.BLUE);
             audioSlider.addChangeListener(e1 ->{
-                System.out.println(musicSlider.getValue());
+                app.getSound().setVolumeEffect(audioSlider.getValue());
+                System.out.println(audioSlider.getValue());
             });
             
             // Labels สำหรับ slider
@@ -375,6 +377,7 @@ public class PageStart extends JPanel {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
                     if(meatRect.intersects(plateRect)) {
+                        app.getSound().closeEffect();
                         app.getBaseClient().getMeat().kill();
                         app.getBaseClient().sendOrder();
                     }else{
