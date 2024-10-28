@@ -38,6 +38,12 @@ public class ConnectServer extends Thread{
 }
 
 class logout extends Thread{
-
-    
+        private App app;
+        private int port;
+        private String ip;
+        logout(App app, String ip, int port){
+            this.app = app;
+            this.ip = ip;
+            this.port = port;
+        }    
 }
