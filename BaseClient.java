@@ -26,17 +26,16 @@ public class BaseClient implements Serializable{
     }
     void sendOrder(){
         if(this.Ordering!=null&&this.meat!=null){
-           // float give = 0;
+            // ตรวจสอบชนิดของเนื้อ
             if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
-                this.money += (Integer.parseInt(this.Ordering.get("price"))*0.01)*calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature());
-                System.out.print(this.money);
-                System.out.println(this.Ordering.get("price"));
-                System.out.println(this.Ordering.get("tempMeat"));
-                System.out.println(this.meat.getTemperature());
+                if(this.Ordering.get("image").equals(this.meat.getImage())||this.Ordering.get("image_rigth").equals(this.meat.getImage())){
+                    this.money += Integer.parseInt(this.Ordering.get("price"))*(calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature())/100);
+                }
             }
             // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
             this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
             this.Ordering = null;
+            this.meat = null;
         }
     }
     double calculatePercentage(int A, int B) {
