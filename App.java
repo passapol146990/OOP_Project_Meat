@@ -12,9 +12,11 @@ public class App extends JFrame{
     private BaseClient baseClient;
     private ConnectServer connectServer;
     BaseServer baseServer;
-    private Sound sound = new Sound();
+    private Sound sound;;
     private HashMap<String,JPanel> panels = new HashMap<String,JPanel>();
-    App(String title,BaseClient baseClient){
+    
+    App(String title,BaseClient baseClient, Sound sound){
+        this.sound = sound;
         this.baseClient = baseClient;
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(cardLayout);
@@ -25,7 +27,9 @@ public class App extends JFrame{
         add(this.mainPanel);
         setVisible(true);
     }
-    BaseClient getBaseClient(){return this.baseClient;}
+    BaseClient getBaseClient(){
+        return this.baseClient;
+    }
     void addPanel(JPanel panel,String path){
         this.panels.put(path, panel);
         this.mainPanel.add(panel, path);

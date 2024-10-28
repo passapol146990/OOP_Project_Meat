@@ -12,12 +12,12 @@ public class BaseServer implements Serializable{
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
-    private boolean statusInRoby = true;
-    private boolean statusInGame = false;
+    boolean statusInRoby = true;
+    boolean statusInGame = false;
+    boolean statusEndGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 3;
+    private int CountPlayerIsReady = 1;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
-    private boolean connectServerError = false;
     BaseServer(){
         this.orders.add(getOrderFormat("49", "01",140));
         this.orders.add(getOrderFormat("60", "02",140));
@@ -64,23 +64,10 @@ public class BaseServer implements Serializable{
     HashMap<String,String> getRandomOrder(){
         return orders.get(new Random().nextInt(0,orders.size()));
     }
-    void setStatusInRoby(Boolean status){
-        if(status){
-            this.time = 0;
-            this.statusInGame = false;
-        }
-        this.statusInRoby = status;
-    }
     Boolean getStatusInRoby(){return this.statusInRoby;}
     Boolean getStatusInGame(){return this.statusInGame;}
-    
-    public synchronized boolean hasConnectServerError() {
-        return connectServerError;
-    }
+    Boolean getStatusEndGame(){return this.statusEndGame;}
 
-    public synchronized void setConnectServerError(boolean error) {
-        this.connectServerError = error;
-    }
     void setClient(BaseClient baseClient, String ip){
         this.client.put(ip,baseClient);
     }
@@ -112,6 +99,7 @@ public class BaseServer implements Serializable{
             }
             if(ready>=this.CountPlayerIsReady){
                 this.statusInRoby = false;
+                this.statusEndGame = false;
                 this.statusInGame = true;
                 this.time = 300;
                 CountTimeServer countime = new CountTimeServer(this);
@@ -143,7 +131,6 @@ public class BaseServer implements Serializable{
         onlinePlayers.sort(Comparator.comparingDouble(BaseClient::getMoney).reversed());
         return onlinePlayers;
     }
-    
 }
 class CountTimeServer extends Thread implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -156,6 +143,9 @@ class CountTimeServer extends Thread implements Serializable{
             this.base.time = this.base.time-1;
             try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
         }
+        this.base.statusEndGame = true;
+        this.base.statusInGame = false;
+        this.base.statusInRoby = false;
     }
     
 }

@@ -12,15 +12,13 @@ public class ConnectServer extends Thread{
     private App app;
     private int port;
     private String ip;
-    private BaseServer baseServer;
     ConnectServer(App app, String ip, int port){
         this.app = app;
         this.ip = ip;
         this.port = port;
     }
     public void run(){
-        System.out.println("Connect Server : "+this.ip+" "+this.port);
-        app.setConnectServer(this);
+        System.out.println("Client Connect : "+this.ip+" Port : "+this.port);
         try{
             while (this.app.getBaseClient().statusConnectServer) {
                 Socket socket = new Socket(this.ip,this.port);
@@ -30,11 +28,38 @@ public class ConnectServer extends Thread{
                 res.reset();
                 res.close();
                 socket.close();
-                try {Thread.sleep(500);} catch (InterruptedException e) {throw new Exception(e);}
+                try {Thread.sleep(100);} catch (InterruptedException e) {throw new Exception(e);}
             }
         } catch (Exception e) {
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
-            app.baseServer.setConnectServerError(true);
+            this.app.getBaseClient().statusConnectServer = false;
+        }
+        try {Thread.sleep(500);} catch (InterruptedException e) {}
+        CheckOutServer checkout = new CheckOutServer(this.app, this.ip, this.port);
+        checkout.start();
+    }
+}
+class CheckOutServer extends Thread{
+    private App app;
+    private int port;
+    private String ip;
+    CheckOutServer(App app, String ip, int port){
+        this.app = app;
+        this.ip = ip;
+        this.port = port;
+        System.out.println("Check Out Server : "+this.ip+" "+this.port);
+    }
+    public void run(){
+        try{
+            Socket socket = new Socket(this.ip,this.port);
+            ObjectOutputStream res = new ObjectOutputStream(socket.getOutputStream());
+            res.writeObject(this.app.getBaseClient());
+            res.flush();
+            res.reset();
+            res.close();
+            socket.close();
+            try {Thread.sleep(100);} catch (InterruptedException e) {throw new Exception(e);}
+        } catch (Exception e) {
             this.app.getBaseClient().statusConnectServer = false;
         }
     }

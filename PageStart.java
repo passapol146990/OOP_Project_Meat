@@ -22,10 +22,6 @@ public class PageStart extends JPanel {
     private boolean isHoldingMeat = false;
     private Point lastMousePosition;
     boolean showTemp = false;
-    private JPanel item1[] = new JPanel[5];
-    private int price[] = new int[5];
-    private Random random = new Random();
-    private int indexs;
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -364,8 +360,8 @@ public class PageStart extends JPanel {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
                     if(meatRect.intersects(plateRect)) {
-                        app.getSound().closeEffect();
                         app.getBaseClient().sendOrder();
+                        app.getSound().closeEffect();
                     }else{
                         meatRect.x = 402;
                         meatRect.y = 160;
@@ -495,7 +491,6 @@ public class PageStart extends JPanel {
 
     }
 }
-
 class RunRepaint extends Thread{
     private boolean status = true;
     private JPanel panel;
@@ -515,7 +510,6 @@ class RunRepaint extends Thread{
     }
     
 }
-
 class CountDownShowTemp extends Thread{
     private PageStart pageStart;
     CountDownShowTemp(PageStart pageStart){

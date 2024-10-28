@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.swing.*;
 
 public class PageLobby extends JPanel {
+    PlayerPanel showPlayer;
     App app;
     PageLobby(App app) {
         this.app = app;
@@ -16,8 +17,9 @@ public class PageLobby extends JPanel {
         back.setBounds(0, 0, 100, 60);
         back.addActionListener(e -> {
             this.app.getBaseClient().statusConnectServer = false;
-            app.getBaseClient().statusReady = false;
-            app.getBaseClient().nowPage = "menu";
+            this.app.getBaseClient().statusReady = false;
+            this.app.getSound().playMusic();
+            this.app.getBaseClient().nowPage = "menu";
         });
         add(back);
 
@@ -27,21 +29,23 @@ public class PageLobby extends JPanel {
         ready.setBounds(600, 600, 150, 60);
         ready.addActionListener(e -> {
             if(app.getBaseClient().statusReady){
-                app.getBaseClient().statusReady = false;
-                ready.setText("พร้อม");
-            }else{
-                app.getBaseClient().statusReady = true;
                 ready.setText("ยังไม่พร้อม");
+                app.getBaseClient().statusReady = false;
+            }else{
+                ready.setText("พร้อม");
+                app.getBaseClient().statusReady = true;
             }
         });
         add(ready);
 
         // Player Panel
-        PlayerPanel showPlayer = new PlayerPanel(app);
+        showPlayer = new PlayerPanel(app);
         showPlayer.setBounds(400, 200, 500, 400);
         add(showPlayer);
     }
-
+    void runSetPlayer(){
+        this.showPlayer.startUpdatingPlayers();
+    }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -66,12 +70,12 @@ class PlayerPanel extends JPanel {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(scrollPane, BorderLayout.CENTER);
 
-        startUpdatingPlayers();
+        // startUpdatingPlayers();
     }
 
     public void startUpdatingPlayers() {
         new Thread(() -> {
-            while (this.app.getBaseClient().statusConnectServer) {
+            while (this.app.baseServer.statusInRoby) {
                 SwingUtilities.invokeLater(this::updatePlayerList);
                 try {
                     Thread.sleep(100);
@@ -83,7 +87,6 @@ class PlayerPanel extends JPanel {
     }
 
     private void updatePlayerList() {
-        
         if(this.app.baseServer!=null){
             playerListPanel.removeAll();
             ArrayList<HashMap<String, String>> players = this.app.baseServer.getPlayerInRobby();

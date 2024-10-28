@@ -5,7 +5,15 @@ public class ControlClient extends Thread{
     }
     public void run(){
         while(true){
+            if(this.app.getBaseClient().nowPage=="lobby"){
+                ((PageLobby)this.app.getPanel("lobby")).runSetPlayer();
+            }
             this.app.showPanel(this.app.getBaseClient().nowPage);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

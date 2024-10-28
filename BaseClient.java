@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class BaseClient implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
+    Sound sound;
     String id = "";
     private int money = 50;
     private Meat meat = null;
@@ -19,7 +20,8 @@ public class BaseClient implements Serializable{
     private String nameShop;
     private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     private HashMap<String,String> Ordering;
-    BaseClient(){
+    BaseClient(Sound sound){
+        this.sound = sound;
         String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
         for(int i=0;i<55;i++){
             this.id += string.split("")[new Random().nextInt(0,string.length())];
