@@ -36,6 +36,11 @@ class Server extends Thread{
                 // อัพเดทข้อมูลของผู้เล่น
                 BaseClient baseClient = (BaseClient) req.readObject();
                 this.baseServer.setClient(baseClient, ipAddress);
+                // ตรวจสอบว่าผู้เล่นคนนั้นออกจากเซิฟหรือยัง ถ้าออกจากเซิฟเขาจะส่งค่า statusConnectServer = false มาแล้วจะทำงานตรงนี้
+                if(this.baseServer.getClientByID(baseClient.id)!=null&&!this.baseServer.getClientByID(baseClient.id).statusConnectServer){
+                    this.baseServer.controller_client.put(ipAddress, false);
+                    this.baseServer.CountPlayerOnServer -= 1;
+                }
                 // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
                 if(this.baseServer.CountPlayerOnServer==0){
                     this.baseServer.setStatusInRoby(true);

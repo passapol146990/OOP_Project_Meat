@@ -21,6 +21,13 @@ class OpenPortClient extends Thread{
                     ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
                     BaseServer baseServer = (BaseServer) req.readObject();
                     this.app.baseServer = baseServer;
+                    if(baseServer.getStatusInRoby()){
+                        this.app.getBaseClient().nowPage = "lobby";
+                    }else if(baseServer.getStatusInGame()){
+                        this.app.getBaseClient().nowPage = "start";
+                    }else if(baseServer.time<=297){
+                        this.app.getBaseClient().nowPage = "start";
+                    }
                     this.app.getBaseClient().setOrder(baseServer.getClientByID(this.app.getBaseClient().id).getOrder());
                     req.close();
                     socket.close();

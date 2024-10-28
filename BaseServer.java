@@ -12,7 +12,6 @@ public class BaseServer implements Serializable{
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
-    private boolean statusStartGame = false;
     private boolean statusInRoby = true;
     private boolean statusInGame = false;
     int CountPlayerOnServer = 0;
@@ -93,8 +92,6 @@ public class BaseServer implements Serializable{
         }
         return data;
     }
-    void setStatusStartGame(boolean status){this.statusStartGame = status;}
-    boolean getStatusStartGame(){return this.statusStartGame;}
     void checkReadyPlayer(){
         //ถ้าผู้เล่นใน server ครบตามจำนวนที่พร้อมเล่นของ server จะทำงาน
         if(this.CountPlayerOnServer>=this.CountPlayerIsReady){

@@ -6,19 +6,6 @@ public class ControlClient extends Thread{
     public void run(){
         while(true){
             this.app.showPanel(this.app.getBaseClient().nowPage);
-            // if(this.app.getBaseClient().statusConnectServer){
-            //     if(this.app.baseServer!=null){
-            //         if(this.app.baseServer.getStatusInGame()){
-            //             this.app.getBaseClient().setTime(this.app.baseServer.time);
-            //             this.app.showPanel("start");
-            //         }else{
-            //             this.app.showPanel("lobby");
-            //         }
-            //     }else{
-            //         this.app.showPanel("lobby");
-            //     }
-            // }else{
-            // }
         }
     }
 }
