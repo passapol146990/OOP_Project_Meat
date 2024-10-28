@@ -10,6 +10,7 @@ public class App extends JFrame{
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private BaseClient baseClient;
+    private ConnectServer connectServer;
     BaseServer baseServer;
     private Sound sound = new Sound();
     private HashMap<String,JPanel> panels = new HashMap<String,JPanel>();
@@ -37,5 +38,14 @@ public class App extends JFrame{
     }
     Sound getSound(){
         return this.sound;
+    }
+    void setConnectServer(ConnectServer connectServer){
+        this.connectServer = connectServer;
+    }
+    ConnectServer getConnectServer(){
+        return this.connectServer;
+    }
+    void setbaseServer(BaseServer baseServer){
+        this.baseServer = baseServer;
     }
 }
