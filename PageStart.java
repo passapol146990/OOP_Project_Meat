@@ -359,9 +359,10 @@ public class PageStart extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
-                    if(meatRect.intersects(plateRect)) {
+                    if(meatRect.x>550&&meatRect.y<200) {
                         app.getBaseClient().sendOrder();
                         app.getSound().closeEffect();
+                        isHoldingMeat =false; 
                     }else{
                         meatRect.x = 402;
                         meatRect.y = 160;
