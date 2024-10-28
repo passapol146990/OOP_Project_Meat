@@ -488,6 +488,8 @@ public class PageStart extends JPanel {
         g.setColor(new Color(255,255,255));
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
+
+        
         
         int x = 1000; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
@@ -502,7 +504,7 @@ public class PageStart extends JPanel {
             String playerName = player.getNameShop();
             double playerMoney = player.getMoney();
             int rank = i + 1;
-
+            
             // ตั้งค่าและวาดกรอบรอบข้อความ
             g.setColor(new Color(85, 85, 85));
             int rectHeight = lineHeight;

@@ -7,7 +7,9 @@ public class ControlClient extends Thread{
         while(true){
             if(this.app.getBaseClient().statusConnectServer){
                 if(this.app.baseServer!=null){
-                    if(this.app.baseServer.getStatusInGame()){
+                    if(this.app.getBaseClient().getTime()<=299){
+                        this.app.showPanel("PageShowscore");
+                    }else if(this.app.baseServer.getStatusInGame()){
                         this.app.getBaseClient().setTime(this.app.baseServer.time);
                         this.app.showPanel("start");
                     }else{
