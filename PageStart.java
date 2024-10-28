@@ -29,48 +29,36 @@ public class PageStart extends JPanel {
     private JPanel createProductPanel(String imagePath, String productName, int price, JDialog Jdialog){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        //เพิ่มรูป
+        //เพิ่มรูปเนื้อในร้านค้า
         JLabel imagLabel = new JLabel();
-        try {
-                // Load the original image
-                BufferedImage originalImage = ImageIO.read(new File(imagePath));
-                
-                // Resize the image (adjust the width and height as needed, e.g., 150x150)
-                Image resizedImage = originalImage.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
-                
-                // Create ImageIcon using the resized image
-                ImageIcon resizedIcon = new ImageIcon(resizedImage);
-                
-                // Add the resized image to the JLabel
-                imagLabel.setIcon(resizedIcon);
-            } catch (IOException e) {
-                e.printStackTrace();
+        try{
+            BufferedImage originalImage = ImageIO.read(new File(imagePath));
+            Image resizedImage = originalImage.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+            imagLabel.setIcon(resizedIcon);
+        }catch (IOException e) {e.printStackTrace();}
+        imagLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e){
+                app.getSound().playEffect();
+                app.getBaseClient().newMeat(productName,price);
+                meatRect = new Rectangle(402, 160, 400, 300);
+                Jdialog.dispose();
             }
-            imagLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e){
-                    app.getSound().playGrillSound();
-                    app.getBaseClient().newMeat(productName,price);
-                    meatRect = new Rectangle(402, 160, 400, 300);
-                    Jdialog.dispose();
-                }
-            });
-    
-            // Add the JLabel containing the image to the panel
-            panel.add(imagLabel, BorderLayout.CENTER);
-    
-            //ชื่อสินค้าและราคา
-            JLabel namLabel = new JLabel(productName, SwingConstants.CENTER);
-            JLabel pricLabel = new JLabel(String.format("%d$", price), SwingUtilities.CENTER);
-            pricLabel.setForeground(Color.GREEN);
-    
-            JPanel textPanel = new JPanel(new GridLayout(2,1));
-            textPanel.add(namLabel);
-            textPanel.add(pricLabel);
-    
-            panel.add(textPanel, BorderLayout.SOUTH);
-            return panel;
-        }
+        });
+        panel.add(imagLabel, BorderLayout.CENTER);
+
+        //ชื่อสินค้าและราคา
+        JLabel namLabel = new JLabel(productName, SwingConstants.CENTER);
+        JLabel pricLabel = new JLabel(String.format("%d$", price), SwingUtilities.CENTER);
+        pricLabel.setForeground(Color.GREEN);
+
+        JPanel textPanel = new JPanel(new GridLayout(2,1));
+        textPanel.add(namLabel);
+        textPanel.add(pricLabel);
+
+        panel.add(textPanel, BorderLayout.SOUTH);
+        return panel;
+    }
     private JPanel createOrderItemPanel(JDialog orderDialog, int index,String imagePath, String description, String price) {
         JPanel panel = new JPanel() {
             @Override

@@ -5,68 +5,91 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
-public class PageSeting extends JPanel{
-    private App app;
-    public PageSeting(App app) {
-        setSize(1200, 800);
-        setLayout(new BorderLayout());
-        settingOutTheGame settingPanel = new settingOutTheGame(app);
-        add(settingPanel, BorderLayout.CENTER);
-        setVisible(true);   
-    }
-}
-
-class settingOutTheGame extends JPanel{
+class PageSeting extends JPanel{
     private JSlider musicSlider;
     private JSlider audioSlider;
     private JLabel music;
     private JLabel audio;
     private App app;
-    public settingOutTheGame(App app) {
+    public PageSeting(App app) {
         setLayout(null);
-        // สร้างแผงหลัก
-        JPanel panel = new JPanel();    
-        panel.setLayout(null);
-        panel.setBounds(170, 180, 911, 420);
-        panel.setBackground(new Color(	217, 217, 217));
+        // สร้าง JPanel สำหรับการตั้งค่า
+        JPanel settingsPanel = new JPanel();
+        settingsPanel.setLayout(new GridBagLayout());
+        settingsPanel.setBounds(400, 200, 500, 420);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // สร้างปุ่ม "Back to the menu"
-        JButton backButton = Component.createCustomRoundedButton("Back to the menu", Color.pink);
-        backButton.setBounds(480, 530, 300, 50);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.getBaseClient().nowPage = "menu";
-            }
-        });
-        add(backButton);
+        // โหลดไอคอนและปรับขนาดให้พอดี (เช่น 50x50)
+        ImageIcon AmusicIcon = new ImageIcon("./image/music.png");
+        Image musicImage = AmusicIcon.getImage(); // แปลงจาก ImageIcon เป็น Image
+        Image resizedMusicImage = musicImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
-        // สร้าง JSlider สำหรับ music และ audio
-        musicSlider = Component.createCustomSlider(app.getSound().getVolumeMusic());
-        musicSlider.setBounds(300, 100, 500, 50);  // ตั้งตำแหน่ง slider
-        musicSlider.addChangeListener(e ->{
-            // sound.setVolume(musicSlider.getValue()); // เชื่อมต่อกับการเปลี่ยนแปลงค่า
-        });
-
-        music = new JLabel("Music");
-        music.setBounds(145, 100, 1000, 50);
-        music.setFont(new Font("Courier New", Font.BOLD, 50));
-
-        audioSlider = Component.createCustomSlider(app.getSound().getVolumeEffect());
-        audioSlider.setBounds(300, 250, 500, 50);
+        // โหลดไอคอน audio และปรับขนาด
+        ImageIcon AaudioIcon = new ImageIcon("./image/volume.png");
+        Image audioImage = AaudioIcon.getImage();
+        Image resizedAudioImage = audioImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         
-        audio = new JLabel("Audio");
-        audio.setBounds(145, 250, 1000, 50);
-        audio.setFont(new Font("Courier New", Font.BOLD, 50));
+        // Icon สำหรับ Music และ Audio
+        JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage));
+        JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage));
 
-        // เพิ่ม slider และ label ในแผง
-        panel.add(musicSlider);
-        panel.add(music);
-        panel.add(audioSlider);
-        panel.add(audio);
-        add(panel);
+        // Slider สำหรับปรับระดับเสียงเพลง
+        JSlider musicSlider = new JSlider(0, 100, app.getSound().getVolumeMusic());
+        musicSlider.setForeground(Color.BLUE);
+        musicSlider.addChangeListener(e1 ->{
+            app.getSound().setVolumeMusic(musicSlider.getValue());
+        });
+        // Slider สำหรับปรับระดับเสียงย่างเนื้อ
+        JSlider audioSlider = new JSlider(0, 100, app.getSound().getVolumeEffect());
+        audioSlider.setForeground(Color.BLUE);
+        audioSlider.addChangeListener(e1 ->{
+            app.getSound().setVolumeEffect(audioSlider.getValue());
+        });
+        
+        // Labels สำหรับ slider
+        JLabel musicLabel = new JLabel("Music");
+        JLabel audioLabel = new JLabel("Audio");
 
-        // กำหนดขนาด panel
+        // เพิ่ม Music Icon และ Slider
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        settingsPanel.add(musicIcon, gbc);
+        
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        settingsPanel.add(musicLabel, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        settingsPanel.add(musicSlider, gbc);
+
+        // เพิ่ม Audio Icon และ Slider
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        settingsPanel.add(audioIcon, gbc);
+        
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        settingsPanel.add(audioLabel, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        settingsPanel.add(audioSlider, gbc);
+        settingsPanel.setVisible(true);
+        // ปุ่มสำหรับย้อนกลับ
+        JButton backToMenuButton = new JButton("Back to the Menu");
+        backToMenuButton.setBounds(0, 0, 200, 50);
+        backToMenuButton.addActionListener(e1 -> {
+            app.getBaseClient().nowPage = "menu";
+        });
+        // เพิ่ม settingsPanel ลงใน JFrame
+        add(settingsPanel);
+        add(backToMenuButton);
         setPreferredSize(new Dimension(1200, 800));
     }
 

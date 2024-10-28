@@ -12,29 +12,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
     private int volumeMusic = 100;
+    private int volumeEffect = 100;
     private Clip music;
     private Clip effect;
-    private Clip clip2;
-
-    void playGrillSound() {
-        try {
-            File audioFile = new File(System.getProperty("user.dir") + File.separator + "./sound/meat_audio.wav");
-            AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
-            AudioFormat format = stream.getFormat();
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
-            clip2 = (Clip) AudioSystem.getLine(info);
-            clip2.open(stream);
-            FloatControl volumeControl = (FloatControl) clip2.getControl(FloatControl.Type.MASTER_GAIN);
-            volumeControl.setValue(-20.0f);
-            clip2.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     void playMusic(){
-        AudioInputStream audioInputStream;
         try {
-            audioInputStream = AudioSystem.getAudioInputStream(new File("./Sound/tvari-tokyo-cafe-159065.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./Sound/tvari-tokyo-cafe-159065.wav"));
             this.music = AudioSystem.getClip();
             this.music.open(audioInputStream);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {e.printStackTrace();}
@@ -66,31 +49,45 @@ public class Sound {
         }
     }
     int getVolumeMusic(){return this.volumeMusic;}
-    int getVolumeEffect(){return this.volumeMusic;}
     ///////////////// Effect Sound //////////////////////////////////////
-    public void closeEffect() {
-        if (clip2 != null) {
-            clip2.stop();
-            clip2.close();
+    void playEffect() {
+        try {
+            File audioFile = new File(System.getProperty("user.dir") + File.separator + "./sound/meat_audio.wav");
+            AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
+            AudioFormat format = stream.getFormat();
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+            this.effect = (Clip) AudioSystem.getLine(info);
+            this.effect.open(stream);
+            FloatControl volumeControl = (FloatControl) this.effect.getControl(FloatControl.Type.MASTER_GAIN);
+            volumeControl.setValue(-20.0f);
+            this.effect.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-    public void setVolumeEffect(int value) {
-        if (clip2 != null) {
+    void closeEffect() {
+        if (this.effect != null) {
+            this.effect.stop();
+            this.effect.close();
+        }
+    }
+    void setVolumeEffect(int value) {
+        this.volumeEffect = value;
+        if (this.effect != null) {
             float volume;
-            FloatControl volumeControl = (FloatControl) clip2.getControl(FloatControl.Type.MASTER_GAIN);
-            if(value == 0)
-            {
-                clip2.stop(); // หยุดเสียง
+            FloatControl volumeControl = (FloatControl) this.effect.getControl(FloatControl.Type.MASTER_GAIN);
+            if(this.volumeEffect == 0){
+                this.effect.stop(); // หยุดเสียง
                 volumeControl.setValue(-80.0f);
-            }
-            else{
-            volume = (float) (value - 100) * 0.5f;
-            volumeControl.setValue(volume); // ปรับระดับเสียง
-            if (!clip2.isRunning()) {
-                clip2.start(); // เริ่มเสียงถ้าหยุด
-            }
+            }else{
+                volume = (float) (this.volumeEffect - 100) * 0.5f;
+                volumeControl.setValue(volume); // ปรับระดับเสียง
+                if (!this.effect.isRunning()) {
+                    this.effect.start(); // เริ่มเสียงถ้าหยุด
+                }
             }
         }
     }
+    int getVolumeEffect(){return this.volumeEffect;}
 }
 
