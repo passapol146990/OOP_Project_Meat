@@ -15,8 +15,7 @@ public class PageShowscore extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Back button clicked!");
-                app.getBaseClient().statusConnectServer = false;
-                
+                app.getConnectServer().interrupt();
             }
         });
         setLayout(null);

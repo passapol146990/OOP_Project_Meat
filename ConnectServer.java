@@ -12,6 +12,7 @@ public class ConnectServer extends Thread{
     private App app;
     private int port;
     private String ip;
+    private BaseServer baseServer;
     ConnectServer(App app, String ip, int port){
         this.app = app;
         this.ip = ip;
@@ -19,6 +20,7 @@ public class ConnectServer extends Thread{
     }
     public void run(){
         System.out.println("Connect Server : "+this.ip+" "+this.port);
+        app.setConnectServer(this);
         try{
             while (this.app.getBaseClient().statusConnectServer) {
                 Socket socket = new Socket(this.ip,this.port);
@@ -28,22 +30,12 @@ public class ConnectServer extends Thread{
                 res.reset();
                 res.close();
                 socket.close();
-                try {Thread.sleep(500);} catch (InterruptedException e) {throw new RuntimeException(e);}
+                try {Thread.sleep(500);} catch (InterruptedException e) {throw new Exception(e);}
             }
         } catch (Exception e) {
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
+            app.baseServer.setConnectServerError(true);
             this.app.getBaseClient().statusConnectServer = false;
         }
     }
-}
-
-class logout extends Thread{
-        private App app;
-        private int port;
-        private String ip;
-        logout(App app, String ip, int port){
-            this.app = app;
-            this.ip = ip;
-            this.port = port;
-        }    
 }

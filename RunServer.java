@@ -82,6 +82,9 @@ class SendClient extends Thread{
     public void run(){
         while(this.baseServer.controller_client.get(this.ipAddress)){
             try{
+                if (this.baseServer.hasConnectServerError()) {
+                    throw new Exception("ConnectServer encountered an error.");
+                }
                 Socket socket = new Socket(this.ipAddress,this.port);
                 ObjectOutputStream res = new ObjectOutputStream(socket.getOutputStream());
                 res.writeObject(this.baseServer);
@@ -91,7 +94,7 @@ class SendClient extends Thread{
                 socket.close();
                 try {Thread.sleep(500);} catch (InterruptedException e) {throw new RuntimeException(e);}
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println(e + "Test");
                 this.baseServer.controller_client.put(this.ipAddress,false);
                 this.baseServer.CountPlayerOnServer -= 1;
             }

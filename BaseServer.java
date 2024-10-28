@@ -18,6 +18,7 @@ public class BaseServer implements Serializable{
     int CountPlayerOnServer = 0;
     private int CountPlayerIsReady = 1;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
+    private boolean connectServerError = false;
     BaseServer(){
         this.orders.add(getOrderFormat("./image/meat/01/medium_rare1.png", "เนื้อวัว แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "49", "01","130"));
         this.orders.add(getOrderFormat("./image/meat/02/medium_rare1.png", "เนื้อวากิล แบบมีเดียมแรร์ อุณหภูมิ 130 องศา", "60", "02","130"));
@@ -47,6 +48,14 @@ public class BaseServer implements Serializable{
     }
     Boolean getStatusInRoby(){return this.statusInRoby;}
     Boolean getStatusInGame(){return this.statusInGame;}
+    
+    public synchronized boolean hasConnectServerError() {
+        return connectServerError;
+    }
+
+    public synchronized void setConnectServerError(boolean error) {
+        this.connectServerError = error;
+    }
     void setClient(BaseClient baseClient, String ip){
         this.client.put(ip,baseClient);
     }
