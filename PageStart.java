@@ -417,6 +417,7 @@ public class PageStart extends JPanel {
         }
         return data;
     }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -510,6 +511,7 @@ public class PageStart extends JPanel {
 
     }
 }
+
 class RunRepaint extends Thread{
     private boolean status = true;
     private JPanel panel;
@@ -522,7 +524,6 @@ class RunRepaint extends Thread{
             this.panel.repaint();
             try {Thread.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
         }
-
         grillSound.stopSound();  // ปิดเสียงเมื่อ ออก loop
     }
     void kill(){
