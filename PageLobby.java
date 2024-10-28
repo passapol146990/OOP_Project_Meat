@@ -17,7 +17,7 @@ public class PageLobby extends JPanel {
         back.addActionListener(e -> {
             this.app.getBaseClient().statusConnectServer = false;
             app.getBaseClient().statusReady = false;
-            app.showPanel("menu");
+            app.getBaseClient().nowPage = "menu";
         });
         add(back);
 

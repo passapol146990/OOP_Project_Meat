@@ -8,11 +8,12 @@ class Run {
         PageStart start = new PageStart(app);
         PageSeting seting = new PageSeting(app);
         PageAbout about = new PageAbout(app);
+        PageLobby lobby = new PageLobby(app);
         app.addPanel(menu,"menu");
         app.addPanel(start,"start");
         app.addPanel(seting, "seting");
         app.addPanel(about, "about");
-        app.showPanel("menu");
+        app.addPanel(lobby, "lobby");
         openPortClient.start();
         controlClient.start();
     }    

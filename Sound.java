@@ -11,10 +11,12 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
-    private Clip clip;
+    private int volumeMusic = 100;
+    private Clip music;
+    private Clip effect;
     private Clip clip2;
 
-    public void playGrillSound() {
+    void playGrillSound() {
         try {
             File audioFile = new File(System.getProperty("user.dir") + File.separator + "./sound/meat_audio.wav");
             AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
@@ -22,82 +24,54 @@ public class Sound {
             DataLine.Info info = new DataLine.Info(Clip.class, format);
             clip2 = (Clip) AudioSystem.getLine(info);
             clip2.open(stream);
-
-            // Adjust volume using FloatControl
             FloatControl volumeControl = (FloatControl) clip2.getControl(FloatControl.Type.MASTER_GAIN);
-            volumeControl.setValue(-20.0f);  // ปรับเสียงง
-
+            volumeControl.setValue(-20.0f);
             clip2.start();
-            
-            // Loop the clip continuously
-            // clip.loop(Clip.LOOP_CONTINUOUSLY);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void stopSound() {
-        if (clip != null && clip.isRunning()) {
-            clip.stop();  // Stop the clip if it's running
-        }
-    }
-    // โหลดเสียง
-    public void playmusic(){
-            loadSound("./Sound/tvari-tokyo-cafe-159065.wav");
-            play();
-    }
-    public void loadSound(String filePath){
+    void playMusic(){
         AudioInputStream audioInputStream;
         try {
-            audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
-            try {
-                clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-            } catch (LineUnavailableException e) {
-                
-                e.printStackTrace();
+            audioInputStream = AudioSystem.getAudioInputStream(new File("./Sound/tvari-tokyo-cafe-159065.wav"));
+            this.music = AudioSystem.getClip();
+            this.music.open(audioInputStream);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {e.printStackTrace();}
+        if (this.music != null) {
+            this.music.start();
+            this.music.loop(-1);
+        }
+    }
+    void stopMusic() {
+        if (this.music != null && this.music.isRunning()) {
+            this.music.stop();
+        }
+    }
+    void setVolumeMusic(int value) {
+        this.volumeMusic = value;
+        if (this.music != null) {
+            float volume;
+            FloatControl volumeControl = (FloatControl) this.music.getControl(FloatControl.Type.MASTER_GAIN);
+            if(this.volumeMusic == 0){
+                this.music.stop(); // หยุดเสียง
+                volumeControl.setValue(-80.0f);
+            }else{
+                volume = (float) (this.volumeMusic - 100) * 0.5f;
+                volumeControl.setValue(volume); // ปรับระดับเสียง
+                if (!this.music.isRunning()) {
+                    this.music.start(); // เริ่มเสียงถ้าหยุด
+                }
             }
-        } catch (UnsupportedAudioFileException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     }
-    // เล่นเสียง
-    public void play() {
-        if (clip != null) {
-            clip.start();
-            clip.loop(-1); // เล่นเสียงซ้ำไปเรื่อย ๆ
-        }
-    }
-    // ปิดเสียงเมื่อเสร็จสิ้น
-    public void close() {
-        if (clip != null) {
-            clip.stop();
-            clip.close();
-        }
-    }
+    int getVolumeMusic(){return this.volumeMusic;}
+    int getVolumeEffect(){return this.volumeMusic;}
+    ///////////////// Effect Sound //////////////////////////////////////
     public void closeEffect() {
         if (clip2 != null) {
             clip2.stop();
             clip2.close();
-        }
-    }
-    public void setVolume(int value) {
-        if (clip != null) {
-            float volume;
-            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            if(value == 0)
-            {
-                clip.stop(); // หยุดเสียง
-                volumeControl.setValue(-80.0f);
-            }
-            else{
-            volume = (float) (value - 100) * 0.5f;
-            volumeControl.setValue(volume); // ปรับระดับเสียง
-            if (!clip.isRunning()) {
-                clip.start(); // เริ่มเสียงถ้าหยุด
-            }
-            }
         }
     }
     public void setVolumeEffect(int value) {

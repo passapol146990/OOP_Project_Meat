@@ -16,8 +16,8 @@ public class Component{
     }
 
     // Method to create a custom JSlider
-    public static JSlider createCustomSlider() {
-        JSlider slider = new JSlider(0, 100,100); // Slider with min 0 and max 100
+    public static JSlider createCustomSlider(int value) {
+        JSlider slider = new JSlider(0, 100,value); // Slider with min 0 and max 100
         slider.setUI(new CustomSliderUI(slider)); // Apply custom UI to slider
         slider.setPaintTicks(false); // No ticks on slider
         return slider;

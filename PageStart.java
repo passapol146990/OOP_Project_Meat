@@ -171,19 +171,17 @@ public class PageStart extends JPanel {
             JLabel musicIcon = new JLabel(new ImageIcon(resizedMusicImage));
             JLabel audioIcon = new JLabel(new ImageIcon(resizedAudioImage));
 
-            // Slider สำหรับปรับระดับเสียง
-            JSlider musicSlider = new JSlider(0, 100, 50);
+            // Slider สำหรับปรับระดับเสียงเพลง
+            JSlider musicSlider = new JSlider(0, 100, app.getSound().getVolumeMusic());
             musicSlider.setForeground(Color.BLUE);
             musicSlider.addChangeListener(e1 ->{
-                app.getSound().setVolume(musicSlider.getValue());
-                System.out.println(musicSlider.getValue());
+                app.getSound().setVolumeMusic(musicSlider.getValue());
             });
-            
-            JSlider audioSlider = new JSlider(0, 100, 50);
+            // Slider สำหรับปรับระดับเสียงย่างเนื้อ
+            JSlider audioSlider = new JSlider(0, 100, app.getSound().getVolumeEffect());
             audioSlider.setForeground(Color.BLUE);
             audioSlider.addChangeListener(e1 ->{
                 app.getSound().setVolumeEffect(audioSlider.getValue());
-                System.out.println(audioSlider.getValue());
             });
             
             // Labels สำหรับ slider
@@ -237,6 +235,7 @@ public class PageStart extends JPanel {
                 app.getBaseClient().statusConnectServer = false;
                 app.getBaseClient().statusReady = false;
                 settingsDialog.dispose();
+                app.getBaseClient().nowPage = "menu";
             });
 
             // เพิ่ม settingsPanel ลงใน JFrame
@@ -351,7 +350,6 @@ public class PageStart extends JPanel {
             shopDialog.setVisible(true);
         });
         add(B_shop);
-        
         runRepaint = new RunRepaint(this); 
         runRepaint.start();
 
@@ -387,7 +385,6 @@ public class PageStart extends JPanel {
                 }
             }
         });
-
         // Mouse motion listener to drag meat
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -402,7 +399,6 @@ public class PageStart extends JPanel {
                 }
             }
         });
-        
     }
     String[] getFormatTitleOrder(String text, int maxString) {
         if (text == null || text.isEmpty() || maxString <= 0) {
@@ -420,7 +416,6 @@ public class PageStart extends JPanel {
         }
         return data;
     }
-    @Override
     public void paint(Graphics g) {
         super.paint(g);
         ImageIcon icon_setting = new ImageIcon("./image/settings-white.png");

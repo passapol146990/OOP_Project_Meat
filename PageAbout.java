@@ -14,8 +14,7 @@ public class PageAbout extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Back button clicked!");
-                app.showPanel("menu");
+                app.getBaseClient().nowPage = "menu";
             }
         });
         setLayout(null);

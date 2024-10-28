@@ -15,6 +15,7 @@ public class BaseClient implements Serializable{
     private int time = 0;
     boolean statusConnectServer = false;
     boolean statusReady = false;
+    String nowPage = "menu";
     private String nameShop;
     private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     private HashMap<String,String> Ordering;
