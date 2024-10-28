@@ -16,7 +16,7 @@ public class BaseServer implements Serializable{
     private boolean statusInRoby = true;
     private boolean statusInGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 1;
+    private int CountPlayerIsReady = 3;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
         this.orders.add(getOrderFormat("49", "01",140));
@@ -139,7 +139,8 @@ public class BaseServer implements Serializable{
     }
     
 }
-class CountTimeServer extends Thread{
+class CountTimeServer extends Thread implements Serializable{
+    private static final long serialVersionUID = 1L;
     private BaseServer base;
     CountTimeServer(BaseServer base){
         this.base = base;

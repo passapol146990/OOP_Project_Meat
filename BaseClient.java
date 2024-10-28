@@ -109,6 +109,7 @@ public class BaseClient implements Serializable{
     void setNameShop(String name ){this.nameShop = name;}
 }
 class Meat extends Thread implements Serializable{
+    private static final long serialVersionUID = 1L;
     int temp = 0;
     int meat_left = 0;
     int meat_rigth = 0;
@@ -170,6 +171,7 @@ class Meat extends Thread implements Serializable{
     String getid(){return this.id;}
 }
 class ClickMeat extends Thread implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Meat meat;
     ClickMeat(Meat meat){
         this.meat = meat;
@@ -191,6 +193,7 @@ class ClickMeat extends Thread implements Serializable{
     }
 }
 class StartTempMeat extends Thread implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Meat meat;
     StartTempMeat(Meat meat){
         this.meat = meat;
