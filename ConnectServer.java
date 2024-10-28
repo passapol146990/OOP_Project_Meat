@@ -36,3 +36,8 @@ public class ConnectServer extends Thread{
         }
     }
 }
+
+class logout extends Thread{
+
+    
+}
