@@ -35,10 +35,12 @@ public class PageStart extends JPanel {
         }catch (IOException e) {e.printStackTrace();}
         imagLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e){
-                app.getSound().playEffect();
-                app.getBaseClient().newMeat(productName,price);
-                meatRect = new Rectangle(402, 160, 400, 300);
-                Jdialog.dispose();
+                if(app.getBaseClient().getMoney()>0){
+                    app.getSound().playEffect();
+                    app.getBaseClient().newMeat(productName,price);
+                    meatRect = new Rectangle(402, 160, 400, 300);
+                    Jdialog.dispose();
+                }
             }
         });
         panel.add(imagLabel, BorderLayout.CENTER);
