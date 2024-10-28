@@ -20,7 +20,6 @@ public class ControlClient extends Thread{
                 }
             }else{
                 this.app.showPanel("menu");
-                this.app.getBaseClient().setTime(300);
             }
         }
     }

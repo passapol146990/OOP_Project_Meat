@@ -53,14 +53,13 @@ public class PageMenu extends JPanel {
         exitButton.setPreferredSize(buttonSize);
 
         startButton.addActionListener(e->{
-            if(!app.getBaseClient().statusConnectServer && this.app.getBaseClient().getTime()==300){
+            if(!app.getBaseClient().statusConnectServer){
                 app.getBaseClient().setNameShop(nameField.getText());
                 app.getBaseClient().statusConnectServer = true;
                 PageLobby lobby = new PageLobby(app);
                 app.addPanel(lobby, "lobby");
                 ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
                 conn.start();
-                this.app.getBaseClient().setTime(300);
             }
         });
         settingButton.addActionListener(e->{
