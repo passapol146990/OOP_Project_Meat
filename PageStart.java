@@ -479,7 +479,7 @@ public class PageStart extends JPanel {
             String playerName = player.getNameShop();
             double playerMoney = player.getMoney();
             int rank = i + 1;
-
+            
             // ตั้งค่าและวาดกรอบรอบข้อความ
             g.setColor(new Color(85, 85, 85));
             int rectHeight = lineHeight;

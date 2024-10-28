@@ -8,11 +8,14 @@ class Run {
         PageStart start = new PageStart(app);
         PageSeting seting = new PageSeting(app);
         PageAbout about = new PageAbout(app);
+        PageShowscore pageShowscore = new PageShowscore(app);
         app.addPanel(menu,"menu");
         app.addPanel(start,"start");
         app.addPanel(seting, "seting");
         app.addPanel(about, "about");
-        app.showPanel("menu");
+        app.addPanel(pageShowscore,"PageShowscore");
+        app.showPanel("showscore");
+    
         openPortClient.start();
         controlClient.start();
     }    
