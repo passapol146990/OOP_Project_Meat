@@ -60,11 +60,11 @@ class Server extends Thread{
                 }else if(this.baseServer.getStatusInGame()){
                     this.baseServer.checkDataBasePlayerInGame();
                 }
+                System.out.println("Test");
                 req.close();
                 socket.close();
                 try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
-
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
@@ -83,8 +83,9 @@ class SendClient extends Thread{
     public void run(){
         while(this.baseServer.controller_client.get(this.ipAddress)){
             try{
+                System.out.println(this.baseServer.hasConnectServerError());
                 if (this.baseServer.hasConnectServerError()) {
-                    throw new Exception("Test !!!");
+                    System.out.println("Test001");
                 }
                 Socket socket = new Socket(this.ipAddress,this.port);
                 ObjectOutputStream res = new ObjectOutputStream(socket.getOutputStream());

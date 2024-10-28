@@ -36,7 +36,7 @@ public class ConnectServer extends Thread{
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
             app.baseServer.setConnectServerError(true);
             System.out.println(app.baseServer.hasConnectServerError());
-            this.app.getBaseClient().statusConnectServer = false;
+            app.getBaseClient().statusConnectServer = false;
         }
     }
 }
