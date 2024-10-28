@@ -369,6 +369,7 @@ public class PageStart extends JPanel {
                 if (meatRect.contains(e.getPoint())) {
                     isHoldingMeat = true;
                     lastMousePosition = e.getPoint();
+                    System.out.println(lastMousePosition);
                 }
             }
             //เช็คว่าเนื้ออยู่จานมั้ย
@@ -376,10 +377,14 @@ public class PageStart extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
-                    if(meatRect.intersects(plateRect)) {
-                        app.getSound().closeEffect();
-                        app.getBaseClient().getMeat().kill();
-                        app.getBaseClient().sendOrder();
+                    if(meatRect.x>550&&meatRect.y<200) {
+                            app.getSound().closeEffect();
+                            app.getBaseClient().getMeat().kill();
+                            app.getBaseClient().sendOrder();
+                            System.out.println(meatRect);
+                            System.out.println(plateRect);
+                            isHoldingMeat = false;
+
                     }else{
                         meatRect.x = 402;
                         meatRect.y = 160;
@@ -398,7 +403,10 @@ public class PageStart extends JPanel {
                     meatRect.x += dx;
                     meatRect.y += dy;
                     lastMousePosition = e.getPoint();
+                    System.out.println(meatRect.x);
+                    System.out.println(meatRect.y);
                     repaint();
+                    
                 }
             }
         });
