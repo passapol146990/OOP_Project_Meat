@@ -26,13 +26,15 @@ public class BaseClient implements Serializable{
     }
     void sendOrder(){
         if(this.Ordering!=null&&this.meat!=null){
-            float give = 0;
+           // float give = 0;
             if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
-                give += Integer.parseInt(this.Ordering.get("price"))*0.6;
-                give += (Integer.parseInt(this.Ordering.get("price"))*0.4)*calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature());
+                this.money += (Integer.parseInt(this.Ordering.get("price"))*0.01)*calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature());
+                System.out.print(this.money);
+                System.out.println(this.Ordering.get("price"));
+                System.out.println(this.Ordering.get("tempMeat"));
+                System.out.println(this.meat.getTemperature());
             }
             // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
-            this.money += give;
             this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
             this.Ordering = null;
         }
@@ -160,7 +162,7 @@ class Meat extends Thread implements Serializable{
     void setSted_meat(int sted){this.sted_meat = sted;}
     //ดึงค่าอุณหภูมิ
     public int getTemperature() {
-        return this.temp;
+        return this.temp/38;
     }
     String gettype_meat(){return this.type_meat;}
     String getid(){return this.id;}
