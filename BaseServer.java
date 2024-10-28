@@ -15,6 +15,7 @@ public class BaseServer implements Serializable{
     private boolean statusStartGame = false;
     private boolean statusInRoby = true;
     private boolean statusInGame = false;
+    private boolean running = true;
     int CountPlayerOnServer = 0;
     private int CountPlayerIsReady = 1;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
@@ -48,9 +49,16 @@ public class BaseServer implements Serializable{
     }
     Boolean getStatusInRoby(){return this.statusInRoby;}
     Boolean getStatusInGame(){return this.statusInGame;}
-    
+
     public synchronized boolean hasConnectServerError() {
         return connectServerError;
+    }
+    public void stopServer() {
+        running = false; // Method to stop the server
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public synchronized void setConnectServerError(boolean error) {

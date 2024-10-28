@@ -64,6 +64,7 @@ class Server extends Thread{
                 socket.close();
                 try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
+
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
@@ -83,7 +84,7 @@ class SendClient extends Thread{
         while(this.baseServer.controller_client.get(this.ipAddress)){
             try{
                 if (this.baseServer.hasConnectServerError()) {
-                    throw new Exception("ConnectServer encountered an error.");
+                    throw new Exception("Test !!!");
                 }
                 Socket socket = new Socket(this.ipAddress,this.port);
                 ObjectOutputStream res = new ObjectOutputStream(socket.getOutputStream());
@@ -94,7 +95,7 @@ class SendClient extends Thread{
                 socket.close();
                 try {Thread.sleep(500);} catch (InterruptedException e) {throw new RuntimeException(e);}
             } catch (Exception e) {
-                System.out.println(e + "Test");
+                System.out.println("Caught Exception: " + e.getMessage());
                 this.baseServer.controller_client.put(this.ipAddress,false);
                 this.baseServer.CountPlayerOnServer -= 1;
             }
