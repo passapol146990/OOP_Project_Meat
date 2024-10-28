@@ -26,24 +26,26 @@ public class BaseClient implements Serializable{
     }
     void sendOrder(){
         if(this.Ordering!=null&&this.meat!=null){
-           // float give = 0;
+            // ตรวจสอบชนิดของเนื้อ
             if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
-                this.money += (Integer.parseInt(this.Ordering.get("price"))*0.01)*calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature());
-                System.out.print(this.money);
-                System.out.println(this.Ordering.get("price"));
-                System.out.println(this.Ordering.get("tempMeat"));
-                System.out.println(this.meat.getTemperature());
+                if(this.Ordering.get("image").equals(this.meat.getImage())||this.Ordering.get("image_rigth").equals(this.meat.getImage())){
+                    this.money += Integer.parseInt(this.Ordering.get("price"))*(calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature())/100);
+                }
             }
             // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
             this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
             this.Ordering = null;
+            this.meat = null;
         }
     }
-    double calculatePercentage(int A, int B) {
-        int maxDiff = 100; // ความต่างสูงสุดที่กำหนดได้เอง
-        int diff = Math.abs(A - B); // คำนวณค่าความต่างระหว่าง A และ B
-        double percentage = Math.max(0, 100 - ((double) diff / maxDiff) * 100);
-        return percentage;
+    double calculatePercentage(int num1, int num2) {
+        int difference = Math.abs(num1 - num2); // หาค่าความต่าง
+        int percent = 100 - (difference / 3) * 5; // ลดเปอร์เซ็นต์ตามค่าความต่าง
+        // ถ้าเปอร์เซ็นต์น้อยกว่า 1 ให้ส่งค่า 1%
+        if (percent <= 0) {
+            percent = 1;
+        }
+        return percent;
     }
     boolean checkOrdering(){
         boolean status = false;
@@ -112,7 +114,7 @@ class Meat extends Thread implements Serializable{
     int meat_rigth = 0;
     boolean meat_on = true;
     private String type_meat = "01";
-    private String rank_meat = "rare";
+    String rank_meat = "rare";
     private int sted_meat = 1;
     private String image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
     private String id;
@@ -162,7 +164,7 @@ class Meat extends Thread implements Serializable{
     void setSted_meat(int sted){this.sted_meat = sted;}
     //ดึงค่าอุณหภูมิ
     public int getTemperature() {
-        return this.temp/38;
+        return this.temp;
     }
     String gettype_meat(){return this.type_meat;}
     String getid(){return this.id;}
@@ -188,7 +190,7 @@ class ClickMeat extends Thread implements Serializable{
         }
     }
 }
-class StartTempMeat extends Thread{
+class StartTempMeat extends Thread implements Serializable{
     private Meat meat;
     StartTempMeat(Meat meat){
         this.meat = meat;
