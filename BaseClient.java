@@ -105,10 +105,10 @@ public class BaseClient implements Serializable{
     void setNameShop(String name ){this.nameShop = name;}
 }
 class Meat extends Thread implements Serializable{
-    private int temp = 0;
-    private int meat_left = 0;
-    private int meat_rigth = 0;
-    private boolean meat_on = true;
+    int temp = 0;
+    int meat_left = 0;
+    int meat_rigth = 0;
+    boolean meat_on = true;
     private String type_meat = "01";
     private String rank_meat = "rare";
     private int sted_meat = 1;
@@ -118,34 +118,33 @@ class Meat extends Thread implements Serializable{
 
     Meat(String type){
         this.type_meat = type;
+        StartTempMeat startTempMeat = new StartTempMeat(this);
+        startTempMeat.start();
     }
 
     public void run(){
         while (this.meat_on){
             if(this.sted_meat==1){
-                this.meat_left += new Random().nextInt(1,5);
-                if(this.meat_rigth>200*50){
+                if(this.meat_rigth>300){
                     this.rank_meat = "over_cook";
-                }else if(this.meat_rigth>130*50){
+                }else if(this.meat_rigth>200){
                     this.rank_meat = "medium_well";
-                }else if(this.meat_rigth>70*50){
+                }else if(this.meat_rigth>130){
                     this.rank_meat = "medium_rare";
                 }else{
                     this.rank_meat = "rare";
                 }
             }else{
-                this.meat_rigth += new Random().nextInt(1,5);
-                if(this.meat_left>200*50){
-                    this.rank_meat = "over_cook";
-                }else if(this.meat_left>130*50){
+                if(this.meat_left>300){
+                    this.rank_meat = "over_cook.png";
+                }else if(this.meat_left>200){
                     this.rank_meat = "medium_well";
-                }else if(this.meat_left>70*50){
+                }else if(this.meat_left>130){
                     this.rank_meat = "medium_rare";
                 }else{
                     this.rank_meat = "rare";
                 }
             }
-            this.temp = (this.meat_left+this.meat_rigth)/2;
             this.image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
             try {Thread.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}  
         }
@@ -187,6 +186,23 @@ class ClickMeat extends Thread implements Serializable{
         }
     }
 }
-
+class StartTempMeat extends Thread{
+    private Meat meat;
+    StartTempMeat(Meat meat){
+        this.meat = meat;
+    }
+    public void run(){
+        while (this.meat.meat_on) {
+            // System.out.println(this.meat.meat_on+", "+this.meat.getTemperature()+", Left : "+this.meat.meat_left+", Rigth : "+ this.meat.meat_rigth);
+            if(this.meat.getSted_meat()==1){
+                this.meat.meat_left += new Random().nextInt(5,25);
+            }else{
+                this.meat.meat_rigth += new Random().nextInt(5, 25);
+            }
+            this.meat.temp = (this.meat.meat_left + this.meat.meat_rigth) / 2;
+            try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+        }
+    }
+}
 
 

@@ -437,9 +437,8 @@ public class PageStart extends JPanel {
         g.setColor(new Color(255, 255, 255));
         //วาดอุณหภูมิ
         if (showTemp&&this.app.getBaseClient().getMeat()!=null) {
-            g.setFont(new Font("Tahoma", Font.PLAIN, 50)); 
-            String str_temp = Integer.toString(app.getBaseClient().getMeat().getTemperature()/100);
-            g.drawString(str_temp, 200, 250); 
+            g.setFont(new Font("Tahoma", Font.PLAIN, 20)); 
+            g.drawString("อุณหภูมิตรงกลางของเนื้อคือ: " + app.getBaseClient().getMeat().getTemperature() + " °C", 200, 250); 
         }
         // เงิน
         g.setFont(new Font("Tahoma", Font.PLAIN, 30));
