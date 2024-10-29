@@ -48,8 +48,8 @@ public class PageShowscore extends JPanel {
             
             // ตั้งค่าและวาดกรอบรอบข้อความ
             g.setColor(new Color(85, 85, 85));
-            int rectHeight = lineHeight;
-            int rectWidth = playerName.length() * 15; // กำหนดขนาดตามความยาวชื่อผู้เล่น
+            int rectHeight = 60;
+            int rectWidth = 272; // กำหนดขนาดตามความยาวชื่อผู้เล่น
             int rectX = x - 10;
             int rectY = startY + i * lineHeight - 20;
             g.drawRect(rectX, rectY, rectWidth, rectHeight);

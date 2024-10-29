@@ -455,7 +455,7 @@ public class PageStart extends JPanel {
             g.drawString(String.format("+%s$", isorders.get("price")),1180,55);
         }
         
-        int x = 1000; // ตำแหน่ง x
+        int x = 995; // ตำแหน่ง x
         int startY = 480; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
 
@@ -471,8 +471,8 @@ public class PageStart extends JPanel {
             
             // ตั้งค่าและวาดกรอบรอบข้อความ
             g.setColor(new Color(85, 85, 85));
-            int rectHeight = lineHeight;
-            int rectWidth = playerName.length() * 15 + 100; // กำหนดขนาดตามความยาวชื่อผู้เล่น
+            int rectHeight = 40;
+            int rectWidth = 300; // กำหนดขนาดตามความยาวชื่อผู้เล่น
             int rectX = x;
             int rectY = startY + i * lineHeight - 20;
             g.drawRect(rectX, rectY, rectWidth, rectHeight);
