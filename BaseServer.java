@@ -16,9 +16,16 @@ public class BaseServer implements Serializable{
     boolean statusInGame = false;
     boolean statusEndGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 1;
+    private int CountPlayerIsReady = 4;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
+        BaseClient x = new BaseClient();
+        x.statusReady = true;
+        for(int i=0;i<3;i++){
+            this.client.put(String.format("0.0.0.%d", i), x);
+            this.controller_client.put(String.format("0.0.0.%d", i), true);
+            this.IDClientGETIPAddress.put(x.id, String.format("0.0.0.%d", i));
+        }
         for(int i=0;i<20;i++){
             this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(40,50)), "01",140+i));
             this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(50,70)), "02",140+i));
@@ -113,7 +120,7 @@ public class BaseServer implements Serializable{
     }
     void checkDataBasePlayerInGame(){
         if(this.statusInGame){
-            if(this.time<=299){
+            if(this.time<=290){
                 this.statusEndGame = true;
                 this.statusInGame = false;
                 this.statusInRoby = false;

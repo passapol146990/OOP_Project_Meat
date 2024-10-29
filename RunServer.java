@@ -1,12 +1,8 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * InnerServer
@@ -20,7 +16,6 @@ public class RunServer {
         checkPlayerInServer.start();
     }
 }
-
 class Server extends Thread{
     private ServerSocket serverSocket;
     private BaseServer baseServer;
