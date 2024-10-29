@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -9,7 +10,7 @@ public class PageAbout extends JPanel {
     private JButton backButton;
     public PageAbout(App app) {
         this.app = app;
-        backButton = new JButton("Back");
+        backButton = Component.createCustomRoundedButton("Back",Color.white);
         backButton.setBounds(540, 550, 200, 50);
         backButton.addActionListener(new ActionListener() {
             @Override

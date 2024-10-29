@@ -9,7 +9,7 @@ public class PageShowscore extends JPanel {
     private JButton backButton;
     PageShowscore(App app){
         this.app = app;
-        backButton = new JButton("Back");
+        backButton = Component.createCustomRoundedButton("Back",Color.white);
         backButton.setBounds(540, 600, 200, 50);
         backButton.addActionListener(new ActionListener() {
             @Override

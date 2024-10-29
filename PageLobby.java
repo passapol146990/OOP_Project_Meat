@@ -13,7 +13,7 @@ public class PageLobby extends JPanel {
         setLayout(null);
 
         // Back Button
-        JButton back = new JButton("Back");
+        JButton back = Component.createCustomRoundedButton("Back",Color.white);
         back.setBounds(0, 0, 100, 60);
         back.addActionListener(e -> {
             this.app.getBaseClient().statusConnectServer = false;
@@ -23,7 +23,7 @@ public class PageLobby extends JPanel {
         add(back);
 
         // Ready Button
-        JButton ready = new JButton("พร้อม");
+        JButton ready = Component.createCustomRoundedButton("พร้อม",Color.white);
         ready.setFont(new Font("Tahoma", Font.BOLD, 14));
         ready.setBounds(600, 600, 150, 60);
         ready.addActionListener(e -> {

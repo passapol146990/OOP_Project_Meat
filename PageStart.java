@@ -173,8 +173,8 @@ public class PageStart extends JPanel {
             JLabel audioLabel = new JLabel("Audio");
 
             // ปุ่มสำหรับย้อนกลับ
-            JButton backToGameButton = new JButton("Back to the Game");
-            JButton backToMenuButton = new JButton("Back to the Menu");
+            JButton backToGameButton = Component.createCustomRoundedButton("Back to the Game",Color.white);
+            JButton backToMenuButton = Component.createCustomRoundedButton("Back to the Menu",Color.white);
 
             // เพิ่ม Music Icon และ Slider
             gbc.gridx = 0;

@@ -82,7 +82,7 @@ class PageSeting extends JPanel{
         settingsPanel.add(audioSlider, gbc);
         settingsPanel.setVisible(true);
         // ปุ่มสำหรับย้อนกลับ
-        JButton backToMenuButton = new JButton("Back to the Menu");
+        JButton backToMenuButton = Component.createCustomRoundedButton("Back to the Menu",Color.white);
         backToMenuButton.setBounds(0, 0, 200, 50);
         backToMenuButton.addActionListener(e1 -> {
             app.getBaseClient().nowPage = "menu";
