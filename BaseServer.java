@@ -148,7 +148,7 @@ class CountTimeServer extends Thread implements Serializable{
         this.base = base;
     }
     public void run(){
-        while (this.base.time>0) {
+        while (this.base.getStatusInGame()) {
             this.base.time = this.base.time-1;
             try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
         }

@@ -153,7 +153,7 @@ class Meat extends Thread implements Serializable{
                 }
             }else{
                 if(this.meat_left>300){
-                    this.rank_meat = "over_cook.png";
+                    this.rank_meat = "over_cook";
                 }else if(this.meat_left>200){
                     this.rank_meat = "medium_well";
                 }else if(this.meat_left>130){
