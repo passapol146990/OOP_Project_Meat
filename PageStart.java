@@ -471,15 +471,12 @@ public class PageStart extends JPanel {
             
             // ตั้งค่าและวาดกรอบรอบข้อความ
             g.setColor(new Color(85, 85, 85));
-            int rectHeight = lineHeight;
-            int rectWidth = playerName.length() * 15 + 100; // กำหนดขนาดตามความยาวชื่อผู้เล่น
-            int rectX = x;
             int rectY = startY + i * lineHeight - 20;
-            g.drawRect(rectX, rectY, rectWidth, rectHeight);
-
+            g.drawRect(x-10, rectY, 260, lineHeight);
+            
             // วาดข้อมูลผู้เล่นในกรอบ
             g.setColor(new Color(0, 0, 0)); // ตั้งสีสำหรับข้อความ
-            g.setFont(new Font("Tahoma", Font.PLAIN, 20)); // ตั้งฟอนต์
+            g.setFont(new Font("Tahoma", Font.PLAIN, 15)); // ตั้งฟอนต์
 
             // ข้อความที่จะแสดง (อันดับ ชื่อ และจำนวนเงิน)
             String displayText = rank + ". " + playerName + " = " + playerMoney + "$";
@@ -487,10 +484,11 @@ public class PageStart extends JPanel {
             int textY = startY + i * lineHeight;
             g.drawString(displayText, textX, textY);
         }
-
-        // แสดงอันดับของผู้เล่นปัจจุบัน
+        
+        // แสดงอันดับของเรา
         String rankingText = "Your ranking: " + app.getBaseClient().getMoney() + "$";
-        g.drawString(rankingText, x, startY + rankedPlayers.size() * lineHeight + 30); // วางหลังรายการ
+        g.drawString(rankingText, x, 670); // วางหลังรายการ
+        g.drawRect(x-10,650,260,lineHeight);
 
         // วาดรูปภาพเนื้อ ถ้ามี
         if (this.app.getBaseClient().getMeat() != null && this.app.getBaseClient().getMeat().getImage() != null) {

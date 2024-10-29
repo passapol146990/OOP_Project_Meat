@@ -111,7 +111,13 @@ public class BaseClient implements Serializable{
     }
     void setTime(int time){this.time = time;}
     String getNameShop(){return this.nameShop;}
-    void setNameShop(String name ){this.nameShop = name;}
+    void setNameShop(String name ){
+        if(name.length()>18){
+            name = name.substring(0,18);
+            name += "...";    
+        }
+        this.nameShop = name;
+    }
     void reSetBaseClient(){
         this.money = 50;
         this.orders.clear();
