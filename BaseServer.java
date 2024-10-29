@@ -113,7 +113,7 @@ public class BaseServer implements Serializable{
     }
     void checkDataBasePlayerInGame(){
         if(this.statusInGame){
-            if(this.time<=295){
+            if(this.time<=299){
                 this.statusEndGame = true;
                 this.statusInGame = false;
                 this.statusInRoby = false;

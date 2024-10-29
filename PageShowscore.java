@@ -33,7 +33,7 @@ public class PageShowscore extends JPanel {
         g.setFont(font);
         g.drawString("สรุปอันดับร้านค้า",545,100);
 
-        int x = 500; // ตำแหน่ง x
+        int x = 450; // ตำแหน่ง x
         int startY = 150; // ตำแหน่ง y เริ่มต้น
         int lineHeight = 30; // ความสูงของแต่ละบรรทัด
 
@@ -49,15 +49,11 @@ public class PageShowscore extends JPanel {
             // ตั้งค่าและวาดกรอบรอบข้อความ
             g.setColor(new Color(85, 85, 85));
             int rectHeight = 40;
-            int rectWidth = 300; // กำหนดขนาดตามความยาวชื่อผู้เล่น
-            int rectX = x;
             int rectY = startY + i * lineHeight - 20;
-            g.drawRect(rectX, rectY, rectWidth, rectHeight);
-            System.out.println(rectY);
+            g.drawRect(x, rectY, 400, rectHeight);
             // วาดข้อมูลผู้เล่นในกรอบ
             g.setColor(new Color(0, 0, 0)); // ตั้งสีสำหรับข้อความ
             g.setFont(new Font("Tahoma", Font.PLAIN, 20)); // ตั้งฟอนต์
-            System.out.println(playerName.length());
             // ข้อความที่จะแสดง (อันดับ ชื่อ และจำนวนเงิน)
             String displayText = rank + ". " + playerName + " = " + playerMoney + "$";
             int textX = 525; // กำหนดตำแหน่ง X ของข้อความให้มีระยะจากกรอบ
