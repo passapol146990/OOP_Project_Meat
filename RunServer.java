@@ -9,9 +9,15 @@ import java.net.Socket;
  */
 public class RunServer {
     public static void main(String[] args) {
+///////////////////////////////////////////////////////
         BaseServer baseServer = new BaseServer();
+        baseServer.time = 300;
+        baseServer.CountPlayerIsReady = 3;
+        baseServer.timeStop = 0;
+///////////////////////////////////////////////////////
         Server roby = new Server(baseServer);
         CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
+///////////////////////////////////////////////////////
         roby.start();
         checkPlayerInServer.start();
     }

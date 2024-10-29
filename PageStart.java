@@ -486,7 +486,7 @@ public class PageStart extends JPanel {
         }
         
         // แสดงอันดับของเรา
-        String rankingText = "Your ranking: " + app.getBaseClient().getMoney() + "$";
+        String rankingText = "Your money: " + app.getBaseClient().getMoney() + "$";
         g.drawString(rankingText, x, 670); // วางหลังรายการ
         g.drawRect(x-10,650,260,lineHeight);
 

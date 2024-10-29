@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 import java.util.Random;
 
 public class BaseServer implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     int port = 3333;
     int time = 300;
+    int timeStop = 0;
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
@@ -16,16 +16,9 @@ public class BaseServer implements Serializable{
     boolean statusInGame = false;
     boolean statusEndGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 4;
+    int CountPlayerIsReady = 3;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
-        BaseClient x = new BaseClient();
-        x.statusReady = true;
-        for(int i=0;i<3;i++){
-            this.client.put(String.format("0.0.0.%d", i), x);
-            this.controller_client.put(String.format("0.0.0.%d", i), true);
-            this.IDClientGETIPAddress.put(x.id, String.format("0.0.0.%d", i));
-        }
         for(int i=0;i<20;i++){
             this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(40,50)), "01",140+i));
             this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(50,70)), "02",140+i));
@@ -120,7 +113,7 @@ public class BaseServer implements Serializable{
     }
     void checkDataBasePlayerInGame(){
         if(this.statusInGame){
-            if(this.time<=290){
+            if(this.time<=this.timeStop){
                 this.statusEndGame = true;
                 this.statusInGame = false;
                 this.statusInRoby = false;
