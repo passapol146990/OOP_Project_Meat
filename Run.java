@@ -1,7 +1,7 @@
 class Run {
     public static void main(String[] args){
         Sound sound = new Sound();
-        BaseClient baseClient = new BaseClient(sound);
+        BaseClient baseClient = new BaseClient();
         App app = new App("The Meat",baseClient,sound);
         ControlClient controlClient = new ControlClient(app);
         OpenPortClient openPortClient = new OpenPortClient(app, baseClient, 4444);

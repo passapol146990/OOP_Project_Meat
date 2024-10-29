@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class BaseClient implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
-    Sound sound;
     String id = "";
     private int money = 50;
     private Meat meat = null;
@@ -20,26 +19,30 @@ public class BaseClient implements Serializable{
     private String nameShop;
     private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     private HashMap<String,String> Ordering;
-    BaseClient(Sound sound){
-        this.sound = sound;
+    BaseClient(){
         String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
         for(int i=0;i<55;i++){
             this.id += string.split("")[new Random().nextInt(0,string.length())];
         }
     }
-    void sendOrder(){
-        if(this.Ordering!=null&&this.meat!=null){
-            // ตรวจสอบชนิดของเนื้อ
-            if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
-                if(this.Ordering.get("image").equals(this.meat.getImage())||this.Ordering.get("image_rigth").equals(this.meat.getImage())){
-                    this.money += Integer.parseInt(this.Ordering.get("price"))*(calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature())/100);
+    boolean sendOrder(){
+        boolean status = false;
+        if(this.meat!=null){
+            if(this.Ordering!=null){
+                // ตรวจสอบชนิดของเนื้อ
+                if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
+                    if(this.Ordering.get("image").equals(this.meat.getImage())||this.Ordering.get("image_rigth").equals(this.meat.getImage())){
+                        this.money += Integer.parseInt(this.Ordering.get("price"))*(calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature())/100);
+                        status = true;
+                    }
                 }
+                // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
+                this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
+                this.Ordering = null;
             }
-            // ลบออเดอร์ออก เพื่อที่จะให้เซิฟเวอร์ส่งออเดอร์ใหม่มาให้
-            this.orders.remove(Integer.parseInt(this.Ordering.get("index")));
-            this.Ordering = null;
             this.meat = null;
         }
+        return status;
     }
     double calculatePercentage(int num1, int num2) {
         int difference = Math.abs(num1 - num2); // หาค่าความต่าง
@@ -73,29 +76,28 @@ public class BaseClient implements Serializable{
     ArrayList<HashMap<String,String>> getOrder(){
         return this.orders;
     }
-    void newMeat(String type,int price){
+    boolean newMeat(String type,int price){
         String typeMeat = "";
-        if(this.money>=price){
-            this.money -= price;
-            if(type=="เนื้อวัว"){
-                typeMeat = "01";
-            }
-            else if(type=="เนื้อวากิว"){
-                typeMeat = "02";
-            }
-            else if(type=="เนื้อสันกลาง"){
-                typeMeat = "03";
-            }
-            if(this.meat==null){
-                this.meat = new Meat(typeMeat);
-                this.meat.start();
-            }else{
-                // ป้องการ thead ซ้อมบี้
-                this.meat.kill();
-                this.meat = new Meat(typeMeat);
-                this.meat.start();
-            }
+        this.money -= price;
+        if(type=="เนื้อวัว"){
+            typeMeat = "01";
         }
+        else if(type=="เนื้อวากิว"){
+            typeMeat = "02";
+        }
+        else if(type=="เนื้อสันกลาง"){
+            typeMeat = "03";
+        }
+        if(this.meat==null){
+            this.meat = new Meat(typeMeat);
+            this.meat.start();
+        }else{
+            // ป้องการ thead ซ้อมบี้
+            this.meat.kill();
+            this.meat = new Meat(typeMeat);
+            this.meat.start();
+        }
+        return true;
     }
     Meat getMeat(){return this.meat;}
     int getMoney(){return this.money;}

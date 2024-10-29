@@ -101,7 +101,7 @@ class PageSeting extends JPanel{
         ImageIcon icon = new ImageIcon("./image/bg-start.png");
         g.drawImage(icon.getImage(), 0, 0, this);
 
-        ImageIcon bannerIcon = new ImageIcon("./image/BannerSeting.png");
+        ImageIcon bannerIcon = new ImageIcon("./image/Component/BannerSeting.png");
         g.drawImage(bannerIcon.getImage(), 300, 0, this);
     }
 }

@@ -36,8 +36,7 @@ public class PageStart extends JPanel {
         imagLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e){
                 if(app.getBaseClient().getMoney()>0){
-                    app.getSound().playEffect();
-                    app.getBaseClient().newMeat(productName,price);
+                    app.createMeat(productName,price);
                     meatRect = new Rectangle(402, 160, 400, 300);
                     Jdialog.dispose();
                 }
@@ -46,12 +45,13 @@ public class PageStart extends JPanel {
         panel.add(imagLabel, BorderLayout.CENTER);
 
         //ชื่อสินค้าและราคา
-        JLabel namLabel = new JLabel(productName, SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel(productName, SwingConstants.CENTER);
+        nameLabel.setFont(new Font("Tahoma",Font.CENTER_BASELINE,20));
         JLabel pricLabel = new JLabel(String.format("%d$", price), SwingUtilities.CENTER);
-        pricLabel.setForeground(Color.GREEN);
+        pricLabel.setForeground(new Color(4,93,40));
 
         JPanel textPanel = new JPanel(new GridLayout(2,1));
-        textPanel.add(namLabel);
+        textPanel.add(nameLabel);
         textPanel.add(pricLabel);
 
         panel.add(textPanel, BorderLayout.SOUTH);
@@ -305,18 +305,18 @@ public class PageStart extends JPanel {
         
 
             //สินค้า 1
-            JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", 5,shopDialog);
+            JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", 10,shopDialog);
             meatPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             
             productPanel.add(meatPanel);
 
             // วากิว
-            JPanel wagyuPanel = createProductPanel("./image/wagyuu.png", "เนื้อวากิว", 15,shopDialog);
+            JPanel wagyuPanel = createProductPanel("./image/wagyuu.png", "เนื้อวากิว", 40,shopDialog);
             wagyuPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             productPanel.add(wagyuPanel);
 
             // สันกลาง
-            JPanel ribeyePanel = createProductPanel("./image/sungarng.png", "เนื้อสันกลาง", 10,shopDialog);
+            JPanel ribeyePanel = createProductPanel("./image/sungarng.png", "เนื้อสันกลาง", 30,shopDialog);
             ribeyePanel.setPreferredSize(new Dimension(235,150));
             ribeyePanel.setLocation(meatRect.x, meatRect.y);
             productPanel.add(ribeyePanel);
@@ -362,9 +362,11 @@ public class PageStart extends JPanel {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
                     if(meatRect.x>550&&meatRect.y<200) {
-                        app.getBaseClient().sendOrder();
+                        boolean sendCheck = app.getBaseClient().sendOrder();
+                        if(sendCheck){app.getSound().playGiveMoney();}
                         app.getSound().closeEffect();
                         isHoldingMeat =false; 
+                        showTemp = false;
                     }else{
                         meatRect.x = 402;
                         meatRect.y = 160;
@@ -421,16 +423,22 @@ public class PageStart extends JPanel {
         g.drawImage(icon_thermometer.getImage(), 0, 250, 80, 80, this);
         g.setColor(new Color(255, 255, 255));
         //วาดอุณหภูมิ
+        g.setFont(new Font("Tahoma", Font.PLAIN, 20)); 
         if (showTemp&&this.app.getBaseClient().getMeat()!=null) {
-            g.setFont(new Font("Tahoma", Font.PLAIN, 20)); 
-            g.drawString("อุณหภูมิตรงกลางของเนื้อคือ: " + app.getBaseClient().getMeat().getTemperature() + " °C", 500, 650); 
+            g.drawString("อุณหภูมิตรงกลางของเนื้อคือ : " + app.getBaseClient().getMeat().getTemperature() + " °C", 500, 650); 
+        }else if(showTemp){
+            g.setColor(new Color(255, 0,0));
+            g.drawString("คุณยังไม่มีเนื้อบนเตา", 550, 650); 
         }
+        // เวลา
+        g.setColor(new Color(255, 255, 255));
+        g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
         // เงิน
         g.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        if(app.getBaseClient().getMoney()<0){
+            g.setColor(new Color(255, 0,0));
+        }
         g.drawString(app.getBaseClient().getMoney()+"$", 10, 660);
-        // เวลา
-        g.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        g.drawString(app.getBaseClient().getFormatTime(), 620, 25);
         // ออเดอร์
         if(this.app.getBaseClient().checkOrdering()){
             HashMap<String,String> isorders = this.app.getBaseClient().getOrdering();

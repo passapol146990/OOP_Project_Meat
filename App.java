@@ -46,6 +46,12 @@ public class App extends JFrame{
     void setConnectServer(ConnectServer connectServer){
         this.connectServer = connectServer;
     }
+    void createMeat(String type,int price){
+        boolean newMeat = this.baseClient.newMeat(type, price);
+        if(newMeat){
+            this.sound.playEffect();
+        }
+    }
     ConnectServer getConnectServer(){
         return this.connectServer;
     }

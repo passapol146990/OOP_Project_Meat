@@ -120,6 +120,11 @@ class SendClient extends Thread{
                 this.baseServer.controller_client.put(this.ipAddress,false);
             }
         }
+        int countPlayer = 0;
+        for(Boolean i : this.baseServer.controller_client.values()){
+            if(i){countPlayer+=1;}
+        }
+        this.baseServer.CountPlayerOnServer = countPlayer;
         System.out.println(this.ipAddress+" ออกจากเซิฟไปแล้ว มีผู้เล่นเหลืออยู่ : "+this.baseServer.CountPlayerOnServer);
     }
 }
