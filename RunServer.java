@@ -79,7 +79,7 @@ class CheckPlayerInServer extends Thread{
     }
     public void run(){
         while (true) {
-            try {Thread.sleep(1000);}catch (InterruptedException e) {e.printStackTrace();}
+            try {Thread.sleep(100);}catch (InterruptedException e) {e.printStackTrace();}
             // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
             int countPlayer = 0;
             for(Boolean i : this.baseServer.controller_client.values()){

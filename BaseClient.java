@@ -9,16 +9,16 @@ import java.util.HashMap;
 
 public class BaseClient implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
-    String id = "";
     private int money = 50;
     private Meat meat = null;
-    private int time = 0;
-    boolean statusConnectServer = false;
-    boolean statusReady = false;
-    String nowPage = "menu";
+    private int time = 300;
     private String nameShop;
     private ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     private HashMap<String,String> Ordering;
+    String id = "";
+    boolean statusConnectServer = false;
+    boolean statusReady = false;
+    String nowPage = "menu";
     BaseClient(){
         String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
         for(int i=0;i<55;i++){
@@ -112,6 +112,13 @@ public class BaseClient implements Serializable{
     void setTime(int time){this.time = time;}
     String getNameShop(){return this.nameShop;}
     void setNameShop(String name ){this.nameShop = name;}
+    void reSetBaseClient(){
+        this.money = 50;
+        this.orders.clear();
+        this.Ordering=null;
+        this.meat = null;
+        this.time = 300;
+    }
 }
 class Meat extends Thread implements Serializable{
     private static final long serialVersionUID = 1L;

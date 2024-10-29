@@ -35,11 +35,9 @@ public class PageStart extends JPanel {
         }catch (IOException e) {e.printStackTrace();}
         imagLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e){
-                if(app.getBaseClient().getMoney()>0){
-                    app.createMeat(productName,price);
-                    meatRect = new Rectangle(402, 160, 400, 300);
-                    Jdialog.dispose();
-                }
+                app.createMeat(productName,price);
+                meatRect = new Rectangle(402, 160, 400, 300);
+                Jdialog.dispose();
             }
         });
         panel.add(imagLabel, BorderLayout.CENTER);
@@ -92,7 +90,7 @@ public class PageStart extends JPanel {
         // พาเนลขวา: ราคา (เพิ่มการเว้นขอบด้วย EmptyBorder)
         JLabel priceLabel = new JLabel(price);
         priceLabel.setFont(new Font("Tahoma", Font.BOLD, 14)); // ตั้งฟอนต์ที่รองรับภาษาไทย
-        priceLabel.setForeground(Color.GREEN);
+        priceLabel.setForeground(new Color(4,93,40));
         priceLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // เว้นขอบขวา 10px
     
         panel.add(priceLabel, BorderLayout.EAST);
@@ -389,17 +387,17 @@ public class PageStart extends JPanel {
             }
         });
     }
-    String[] getFormatTitleOrder(String text, int maxString) {
+    static String[] getFormatTitleOrder(String text, int maxString) {
         if (text == null || text.isEmpty() || maxString <= 0) {
             return new String[]{};
         }
         int len = (int) Math.ceil(text.length()/maxString);
+        if(text.length()%maxString!=0){len+=1;}
         String[] data = new String[len];
         int start = 0;
         int end = maxString;
         for(int i=0;i<len;i++){
             end = Math.min(start + maxString, text.length());
-            if(i!=0){start+=1;}
             data[i] = text.substring(start, end);
             start = end;
         }

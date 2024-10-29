@@ -16,15 +16,17 @@ public class BaseServer implements Serializable{
     boolean statusInGame = false;
     boolean statusEndGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 2;
+    private int CountPlayerIsReady = 1;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
-        this.orders.add(getOrderFormat("49", "01",140));
-        this.orders.add(getOrderFormat("60", "02",140));
-        this.orders.add(getOrderFormat("50", "03",140));
-        this.orders.add(getOrderFormat("47", "01",210));
-        this.orders.add(getOrderFormat("58", "02",210));
-        this.orders.add(getOrderFormat("52", "03",201));
+        for(int i=0;i<20;i++){
+            this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(40,50)), "01",140+i));
+            this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(50,70)), "02",140+i));
+            this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(45,65)), "03",140+i));
+            this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(40,50)), "01",210+i));
+            this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(50,70)), "02",210+i));
+            this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(45,65)), "03",201+i));
+        }
     }
     HashMap<String,String> getOrderFormat(String price,String typeMeat,int tempMeat){
         HashMap<String,String> order = new HashMap<String,String>();
@@ -111,7 +113,7 @@ public class BaseServer implements Serializable{
     }
     void checkDataBasePlayerInGame(){
         if(this.statusInGame){
-            if(this.time<=297){
+            if(this.time<=0){
                 this.statusEndGame = true;
                 this.statusInGame = false;
                 this.statusInRoby = false;
