@@ -16,7 +16,7 @@ public class BaseServer implements Serializable{
     boolean statusInGame = false;
     boolean statusEndGame = false;
     int CountPlayerOnServer = 0;
-    private int CountPlayerIsReady = 1;
+    private int CountPlayerIsReady = 2;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
         this.orders.add(getOrderFormat("49", "01",140));
@@ -77,14 +77,16 @@ public class BaseServer implements Serializable{
     ArrayList<HashMap<String,String>> getPlayerInRobby(){
         ArrayList<HashMap<String,String>> data = new ArrayList<>();
         for(String key : this.client.keySet()){
-            HashMap<String,String> player = new HashMap<String,String>();
-            player.put("name",this.client.get(key).getNameShop());
-            String status = "ยังไม่พร้อม";
-            if(this.client.get(key).statusReady){
-                status = "พร้อม";
+            if(this.controller_client.get(key)){
+                HashMap<String,String> player = new HashMap<String,String>();
+                player.put("name",this.client.get(key).getNameShop());
+                String status = "ยังไม่พร้อม";
+                if(this.client.get(key).statusReady){
+                    status = "พร้อม";
+                }
+                player.put("status",status);
+                data.add(player);
             }
-            player.put("status",status);
-            data.add(player);
         }
         return data;
     }
@@ -109,6 +111,11 @@ public class BaseServer implements Serializable{
     }
     void checkDataBasePlayerInGame(){
         if(this.statusInGame){
+            if(this.time<=297){
+                this.statusEndGame = true;
+                this.statusInGame = false;
+                this.statusInRoby = false;
+            }
             for(String key : this.client.keySet()){
                 // ตรวจสอบออเดอร์ของผู้เล่น
                 if(this.client.get(key).getOrder().size()<5){

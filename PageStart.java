@@ -305,18 +305,18 @@ public class PageStart extends JPanel {
         
 
             //สินค้า 1
-            JPanel meatPanel = createProductPanel("./image/rare.png", "เนื้อวัว", 10,shopDialog);
+            JPanel meatPanel = createProductPanel("./image/meat/01/rare1.png", "เนื้อวัว", 10,shopDialog);
             meatPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             
             productPanel.add(meatPanel);
 
             // วากิว
-            JPanel wagyuPanel = createProductPanel("./image/wagyuu.png", "เนื้อวากิว", 40,shopDialog);
+            JPanel wagyuPanel = createProductPanel("./image/meat/02/rare1.png", "เนื้อวากิว", 40,shopDialog);
             wagyuPanel.setBounds(meatRect.x, meatRect.y, 235, 150);
             productPanel.add(wagyuPanel);
 
             // สันกลาง
-            JPanel ribeyePanel = createProductPanel("./image/sungarng.png", "เนื้อสันกลาง", 30,shopDialog);
+            JPanel ribeyePanel = createProductPanel("./image/meat/03/rare1.png", "เนื้อสันกลาง", 30,shopDialog);
             ribeyePanel.setPreferredSize(new Dimension(235,150));
             ribeyePanel.setLocation(meatRect.x, meatRect.y);
             productPanel.add(ribeyePanel);
