@@ -40,10 +40,11 @@ public class PageMenu extends JPanel {
         add(nameField, gbc);
 
         // สร้างปุ่มและตั้งค่า GridBagConstraints ให้ปุ่มอยู่ตรงกลาง
-        JButton startButton = new JButton("Start");
-        JButton settingButton = new JButton("Setting");
-        JButton aboutButton = new JButton("About");
-        JButton exitButton = new JButton("Exit");
+        //JButton startButton = new JButton("Start");
+        JButton startButton = Component.createCustomRoundedButton("Start", Color.white);
+        JButton settingButton = Component.createCustomRoundedButton("Setting",Color.white);
+        JButton aboutButton = Component.createCustomRoundedButton("About",Color.white);
+        JButton exitButton = Component.createCustomRoundedButton("Exit",Color.white);
 
         // ปรับขนาดปุ่ม
         Dimension buttonSize = new Dimension(200, 40);
