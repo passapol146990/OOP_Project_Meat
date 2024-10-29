@@ -35,7 +35,7 @@ public class PageShowscore extends JPanel {
 
         int x = 450; // ตำแหน่ง x
         int startY = 150; // ตำแหน่ง y เริ่มต้น
-        int lineHeight = 30; // ความสูงของแต่ละบรรทัด
+        int lineHeight = 40; // ความสูงของแต่ละบรรทัด
 
         // ดึงข้อมูลผู้เล่นเรียงตามอันดับจาก getPlayerRankings()
         ArrayList<BaseClient> rankedPlayers = app.baseServer.getPlayerRankings();
@@ -57,7 +57,7 @@ public class PageShowscore extends JPanel {
             // ข้อความที่จะแสดง (อันดับ ชื่อ และจำนวนเงิน)
             String displayText = rank + ". " + playerName + " = " + playerMoney + "$";
             int textX = 525; // กำหนดตำแหน่ง X ของข้อความให้มีระยะจากกรอบ
-            int textY = 155 * rank;
+            int textY = 175 + i * lineHeight - 20;
             g.drawString(displayText, textX, textY);
         }
     }
