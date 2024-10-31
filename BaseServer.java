@@ -5,19 +5,14 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class BaseServer implements Serializable{
-    private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
+    private static final long serialVersionUID = 1L;
     int port = 3333;
-    int time = 0;
-    int timeIngame = 0;
-    int timeStop = 0;
-    private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
+    int time,timeIngame, timeStop, CountPlayerOnServer, CountPlayerIsReady;
+    HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
     boolean statusInRoby = true;
-    boolean statusInGame = false;
-    boolean statusEndGame = false;
-    int CountPlayerOnServer = 0;
-    int CountPlayerIsReady = 0;
+    boolean statusInGame,statusEndGame,createServer;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
 
     BaseServer(){
@@ -71,10 +66,15 @@ public class BaseServer implements Serializable{
     HashMap<String,String> getRandomOrder(){
         return orders.get(new Random().nextInt(0,orders.size()));
     }
-    Boolean getStatusInRoby(){return this.statusInRoby;}
-    Boolean getStatusInGame(){return this.statusInGame;}
-    Boolean getStatusEndGame(){return this.statusEndGame;}
-
+    Boolean getStatusInRoby(){
+        return this.statusInRoby;
+    }
+    Boolean getStatusInGame(){
+        return this.statusInGame;
+    }
+    Boolean getStatusEndGame(){
+        return this.statusEndGame;
+    }
     void setClient(BaseClient baseClient, String ip){
         this.client.put(ip,baseClient);
     }
@@ -123,6 +123,7 @@ public class BaseServer implements Serializable{
         //Methods สำหรับการสุ่มออเดอร์ให้ผู้เล่น
         if(this.statusInGame){
             if(this.time<=this.timeStop){
+                this.createServer = false;
                 this.statusEndGame = true;
                 this.statusInGame = false;
                 this.statusInRoby = false;
@@ -135,10 +136,8 @@ public class BaseServer implements Serializable{
             }
         }
     }
-    //เปรียบเทียบค่าเงิน แล้วเก็บไว้ใน arraylist
     ArrayList<BaseClient> getPlayerRankings() {
         ArrayList<BaseClient> onlinePlayers = new ArrayList<>();
-    
         // กรองเฉพาะผู้เล่นที่ออนไลน์
         for (String ip : client.keySet()) {
             if (controller_client.getOrDefault(ip, false)) { // ตรวจสอบว่าออนไลน์อยู่

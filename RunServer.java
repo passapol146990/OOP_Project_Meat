@@ -10,41 +10,10 @@ import java.net.Socket;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * InnerServer
- */
 public class RunServer {
     public static void main(String[] args) {
-        try{
-            try {
-                Process process = Runtime.getRuntime().exec("ipconfig");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line;
-                boolean wifiSection = false;
-                while ((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if (line.startsWith("Wireless LAN adapter Wi-Fi")) {
-                        wifiSection = true;
-                    }
-                    if (wifiSection && line.startsWith("IPv4 Address")) {
-                        System.out.println("Join IP : "+line.split(":")[1].trim());
-                        break;
-                    }
-                }
-                reader.close();
-            }catch(Exception eq){}
-        }catch(NumberFormatException eInput){}
-///////////////////////////////////////////////////////
-        BaseServer baseServer = new BaseServer();
-        baseServer.CountPlayerIsReady = 1;
-        baseServer.timeIngame = 120;
-        baseServer.timeStop = 0;
-///////////////////////////////////////////////////////
-        Server roby = new Server(baseServer);
-        CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
-///////////////////////////////////////////////////////
-        roby.start();
-        checkPlayerInServer.start();
+        PanelCreateServer server = new PanelCreateServer();
+        server.setVisible(true);
     }
 }
 class Server extends Thread{
@@ -57,7 +26,7 @@ class Server extends Thread{
         try{
             serverSocket = new ServerSocket(this.baseServer.port);
             System.out.println("Start Server PORT : "+this.baseServer.port);
-            while (true){
+            while (this.baseServer.createServer){
                 Socket socket = serverSocket.accept();
                 String ipAddress = socket.getInetAddress().getHostAddress();
                 ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
@@ -93,9 +62,8 @@ class Server extends Thread{
                 socket.close();
                 try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println(e);
-        }
+        }catch(IOException | ClassNotFoundException e){System.out.println(e);}
+        System.out.println("x");
     }
 }
 class CheckPlayerInServer extends Thread{
@@ -104,7 +72,7 @@ class CheckPlayerInServer extends Thread{
         this.baseServer = baseServer;
     }
     public void run(){
-        while (true) {
+        while (this.baseServer.createServer) {
             try {Thread.sleep(100);}catch (InterruptedException e) {e.printStackTrace();}
             // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
             int countPlayer = 0;
@@ -117,11 +85,9 @@ class CheckPlayerInServer extends Thread{
                 this.baseServer.statusEndGame = false;
                 this.baseServer.statusInGame = false;
             }
-            
         }
     }
 }
-// คราสสำหรับส่งข้อมูลกลับไปให้ผู้เล่น
 class SendClient extends Thread{
     private String ipAddress;
     private int port;
@@ -154,73 +120,100 @@ class SendClient extends Thread{
         System.out.println(this.ipAddress+" ออกจากเซิฟไปแล้ว มีผู้เล่นเหลืออยู่ : "+this.baseServer.CountPlayerOnServer);
     }
 }
-// class PanelCreateServer extends JFrame{
-//     private BaseServer baseServer;
-//     JPanel panel = new JPanel();
-//     JButton runServer = new JButton("Start server");
-//     JLabel titleShowIP = new JLabel("");
-//     PanelCreateServer(BaseServer baseServer){
-//         this.baseServer = baseServer;
-//         setBounds(150,10,300,300);
-//         panel.setLayout(null);
-//         panel.setBackground(new Color(0,0,0));
-//         JLabel titleCountPlayer = new JLabel("Count Player : ");
-//         titleCountPlayer.setForeground(new Color(255,255,255));
-//         titleCountPlayer.setBounds(getWidth()/2-100, 20, 100, 20);
-//         JTextField inputCountPlayer = new JTextField();
-//         inputCountPlayer.setBounds(getWidth()/2, 20, 100, 20);
-//         JLabel titleTime = new JLabel("Time : ");
-//         titleTime.setForeground(new Color(255,255,255));
-//         titleTime.setBounds(getWidth()/2-100, 60, 100, 20);
-//         JTextField inputTime = new JTextField();
-//         inputTime.setBounds(getWidth()/2, 60, 100, 20);
-//         titleShowIP.setForeground(new Color(255,255,255));
-//         titleShowIP.setBounds(getWidth()/2-100, 100, 200, 20);
-//         runServer.setBounds(getWidth()/2-90, 200, 200, 40);
-//         runServer.addActionListener(e->{
-//             if(this.baseServer.sta==false){
-//                 try{
-//                     int countPlayer = Integer.parseInt(inputCountPlayer.getText());
-//                     int countTime = Integer.parseInt(inputTime.getText());
-//                     runServer.setText("stop server");
-//                     try {
-//                         Process process = Runtime.getRuntime().exec("ipconfig");
-//                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                         String line;
-//                         boolean wifiSection = false;
-//                         while ((line = reader.readLine()) != null) {
-//                             line = line.trim();
-//                             if (line.startsWith("Wireless LAN adapter Wi-Fi")) {
-//                                 wifiSection = true;
-//                             }
-//                             if (wifiSection && line.startsWith("IPv4 Address")) {
-//                                 titleShowIP.setText("Join IP : "+line.split(":")[1].trim());
-//                                 break;
-//                             }
-//                         }
-//                         reader.close();
-//                     }catch(Exception eq){}
-//                     BaseServer baseServer = new BaseServer();
-//                     baseServer.CountPlayerIsReady = countPlayer;
-//                     baseServer.timeIngame = countTime;
-//                     baseServer.timeStop = 0;
-//                     Server server = new Server(baseServer);
-//                     CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
-//                     server.start();
-//                     checkPlayerInServer.start();
-//                 }catch(NumberFormatException eInput){}
-//             }else{
-//                 runServer.setText("Start server");
-//             }
-//         });
+class PanelCreateServer extends JFrame{
+    private BaseServer baseServer = new BaseServer();
+    private String ip;
+    PanelCreateServer(){
+        setResizable(false);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBounds(150,10,300,300);
+        //-------------------------[ create component]------------------------------------------//
+        JPanel panel = new JPanel();
+        JLabel titleShowIP = new JLabel("");
+        JLabel titleCountPlayer = new JLabel("Count Player : ");
+        JLabel titleTime = new JLabel("Time : ");
+        JLabel titleShowStatus = new JLabel("ยังไม่ทำงาน");
+        JTextField inputCountPlayer = new JTextField("3");
+        JTextField inputTime = new JTextField("300");
+        JButton runServer = new JButton("Start server");
+        //-------------------------[ Set position component]------------------------------------------//
+        titleCountPlayer.setBounds(getWidth()/2-100, 20, 100, 20);
+        titleShowIP.setBounds(getWidth()/2-100, 100, 200, 20);
+        titleTime.setBounds(getWidth()/2-100, 60, 100, 20);
+        inputCountPlayer.setBounds(getWidth()/2, 20, 100, 20);
+        inputTime.setBounds(getWidth()/2, 60, 100, 20);
+        titleShowStatus.setBounds(getWidth()/2-100, 160, 200, 20);
+        runServer.setBounds(getWidth()/2-90, 200, 200, 40);
+        //-------------------------[ set about component ]------------------------------------------//
+        panel.setBounds(0,0,300,300);
+        panel.setLayout(null);
+        panel.setBackground(new Color(0,0,0));
+        titleTime.setForeground(new Color(255,255,255));
+        titleShowIP.setForeground(new Color(255,255,255));
+        titleShowIP.setFont(new Font("Tahoma",Font.BOLD,12));
+        titleShowStatus.setForeground(new Color(255,255,255));
+        titleShowStatus.setFont(new Font("Tahoma",Font.BOLD,16));
+        titleCountPlayer.setForeground(new Color(255,255,255));
+        runServer.setCursor(new Cursor(JFrame.HAND_CURSOR));
+        runServer.setFocusPainted(false);
+        runServer.setForeground(new Color(255,255,255));
+        runServer.setBackground(new Color(19,142,0));
+        //-------------------------[ buttom Action]------------------------------------------//
+        runServer.addActionListener(e->{
+            if(!this.baseServer.createServer){
+                this.baseServer.createServer = true;
+                try{
+                    int countPlayer = Integer.parseInt(inputCountPlayer.getText());
+                    int countTime = Integer.parseInt(inputTime.getText());
+                    //-------------------------[ Run CMD "ipconfig" ]------------------------------------------//
+                    try{
+                        Process process = Runtime.getRuntime().exec("ipconfig");
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String line;
+                        boolean wifiSection = false;
+                        while((line = reader.readLine()) != null) {
+                            line = line.trim();
+                            if(line.startsWith("Wireless LAN adapter Wi-Fi")) {
+                                wifiSection = true;
+                            }
+                            if(wifiSection && line.startsWith("IPv4 Address")) {
+                                ip = line.split(":")[1].trim();
+                                titleShowIP.setText("Join IP : "+ip);
+                                titleShowStatus.setText("สร้างเซิฟเวอร์สำเร็จ");
+                                System.out.println(ip);
+                                break;
+                            }
+                        }
+                        reader.close();
+                    }catch(Exception errCMD){System.out.println(errCMD);}
+                    //-------------------------[ Create Server ]------------------------------------------//
+                    baseServer.CountPlayerIsReady = countPlayer;
+                    baseServer.timeIngame = countTime;
+                    Server server = new Server(baseServer);
+                    CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
+                    checkPlayerInServer.start();
+                    server.start();
+                }catch(NumberFormatException errNumber){}
+                runServer.setText("start server");
+                runServer.setBackground(new Color(165,42,42));
+            }else{
+                this.baseServer.createServer = false;
+                titleShowIP.setText("");
+                titleShowStatus.setText("หยุดทำงานเซิฟเวอร์");
+                runServer.setText("stop server");
+                runServer.setBackground(new Color(19,142,0));
+            }
+        });
+        //-------------------------[ add component]------------------------------------------//
+        panel.add(titleCountPlayer);
+        panel.add(inputCountPlayer);
+        panel.add(titleTime);
+        panel.add(inputTime);
+        panel.add(titleShowIP);
+        panel.add(titleShowStatus);
+        panel.add(runServer);
+        add(panel);
+    }
+}
 
-//         panel.add(titleCountPlayer);
-//         panel.add(inputCountPlayer);
-//         panel.add(titleTime);
-//         panel.add(inputTime);
-//         panel.add(titleShowIP);
-//         panel.add(runServer);
-//         add(panel);
-//         setVisible(true);
-//     }
-// }
+
