@@ -65,6 +65,7 @@ public class PageMenu extends JPanel {
             }
         });
         settingButton.addActionListener(e->{
+            ((PageSeting)app.getPanel("seting")).create();
             app.getBaseClient().nowPage = "seting";
         });
         aboutButton.addActionListener(e->{

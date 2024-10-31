@@ -1,4 +1,4 @@
 ip = 127.0.0.1
 name = ตั้งชื่อร้านของคุณ
-volumeemusic = 43
+volumeemusic = 99
 volumeeffect = 100

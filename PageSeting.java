@@ -12,7 +12,23 @@ class PageSeting extends JPanel{
     private JLabel audio;
     private App app;
     public PageSeting(App app) {
-        this.app = app;
+            this.app = app;
+            create();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // วาดพื้นหลังและไอคอน
+        ImageIcon icon = new ImageIcon("./image/bg-start.png");
+        g.drawImage(icon.getImage(), 0, 0, this);
+
+        ImageIcon bannerIcon = new ImageIcon("./image/Component/BannerSeting.png");
+        g.drawImage(bannerIcon.getImage(), 300, 0, this);
+    }
+    void create(){
+        System.out.println(app.getSound().getVolumeMusic());
         setLayout(null);
         // สร้าง JPanel สำหรับการตั้งค่า
         JPanel settingsPanel = new JPanel();
@@ -88,24 +104,12 @@ class PageSeting extends JPanel{
         JButton backToMenuButton = Component.createCustomRoundedButton("Back to the Menu",Color.white);
         backToMenuButton.setBounds(0, 0, 200, 50);
         backToMenuButton.addActionListener(e1 -> {
+            System.out.println(app.getSound().getVolumeMusic());
             app.getBaseClient().nowPage = "menu";
-
         });
         // เพิ่ม settingsPanel ลงใน JFrame
         add(settingsPanel);
         add(backToMenuButton);
         setPreferredSize(new Dimension(1200, 800));
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        // วาดพื้นหลังและไอคอน
-        ImageIcon icon = new ImageIcon("./image/bg-start.png");
-        g.drawImage(icon.getImage(), 0, 0, this);
-
-        ImageIcon bannerIcon = new ImageIcon("./image/Component/BannerSeting.png");
-        g.drawImage(bannerIcon.getImage(), 300, 0, this);
     }
 }
