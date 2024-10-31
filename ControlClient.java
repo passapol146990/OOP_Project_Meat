@@ -6,7 +6,6 @@ public class ControlClient extends Thread{
     public void run(){
         while(true){
             if(!this.app.getBaseClient().statusConnectServer){
-                this.app.getBaseClient().reSetBaseClient();
                 this.app.getSound().stopGiveMoney();
                 this.app.getSound().closeEffect();
             }else{

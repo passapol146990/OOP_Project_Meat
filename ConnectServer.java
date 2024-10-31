@@ -63,6 +63,5 @@ class CheckOutServer extends Thread{
         }
         this.app.getBaseClient().statusConnectServer = false;
         this.app.getBaseClient().statusReady = false;
-        this.app.getBaseClient().nowPage = "menu";
     }
 }

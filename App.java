@@ -25,7 +25,7 @@ public class App extends JFrame{
         setTitle(title);
         setBounds(50,50,1280,720);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setIconImage(Toolkit.getDefaultToolkit().getImage("./image/medium rare-shadow.png"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("./image/meat/01/medium_rare1.png"));
         setResizable(false);
         add(this.mainPanel);
         this.getFile().loaddata();
