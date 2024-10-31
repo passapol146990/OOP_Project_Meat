@@ -1,4 +1,4 @@
-ip = 192.168.1.6
+ip = 192.168.241.11
 name = Test
 volumeemusic = 0
 volumeeffect = 100
