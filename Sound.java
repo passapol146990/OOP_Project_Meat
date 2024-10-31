@@ -7,7 +7,6 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
-
 public class Sound{
     private FileHandler file;
     private int volumeMusic = 100;
@@ -20,6 +19,7 @@ public class Sound{
         volumeMusic = file.getVolumeMusic();
         volumeEffect = file.getVolumeEffect();
     }
+    //////////เล่นเสียงประกอบ,หยุดเพลง,กำหนดค่าเสียง////////////
     void playMusic(){
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./Sound/tvari-tokyo-cafe-159065.wav"));
@@ -33,7 +33,7 @@ public class Sound{
         setVolumeMusic(this.volumeMusic);
     }
     void stopMusic() {
-        if (this.music != null && this.music.isRunning()) {
+        if (this.music != null && this.music.isRunning()) {//ถ้ามีเสรียงและเสียงกำลังเล่นอยู่จะบังคับให้หยุด
             this.music.stop();
         }
     }
@@ -72,12 +72,6 @@ public class Sound{
         }
         setVolumeEffect(this.volumeEffect);
     }
-    void closeEffect() {
-        if (this.effect != null) {
-            this.effect.stop();
-            this.effect.close();
-        }
-    }
     void setVolumeEffect(int value) {
         this.volumeEffect = value;
         if (this.effect != null) {
@@ -112,7 +106,14 @@ public class Sound{
             e.printStackTrace();
         }
     }
+    //ถ้าเสียงเอฟเฟคไม่ว่างจะบังคับให้มันหยุดละก็ปิดด้วยถ้าไม่ปิดมันจะไม่หายเบิ่ด
     void stopGiveMoney() {
+        if (this.effect != null) {
+            this.effect.stop();
+            this.effect.close();
+        }
+    }
+    void closeEffect() {
         if (this.effect != null) {
             this.effect.stop();
             this.effect.close();
