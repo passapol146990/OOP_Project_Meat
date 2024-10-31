@@ -155,13 +155,12 @@ class SendClient extends Thread{
     }
 }
 // class PanelCreateServer extends JFrame{
-//     private App app;
+//     private BaseServer baseServer;
 //     JPanel panel = new JPanel();
 //     JButton runServer = new JButton("Start server");
 //     JLabel titleShowIP = new JLabel("");
-//     PanelCreateServer(App app){
-//         this.app = app;
-//         app.getBaseClient().myStatusCreateServer = true;
+//     PanelCreateServer(BaseServer baseServer){
+//         this.baseServer = baseServer;
 //         setBounds(150,10,300,300);
 //         panel.setLayout(null);
 //         panel.setBackground(new Color(0,0,0));
@@ -179,12 +178,11 @@ class SendClient extends Thread{
 //         titleShowIP.setBounds(getWidth()/2-100, 100, 200, 20);
 //         runServer.setBounds(getWidth()/2-90, 200, 200, 40);
 //         runServer.addActionListener(e->{
-//             if(app.getBaseClient().myStatusRunServer==false){
+//             if(this.baseServer.sta==false){
 //                 try{
 //                     int countPlayer = Integer.parseInt(inputCountPlayer.getText());
 //                     int countTime = Integer.parseInt(inputTime.getText());
 //                     runServer.setText("stop server");
-//                     app.getBaseClient().myStatusRunServer = true;
 //                     try {
 //                         Process process = Runtime.getRuntime().exec("ipconfig");
 //                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -202,7 +200,7 @@ class SendClient extends Thread{
 //                         }
 //                         reader.close();
 //                     }catch(Exception eq){}
-//                     BaseServer baseServer = new BaseServer(app);
+//                     BaseServer baseServer = new BaseServer();
 //                     baseServer.CountPlayerIsReady = countPlayer;
 //                     baseServer.timeIngame = countTime;
 //                     baseServer.timeStop = 0;
@@ -212,7 +210,6 @@ class SendClient extends Thread{
 //                     checkPlayerInServer.start();
 //                 }catch(NumberFormatException eInput){}
 //             }else{
-//                 app.getBaseClient().myStatusRunServer = false;
 //                 runServer.setText("Start server");
 //             }
 //         });

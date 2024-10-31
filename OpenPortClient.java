@@ -27,6 +27,7 @@ class OpenPortClient extends Thread{
                             this.app.getBaseClient().nowPage = "lobby";
                         }else if(baseServer.getStatusInGame()){
                             this.app.getBaseClient().nowPage = "start";
+                            this.app.getBaseClient().statusReady = true;
                         }else if(baseServer.getStatusEndGame()&&this.app.getBaseClient().statusReady){
                             this.app.getBaseClient().nowPage = "showscore";
                             this.app.getBaseClient().statusConnectServer = false;
