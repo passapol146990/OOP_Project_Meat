@@ -13,36 +13,7 @@ import java.awt.*;
 public class RunServer {
     public static void main(String[] args) {
         PanelCreateServer server = new PanelCreateServer();
-//         try{
-//             try {
-//                 Process process = Runtime.getRuntime().exec("ipconfig");
-//                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                 String line;
-//                 boolean wifiSection = false;
-//                 while ((line = reader.readLine()) != null) {
-//                     line = line.trim();
-//                     if (line.startsWith("Wireless LAN adapter Wi-Fi")) {
-//                         wifiSection = true;
-//                     }
-//                     if (wifiSection && line.startsWith("IPv4 Address")) {
-//                         System.out.println("Join IP : "+line.split(":")[1].trim());
-//                         break;
-//                     }
-//                 }
-//                 reader.close();
-//             }catch(Exception eq){}
-//         }catch(NumberFormatException eInput){}
-// ///////////////////////////////////////////////////////
-//         BaseServer baseServer = new BaseServer();
-//         baseServer.CountPlayerIsReady = 1;
-//         baseServer.timeIngame = 120;
-//         baseServer.timeStop = 0;
-// ///////////////////////////////////////////////////////
-//         Server roby = new Server(baseServer);
-//         CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
-// ///////////////////////////////////////////////////////
-//         roby.start();
-//         checkPlayerInServer.start();
+        server.setVisible(true);
     }
 }
 class Server extends Thread{
@@ -55,7 +26,7 @@ class Server extends Thread{
         try{
             serverSocket = new ServerSocket(this.baseServer.port);
             System.out.println("Start Server PORT : "+this.baseServer.port);
-            while (true){
+            while (this.baseServer.createServer){
                 Socket socket = serverSocket.accept();
                 String ipAddress = socket.getInetAddress().getHostAddress();
                 ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
@@ -91,9 +62,8 @@ class Server extends Thread{
                 socket.close();
                 try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println(e);
-        }
+        }catch(IOException | ClassNotFoundException e){System.out.println(e);}
+        System.out.println("x");
     }
 }
 class CheckPlayerInServer extends Thread{
@@ -102,7 +72,7 @@ class CheckPlayerInServer extends Thread{
         this.baseServer = baseServer;
     }
     public void run(){
-        while (true) {
+        while (this.baseServer.createServer) {
             try {Thread.sleep(100);}catch (InterruptedException e) {e.printStackTrace();}
             // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
             int countPlayer = 0;
@@ -115,7 +85,6 @@ class CheckPlayerInServer extends Thread{
                 this.baseServer.statusEndGame = false;
                 this.baseServer.statusInGame = false;
             }
-            
         }
     }
 }
@@ -153,7 +122,6 @@ class SendClient extends Thread{
 }
 class PanelCreateServer extends JFrame{
     private BaseServer baseServer = new BaseServer();
-    private boolean createServer=false;
     private String ip;
     PanelCreateServer(){
         setResizable(false);
@@ -192,7 +160,8 @@ class PanelCreateServer extends JFrame{
         runServer.setBackground(new Color(19,142,0));
         //-------------------------[ buttom Action]------------------------------------------//
         runServer.addActionListener(e->{
-            if(!this.createServer){
+            if(!this.baseServer.createServer){
+                this.baseServer.createServer = true;
                 try{
                     int countPlayer = Integer.parseInt(inputCountPlayer.getText());
                     int countTime = Integer.parseInt(inputTime.getText());
@@ -225,20 +194,15 @@ class PanelCreateServer extends JFrame{
                     checkPlayerInServer.start();
                     server.start();
                 }catch(NumberFormatException errNumber){}
-                this.createServer = true;
                 runServer.setText("start server");
                 runServer.setBackground(new Color(165,42,42));
             }else{
+                this.baseServer.createServer = false;
                 titleShowIP.setText("");
                 titleShowStatus.setText("หยุดทำงานเซิฟเวอร์");
-                this.createServer = false;
                 runServer.setText("stop server");
                 runServer.setBackground(new Color(19,142,0));
             }
-            //     }catch(NumberFormatException eInput){}
-            // }else{
-            //     runServer.setText("Start server");
-            // }
         });
         //-------------------------[ add component]------------------------------------------//
         panel.add(titleCountPlayer);
@@ -249,7 +213,6 @@ class PanelCreateServer extends JFrame{
         panel.add(titleShowStatus);
         panel.add(runServer);
         add(panel);
-        setVisible(true);
     }
 }
 
