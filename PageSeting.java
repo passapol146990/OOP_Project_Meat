@@ -12,6 +12,7 @@ class PageSeting extends JPanel{
     private JLabel audio;
     private App app;
     public PageSeting(App app) {
+        //กำหนดค่าเริ่มต้น และเรียก methods สำหรับสร้างหน้าตั้งค่า
             this.app = app;
             create();
     }
@@ -28,7 +29,7 @@ class PageSeting extends JPanel{
         g.drawImage(bannerIcon.getImage(), 300, 0, this);
     }
     void create(){
-        System.out.println(app.getSound().getVolumeMusic());
+        // System.out.println(app.getSound().getVolumeMusic());
         setLayout(null);
         // สร้าง JPanel สำหรับการตั้งค่า
         JPanel settingsPanel = new JPanel();
@@ -104,7 +105,7 @@ class PageSeting extends JPanel{
         JButton backToMenuButton = Component.createCustomRoundedButton("Back to the Menu",Color.white);
         backToMenuButton.setBounds(0, 0, 200, 50);
         backToMenuButton.addActionListener(e1 -> {
-            System.out.println(app.getSound().getVolumeMusic());
+            // System.out.println(app.getSound().getVolumeMusic());
             app.getBaseClient().nowPage = "menu";
         });
         // เพิ่ม settingsPanel ลงใน JFrame

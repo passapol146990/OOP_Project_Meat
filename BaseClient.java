@@ -22,6 +22,7 @@ public class BaseClient implements Serializable{
     BaseClient(){
         String string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!$#?{}()";
         for(int i=0;i<55;i++){
+            //ทำการสร้าง ID ขึ้นมาแบบสุ่มเพื่อใช้ในการสุ่มออเดอร์ขึ้นมา
             this.id += string.split("")[new Random().nextInt(0,string.length())];
         }
     }
@@ -31,7 +32,9 @@ public class BaseClient implements Serializable{
             if(this.Ordering!=null){
                 // ตรวจสอบชนิดของเนื้อ
                 if(this.Ordering.get("typeMeat").equals(this.meat.gettype_meat())){
+                    //ตรวจสอบระดับความสุขของเนื้อแต่ละด้าน
                     if(this.Ordering.get("image").equals(this.meat.getImage())||this.Ordering.get("image_rigth").equals(this.meat.getImage())){
+                        //คำนวณเงินที่ได้รับการส่งออเดอร์ตามราคาคูณกับเปอร์เซ็น
                         this.money += Integer.parseInt(this.Ordering.get("price"))*(calculatePercentage(Integer.parseInt(this.Ordering.get("tempMeat")),this.meat.getTemperature())/100);
                         status = true;
                     }
@@ -44,6 +47,7 @@ public class BaseClient implements Serializable{
         }
         return status;
     }
+    //Methods หาเปอร์เช็นที่ได้
     double calculatePercentage(int num1, int num2) {
         int difference = Math.abs(num1 - num2); // หาค่าความต่าง
         int percent = 100 - (difference / 3) * 5; // ลดเปอร์เซ็นต์ตามค่าความต่าง
@@ -53,6 +57,7 @@ public class BaseClient implements Serializable{
         }
         return percent;
     }
+    //Methods สำหรับป้องกันการส่งเนื้อที่ไม่ได้รับออเดอร์
     boolean checkOrdering(){
         boolean status = false;
         if(this.Ordering!=null){status=true;}
@@ -88,6 +93,7 @@ public class BaseClient implements Serializable{
         else if(type=="เนื้อสันกลาง"){
             typeMeat = "03";
         }
+        //สร้าง Thead ขึ้นมาเป็นเนื้อ
         if(this.meat==null){
             this.meat = new Meat(typeMeat);
             this.meat.start();
@@ -118,6 +124,7 @@ public class BaseClient implements Serializable{
         }
         this.nameShop = name;
     }
+    //เป็น Methods เอาไว้รีเช็ตค่าเป็นค่าเริ่มต้น 
     void reSetBaseClient(){
         this.money = 50;
         this.orders.clear();
@@ -127,7 +134,7 @@ public class BaseClient implements Serializable{
     }
 }
 class Meat extends Thread implements Serializable{
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;//ค่าเฉพาะของคลาสสำหรับการจัดเก็บข้อมูล
     int temp = 0;
     int meat_left = 0;
     int meat_rigth = 0;
@@ -147,6 +154,7 @@ class Meat extends Thread implements Serializable{
 
     public void run(){
         while (this.meat_on){
+            //ตรวจสอบอุณหภูมิเนื้อ
             if(this.sted_meat==1){
                 if(this.meat_rigth>300){
                     this.rank_meat = "over_cook";
@@ -168,6 +176,7 @@ class Meat extends Thread implements Serializable{
                     this.rank_meat = "rare";
                 }
             }
+            //เปลี่ยนภาพเนื้อตามอุณหภูมิของแต่ละด้าน
             this.image_meat = "./image/meat/"+this.type_meat+"/"+this.rank_meat+this.sted_meat+".png";
             try {Thread.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}  
         }
@@ -189,6 +198,7 @@ class Meat extends Thread implements Serializable{
     String getid(){return this.id;}
 }
 class ClickMeat extends Thread implements Serializable{
+    //Thread สำหรับเกิดอนิเมชั่นการพลิกเนื้อ
     private static final long serialVersionUID = 1L;
     private Meat meat;
     ClickMeat(Meat meat){
@@ -196,7 +206,6 @@ class ClickMeat extends Thread implements Serializable{
     }
     public void run(){
         if(!this.meat.clickMeat&&(this.meat.getSted_meat()==1||this.meat.getSted_meat()==7)){
-            
             if(this.meat.getSted_meat()==1){
                 while (this.meat.getSted_meat()<7) {
                     this.meat.setSted_meat(this.meat.getSted_meat()+1);
@@ -212,6 +221,7 @@ class ClickMeat extends Thread implements Serializable{
     }
 }
 class StartTempMeat extends Thread implements Serializable{
+    //
     private static final long serialVersionUID = 1L;
     private Meat meat;
     StartTempMeat(Meat meat){
@@ -219,7 +229,6 @@ class StartTempMeat extends Thread implements Serializable{
     }
     public void run(){
         while (this.meat.meat_on) {
-            // System.out.println(this.meat.meat_on+", "+this.meat.getTemperature()+", Left : "+this.meat.meat_left+", Rigth : "+ this.meat.meat_rigth);
             if(this.meat.getSted_meat()==1){
                 this.meat.meat_left += new Random().nextInt(5,25);
             }else{

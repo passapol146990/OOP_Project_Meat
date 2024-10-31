@@ -14,6 +14,7 @@ public class PageShowscore extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //กดปุ่ม back แล้วกลับไปหน้าเมนู
                 app.getBaseClient().statusConnectServer = false;
                 app.getBaseClient().nowPage = "menu";
                 app.getSound().playMusic();
@@ -26,6 +27,7 @@ public class PageShowscore extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        //โหลด icon พื้นหลังสีขาว
         ImageIcon icon = new ImageIcon("./image/bg-score.png");
 
         g.drawImage(icon.getImage(), 0, 0, 1280, 720, this);
