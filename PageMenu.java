@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class PageMenu extends JPanel {
+    FileHandler file;
     App app;
     private JTextField ipField;
     private JTextField storeNameField;
@@ -19,7 +20,7 @@ public class PageMenu extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         // แสดง IP Address
-        JTextField ipField = new JTextField("127.0.0.1");
+        JTextField ipField = new JTextField(app.getFile().getIp());
         ipField.setHorizontalAlignment(JTextField.CENTER);
         ipField.setBackground(Color.LIGHT_GRAY);
         ipField.setForeground(Color.BLACK);
@@ -29,7 +30,7 @@ public class PageMenu extends JPanel {
         add(ipField, gbc);
 
         // สร้างช่องกรอกชื่อ
-        JTextField nameField = new JTextField("ตั้งชื่อร้านของคุณ");
+        JTextField nameField = new JTextField(app.getFile().getName());
         nameField.setFont(new Font("Tahoma", Font.BOLD, 14));
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setBackground(Color.LIGHT_GRAY);
@@ -55,7 +56,9 @@ public class PageMenu extends JPanel {
 
         startButton.addActionListener(e->{
             if(!app.getBaseClient().statusConnectServer){
+                app.getFile().saveIp(ipField.getText());
                 app.getBaseClient().setNameShop(nameField.getText());
+                app.getFile().saveName(nameField.getText());
                 app.getBaseClient().statusConnectServer = true;
                 ConnectServer conn = new ConnectServer(app, ipField.getText(), 3333);
                 conn.start();

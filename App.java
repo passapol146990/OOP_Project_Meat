@@ -12,10 +12,12 @@ public class App extends JFrame{
     private BaseClient baseClient;
     private ConnectServer connectServer;
     BaseServer baseServer;
-    private Sound sound;;
+    private Sound sound;
+    private FileHandler file;
     private HashMap<String,JPanel> panels = new HashMap<String,JPanel>();
     
-    App(String title,BaseClient baseClient, Sound sound){
+    App(String title,BaseClient baseClient, Sound sound,FileHandler file){
+        this.file = file;
         this.sound = sound;
         this.baseClient = baseClient;
         this.cardLayout = new CardLayout();
@@ -26,6 +28,7 @@ public class App extends JFrame{
         setIconImage(Toolkit.getDefaultToolkit().getImage("./image/medium rare-shadow.png"));
         setResizable(false);
         add(this.mainPanel);
+        this.getFile().loaddata();
         setVisible(true);
     }
     BaseClient getBaseClient(){
@@ -58,5 +61,11 @@ public class App extends JFrame{
     }
     void setbaseServer(BaseServer baseServer){
         this.baseServer = baseServer;
+    }
+    void setFile(FileHandler file){
+        this.file = file;
+    }
+    FileHandler getFile(){
+        return this.file;
     }
 }

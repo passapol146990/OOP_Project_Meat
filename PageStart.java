@@ -159,12 +159,14 @@ public class PageStart extends JPanel {
             JSlider musicSlider = new JSlider(0, 100, app.getSound().getVolumeMusic());
             musicSlider.setForeground(Color.BLUE);
             musicSlider.addChangeListener(e1 ->{
+                app.getFile().saveVolumeMusic(musicSlider.getValue());
                 app.getSound().setVolumeMusic(musicSlider.getValue());
             });
             // Slider สำหรับปรับระดับเสียงย่างเนื้อ
             JSlider audioSlider = new JSlider(0, 100, app.getSound().getVolumeEffect());
             audioSlider.setForeground(Color.BLUE);
             audioSlider.addChangeListener(e1 ->{
+                app.getFile().saveVolumeEffect(audioSlider.getValue());
                 app.getSound().setVolumeEffect(audioSlider.getValue());
             });
             

@@ -9,10 +9,17 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
 
 public class Sound{
+    private FileHandler file;
     private int volumeMusic = 100;
     private int volumeEffect = 100;
     private Clip music;
     private Clip effect;
+    Sound(FileHandler file){
+        this.file = file;
+        file.loaddata();
+        volumeMusic = file.getVolumeMusic();
+        volumeEffect = file.getVolumeEffect();
+    }
     void playMusic(){
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./Sound/tvari-tokyo-cafe-159065.wav"));

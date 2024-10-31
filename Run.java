@@ -1,8 +1,9 @@
 class Run {
     public static void main(String[] args){
-        Sound sound = new Sound();
         BaseClient baseClient = new BaseClient();
-        App app = new App("The Meat",baseClient,sound);
+        FileHandler file = new FileHandler();
+        Sound sound = new Sound(file);
+        App app = new App("The Meat",baseClient,sound,file);
         ControlClient controlClient = new ControlClient(app);
         OpenPortClient openPortClient = new OpenPortClient(app, baseClient, 4444);
         PageMenu menu = new PageMenu(app);
