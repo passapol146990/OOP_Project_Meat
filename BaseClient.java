@@ -195,7 +195,8 @@ class ClickMeat extends Thread implements Serializable{
         this.meat = meat;
     }
     public void run(){
-        if(!this.meat.clickMeat){
+        if(!this.meat.clickMeat&&(this.meat.getSted_meat()==1||this.meat.getSted_meat()==7)){
+            
             if(this.meat.getSted_meat()==1){
                 while (this.meat.getSted_meat()<7) {
                     this.meat.setSted_meat(this.meat.getSted_meat()+1);

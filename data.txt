@@ -1,4 +1,4 @@
 ip = 10.160.11.140
-name = ssss
+name = ERERERERERERERERERERERERERR
 volumeemusic = 0
 volumeeffect = 100
