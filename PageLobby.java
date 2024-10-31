@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
@@ -12,7 +10,6 @@ public class PageLobby extends JPanel {
         this.app = app;
         setLayout(null);
 
-        // Back Button
         JButton back = Component.createCustomRoundedButton("Back",Color.white);
         back.setBounds(0, 0, 100, 60);
         back.addActionListener(e -> {
@@ -21,8 +18,6 @@ public class PageLobby extends JPanel {
             this.app.getBaseClient().nowPage = "menu";
         });
         add(back);
-
-        // Ready Button
         JButton ready = Component.createCustomRoundedButton("พร้อม",Color.white);
         ready.setFont(new Font("Tahoma", Font.BOLD, 14));
         ready.setBounds(600, 600, 150, 60);
@@ -36,8 +31,7 @@ public class PageLobby extends JPanel {
             }
         });
         add(ready);
-
-        // Player Panel
+       ////////////////////////////////// Player Panel ///////////////////////////////
         showPlayer = new PlayerPanel(app);
         showPlayer.setBounds(400, 200, 500, 400);
         add(showPlayer);
@@ -56,20 +50,14 @@ public class PageLobby extends JPanel {
 class PlayerPanel extends JPanel {
     private final JPanel playerListPanel;
     private final App app;
-
     public PlayerPanel(App app) {
         this.app = app;
-
         this.setLayout(new BorderLayout());
-
         playerListPanel = new JPanel();
         playerListPanel.setLayout(new BoxLayout(playerListPanel, BoxLayout.Y_AXIS));
-        
         JScrollPane scrollPane = new JScrollPane(playerListPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(scrollPane, BorderLayout.CENTER);
-
-        // startUpdatingPlayers();
     }
 
     public void startUpdatingPlayers() {
