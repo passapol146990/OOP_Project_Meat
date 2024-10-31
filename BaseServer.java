@@ -19,7 +19,9 @@ public class BaseServer implements Serializable{
     int CountPlayerOnServer = 0;
     int CountPlayerIsReady = 0;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
+
     BaseServer(){
+        //ลูปสร้างออเดอร์เก็บที่เซิฟเวอร์
         for(int i=0;i<20;i++){
             this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(40,50)), "01",140+i));
             this.orders.add(getOrderFormat(String.format("%s", new Random().nextInt(50,70)), "02",140+i));
@@ -30,6 +32,8 @@ public class BaseServer implements Serializable{
         }
     }
     HashMap<String,String> getOrderFormat(String price,String typeMeat,int tempMeat){
+        //Methods สำหรับสร้างรายละเอียดของออเดอร์เอาไว้
+        //โดยในออเดอร์จะมีจำนวนเงินที่ได้ ประเภทเนื้อ และ อุณหภูมิเนื้อ
         HashMap<String,String> order = new HashMap<String,String>();
         String titleFormat = "";
         String image = "./image/meat/"+typeMeat+"/";
@@ -77,7 +81,9 @@ public class BaseServer implements Serializable{
     BaseClient getClientByID(String ID){
         return client.get(IDClientGETIPAddress.get(ID));
     }
+
     ArrayList<HashMap<String,String>> getPlayerInRobby(){
+        //Methods สำหรับตรวจสอบจำนวนผู้เล่นที่พร้อมเข้าเกม
         ArrayList<HashMap<String,String>> data = new ArrayList<>();
         for(String key : this.client.keySet()){
             if(this.controller_client.get(key)){
@@ -112,7 +118,9 @@ public class BaseServer implements Serializable{
             }
         }
     }
+
     void checkDataBasePlayerInGame(){
+        //Methods สำหรับการสุ่มออเดอร์ให้ผู้เล่น
         if(this.statusInGame){
             if(this.time<=this.timeStop){
                 this.statusEndGame = true;
@@ -143,6 +151,7 @@ public class BaseServer implements Serializable{
     }
 }
 class CountTimeServer extends Thread implements Serializable{
+    //Thread ที่สร้างเป็นเวลาของเกม โดยมีระยะเวลาตาม BaseServer
     private static final long serialVersionUID = 1L;
     private BaseServer base;
     CountTimeServer(BaseServer base){

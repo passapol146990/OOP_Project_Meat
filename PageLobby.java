@@ -12,7 +12,7 @@ public class PageLobby extends JPanel {
         this.app = app;
         setLayout(null);
 
-        // Back Button
+        // Back Button สำหรับกลับไปหน้าเมนู
         JButton back = Component.createCustomRoundedButton("Back",Color.white);
         back.setBounds(0, 0, 100, 60);
         back.addActionListener(e -> {
