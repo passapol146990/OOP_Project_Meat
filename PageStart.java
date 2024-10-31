@@ -211,6 +211,8 @@ public class PageStart extends JPanel {
             gbc.gridx = 0;
             gbc.gridy = 4;
             gbc.gridwidth = 1;
+            gbc.weightx = 1.0; // ทำให้ปุ่มขยายในแนวนอน
+            gbc.weighty = 5.0;
             settingsPanel.add(backToGameButton, gbc);
             backToGameButton.addActionListener(e1 -> settingsDialog.dispose());
             
