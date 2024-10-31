@@ -5,12 +5,12 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class BaseServer implements Serializable{
-    private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
+    private static final long serialVersionUID = 1L;
     int port = 3333;
     int time = 0;
     int timeIngame = 0;
     int timeStop = 0;
-    private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
+    HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
     boolean statusInRoby = true;

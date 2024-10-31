@@ -10,27 +10,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 public class Component{
-    // Method to create a rounded button with custom background color
     public static JButton createCustomRoundedButton(String text, Color color) {
         return new CustomRoundedButton(text, color);
     }
-
-    // Method to create a custom JSlider
     public static JSlider createCustomSlider(int value) {
-        JSlider slider = new JSlider(0, 100,value); // Slider with min 0 and max 100
-        slider.setUI(new CustomSliderUI(slider)); // Apply custom UI to slider
-        slider.setPaintTicks(false); // No ticks on slider
+        JSlider slider = new JSlider(0, 100,value);
+        slider.setUI(new CustomSliderUI(slider));
+        slider.setPaintTicks(false);
         return slider;
     }
-
-    // Custom rounded button class
     static class CustomRoundedButton extends JButton {
-
         public CustomRoundedButton(String text, Color color) {
             super(text);
-            setContentAreaFilled(false); // Disable default button painting
-            setFocusPainted(false); // Disable focus painting
-            setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1)); // Remove border
+            setContentAreaFilled(false);
+            setFocusPainted(false);
+            setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
             setBackground(color); // Set background color
             setCursor(new Cursor(JFrame.HAND_CURSOR)); // Set hand cursor
         }
@@ -58,8 +52,6 @@ public class Component{
             setUI(new BasicButtonUI()); // Use BasicButtonUI for default behavior
         }
     }
-
-    // Custom UI class for JSlider
     static class CustomSliderUI extends BasicSliderUI {
         private boolean isThumbHovered = false;
 

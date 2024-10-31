@@ -1,4 +1,4 @@
-ip = 10.160.11.140
-name = ERERERERERERERERERERERERERR
+ip = 192.168.131.248
+name = passapol
 volumeemusic = 0
 volumeeffect = 100
