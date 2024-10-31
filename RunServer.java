@@ -1,14 +1,39 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * InnerServer
  */
 public class RunServer {
     public static void main(String[] args) {
+        try{
+            try {
+                Process process = Runtime.getRuntime().exec("ipconfig");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line;
+                boolean wifiSection = false;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (line.startsWith("Wireless LAN adapter Wi-Fi")) {
+                        wifiSection = true;
+                    }
+                    if (wifiSection && line.startsWith("IPv4 Address")) {
+                        System.out.println("Join IP : "+line.split(":")[1].trim());
+                        break;
+                    }
+                }
+                reader.close();
+            }catch(Exception eq){}
+        }catch(NumberFormatException eInput){}
 ///////////////////////////////////////////////////////
         BaseServer baseServer = new BaseServer();
         baseServer.CountPlayerIsReady = 1;
@@ -129,3 +154,76 @@ class SendClient extends Thread{
         System.out.println(this.ipAddress+" ออกจากเซิฟไปแล้ว มีผู้เล่นเหลืออยู่ : "+this.baseServer.CountPlayerOnServer);
     }
 }
+// class PanelCreateServer extends JFrame{
+//     private App app;
+//     JPanel panel = new JPanel();
+//     JButton runServer = new JButton("Start server");
+//     JLabel titleShowIP = new JLabel("");
+//     PanelCreateServer(App app){
+//         this.app = app;
+//         app.getBaseClient().myStatusCreateServer = true;
+//         setBounds(150,10,300,300);
+//         panel.setLayout(null);
+//         panel.setBackground(new Color(0,0,0));
+//         JLabel titleCountPlayer = new JLabel("Count Player : ");
+//         titleCountPlayer.setForeground(new Color(255,255,255));
+//         titleCountPlayer.setBounds(getWidth()/2-100, 20, 100, 20);
+//         JTextField inputCountPlayer = new JTextField();
+//         inputCountPlayer.setBounds(getWidth()/2, 20, 100, 20);
+//         JLabel titleTime = new JLabel("Time : ");
+//         titleTime.setForeground(new Color(255,255,255));
+//         titleTime.setBounds(getWidth()/2-100, 60, 100, 20);
+//         JTextField inputTime = new JTextField();
+//         inputTime.setBounds(getWidth()/2, 60, 100, 20);
+//         titleShowIP.setForeground(new Color(255,255,255));
+//         titleShowIP.setBounds(getWidth()/2-100, 100, 200, 20);
+//         runServer.setBounds(getWidth()/2-90, 200, 200, 40);
+//         runServer.addActionListener(e->{
+//             if(app.getBaseClient().myStatusRunServer==false){
+//                 try{
+//                     int countPlayer = Integer.parseInt(inputCountPlayer.getText());
+//                     int countTime = Integer.parseInt(inputTime.getText());
+//                     runServer.setText("stop server");
+//                     app.getBaseClient().myStatusRunServer = true;
+//                     try {
+//                         Process process = Runtime.getRuntime().exec("ipconfig");
+//                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//                         String line;
+//                         boolean wifiSection = false;
+//                         while ((line = reader.readLine()) != null) {
+//                             line = line.trim();
+//                             if (line.startsWith("Wireless LAN adapter Wi-Fi")) {
+//                                 wifiSection = true;
+//                             }
+//                             if (wifiSection && line.startsWith("IPv4 Address")) {
+//                                 titleShowIP.setText("Join IP : "+line.split(":")[1].trim());
+//                                 break;
+//                             }
+//                         }
+//                         reader.close();
+//                     }catch(Exception eq){}
+//                     BaseServer baseServer = new BaseServer(app);
+//                     baseServer.CountPlayerIsReady = countPlayer;
+//                     baseServer.timeIngame = countTime;
+//                     baseServer.timeStop = 0;
+//                     Server server = new Server(baseServer);
+//                     CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
+//                     server.start();
+//                     checkPlayerInServer.start();
+//                 }catch(NumberFormatException eInput){}
+//             }else{
+//                 app.getBaseClient().myStatusRunServer = false;
+//                 runServer.setText("Start server");
+//             }
+//         });
+
+//         panel.add(titleCountPlayer);
+//         panel.add(inputCountPlayer);
+//         panel.add(titleTime);
+//         panel.add(inputTime);
+//         panel.add(titleShowIP);
+//         panel.add(runServer);
+//         add(panel);
+//         setVisible(true);
+//     }
+// }

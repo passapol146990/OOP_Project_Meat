@@ -1,4 +1,4 @@
-ip = 127.0.0.1
-name = ตั้งชื่อร้านของคุณ
-volumeemusic = 99
+ip = 10.160.47.21
+name = พัสพล
+volumeemusic = 0
 volumeeffect = 100
