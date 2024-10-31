@@ -24,6 +24,7 @@ public class App extends JFrame{
         setBounds(50,50,1280,720);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setIconImage(Toolkit.getDefaultToolkit().getImage("./image/medium rare-shadow.png"));
+        setResizable(false);
         add(this.mainPanel);
         setVisible(true);
     }

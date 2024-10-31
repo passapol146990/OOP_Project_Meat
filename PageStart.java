@@ -243,7 +243,7 @@ public class PageStart extends JPanel {
             orderDialog.setLayout(new BorderLayout());
             orderDialog.setUndecorated(true); // ป้องกันการขยับ popup
 
-            JLabel orderLabel = new JLabel("SHOP", SwingConstants.CENTER);
+            JLabel orderLabel = new JLabel("ORDER", SwingConstants.CENTER);
             orderDialog.add(orderLabel, BorderLayout.NORTH);
             JButton btnClose = new JButton("close");
             orderDialog.add(btnClose, BorderLayout.CENTER);
@@ -259,7 +259,7 @@ public class PageStart extends JPanel {
                 productPanel.add(this.createOrderItemPanel(orderDialog,i,dataOrder.get(i).get("image"),dataOrder.get(i).get("title"),String.format("+%s$", dataOrder.get(i).get("price"))));
             }
             // ปุ่ม back
-            JButton backButton = new JButton("back");
+            JButton backButton = new JButton("Close");
             backButton.addActionListener(e1 -> orderDialog.dispose());
 
             // เพิ่ม productPanel เข้าไปใน outerPanel
@@ -321,7 +321,7 @@ public class PageStart extends JPanel {
 
 
             //ปุ่ม back
-            JButton backButton = new JButton("Back");
+            JButton backButton = new JButton("Close");
             
             backButton.addActionListener(e1 -> shopDialog.dispose());
 

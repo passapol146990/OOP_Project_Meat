@@ -7,7 +7,8 @@ import java.util.Random;
 public class BaseServer implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     int port = 3333;
-    int time = 300;
+    int time = 0;
+    int timeIngame = 300;
     int timeStop = 0;
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
@@ -16,7 +17,7 @@ public class BaseServer implements Serializable{
     boolean statusInGame = false;
     boolean statusEndGame = false;
     int CountPlayerOnServer = 0;
-    int CountPlayerIsReady = 3;
+    int CountPlayerIsReady = 0;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
     BaseServer(){
         for(int i=0;i<20;i++){
@@ -105,7 +106,7 @@ public class BaseServer implements Serializable{
                 this.statusInRoby = false;
                 this.statusEndGame = false;
                 this.statusInGame = true;
-                this.time = 300;
+                this.time = this.timeIngame;
                 CountTimeServer countime = new CountTimeServer(this);
                 countime.start(); 
             }

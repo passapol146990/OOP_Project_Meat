@@ -11,8 +11,8 @@ public class RunServer {
     public static void main(String[] args) {
 ///////////////////////////////////////////////////////
         BaseServer baseServer = new BaseServer();
-        baseServer.time = 300;
-        baseServer.CountPlayerIsReady = 3;
+        baseServer.CountPlayerIsReady = 2;
+        baseServer.timeIngame = 120;
         baseServer.timeStop = 0;
 ///////////////////////////////////////////////////////
         Server roby = new Server(baseServer);
