@@ -8,7 +8,7 @@ public class BaseServer implements Serializable{
     private static final long serialVersionUID = 1L; // หรือใส่ค่าที่คุณต้องการ
     int port = 3333;
     int time = 0;
-    int timeIngame = 300;
+    int timeIngame = 0;
     int timeStop = 0;
     private HashMap<String,BaseClient> client = new HashMap<String,BaseClient>();
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();

@@ -11,7 +11,7 @@ public class RunServer {
     public static void main(String[] args) {
 ///////////////////////////////////////////////////////
         BaseServer baseServer = new BaseServer();
-        baseServer.CountPlayerIsReady = 2;
+        baseServer.CountPlayerIsReady = 3;
         baseServer.timeIngame = 120;
         baseServer.timeStop = 0;
 ///////////////////////////////////////////////////////

@@ -23,6 +23,7 @@ public class Sound{
             this.music.start();
             this.music.loop(-1);
         }
+        setVolumeMusic(this.volumeMusic);
     }
     void stopMusic() {
         if (this.music != null && this.music.isRunning()) {
@@ -62,6 +63,7 @@ public class Sound{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        setVolumeEffect(this.volumeEffect);
     }
     void closeEffect() {
         if (this.effect != null) {
