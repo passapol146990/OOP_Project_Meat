@@ -1,4 +1,4 @@
-ip = 192.168.241.11
-name = Test
-volumeemusic = 72
-volumeeffect = 100
+ip = 127.0.0.1
+name = พัสพล
+volumeemusic = 0
+volumeeffect = 49

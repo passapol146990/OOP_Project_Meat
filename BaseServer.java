@@ -123,7 +123,7 @@ public class BaseServer implements Serializable{
         //Methods สำหรับการสุ่มออเดอร์ให้ผู้เล่น
         if(this.statusInGame){
             if(this.time<=this.timeStop){
-                this.createServer = false;
+                // this.createServer = false;
                 this.statusEndGame = true;
                 this.statusInGame = false;
                 this.statusInRoby = false;

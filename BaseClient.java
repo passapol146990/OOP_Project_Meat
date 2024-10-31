@@ -205,16 +205,18 @@ class ClickMeat extends Thread implements Serializable{
         this.meat = meat;
     }
     public void run(){
-        if(!this.meat.clickMeat&&(this.meat.getSted_meat()==1||this.meat.getSted_meat()==7)){
-            if(this.meat.getSted_meat()==1){
-                while (this.meat.getSted_meat()<7) {
-                    this.meat.setSted_meat(this.meat.getSted_meat()+1);
-                    try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-                }
-            }else{
-                while (this.meat.getSted_meat()>1) {
-                    this.meat.setSted_meat(this.meat.getSted_meat()-1);
-                    try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+        if(this.meat!=null){
+            if(!this.meat.clickMeat&&(this.meat.getSted_meat()==1||this.meat.getSted_meat()==7)){
+                if(this.meat.getSted_meat()==1){
+                    while (this.meat.getSted_meat()<7) {
+                        this.meat.setSted_meat(this.meat.getSted_meat()+1);
+                        try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+                    }
+                }else{
+                    while (this.meat.getSted_meat()>1) {
+                        this.meat.setSted_meat(this.meat.getSted_meat()-1);
+                        try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+                    }
                 }
             }
         }

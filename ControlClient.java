@@ -5,7 +5,7 @@ public class ControlClient extends Thread{
     }
     public void run(){
         while(true){
-            if(this.app.getBaseClient().statusConnectServer){
+            if(!this.app.getBaseClient().statusConnectServer){
                 this.app.getBaseClient().reSetBaseClient();
                 this.app.getSound().stopGiveMoney();
                 this.app.getSound().closeEffect();
@@ -21,8 +21,8 @@ public class ControlClient extends Thread{
                     this.app.getSound().stopGiveMoney();
                     this.app.getSound().closeEffect();
                 }
-                this.app.showPanel(this.app.getBaseClient().nowPage);
             }
+            this.app.showPanel(this.app.getBaseClient().nowPage);
             try{Thread.sleep(100);}catch(InterruptedException e){e.printStackTrace();}
         }
     }

@@ -63,7 +63,6 @@ class Server extends Thread{
                 try {Thread.sleep(1);} catch (InterruptedException e) {throw new RuntimeException(e);}
             }
         }catch(IOException | ClassNotFoundException e){System.out.println(e);}
-        System.out.println("x");
     }
 }
 class CheckPlayerInServer extends Thread{

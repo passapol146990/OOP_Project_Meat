@@ -32,9 +32,6 @@ public class ConnectServer extends Thread{
             }
         } catch (Exception e) {
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
-            this.app.getBaseClient().statusConnectServer = false;
-            this.app.getBaseClient().statusReady = false;
-            this.app.getBaseClient().nowPage = "menu";
         }
         try {Thread.sleep(500);} catch (InterruptedException e) {}
         CheckOutServer checkout = new CheckOutServer(this.app, this.ip, this.port);
@@ -64,5 +61,8 @@ class CheckOutServer extends Thread{
         } catch (Exception e) {
             this.app.getBaseClient().statusConnectServer = false;
         }
+        this.app.getBaseClient().statusConnectServer = false;
+        this.app.getBaseClient().statusReady = false;
+        this.app.getBaseClient().nowPage = "menu";
     }
 }
