@@ -93,7 +93,7 @@ public class PageStart extends JPanel {
         app.getBaseClient().setTime(300);
         app.getSound().playMusic();
         meatRect = new Rectangle(402, 160, 400, 300); 
-        plateRect = new Rectangle(1000, -50, 100, 100);
+        plateRect = new Rectangle(1000, -50, 100, 300);
 
         ///////////////////////////////////Button_setting///////////////////////////////////////////////////
         B_setting = new JButton();
@@ -275,7 +275,7 @@ public class PageStart extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (isHoldingMeat) {
                     isHoldingMeat = false;
-                    if(meatRect.x>550&&meatRect.y<200) {
+                    if((meatRect.intersects(plateRect))) {
                         boolean sendCheck = app.getBaseClient().sendOrder();
                         if(sendCheck){app.getSound().playGiveMoney();}
                         app.getSound().closeEffect();
