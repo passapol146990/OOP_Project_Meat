@@ -30,8 +30,9 @@ public class ConnectServer extends Thread{
                 socket.close();
                 try {Thread.sleep(100);} catch (InterruptedException e) {throw new Exception(e);}
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
+            this.app.getBaseClient().nowPage = "menu";
         }
         try {Thread.sleep(500);} catch (InterruptedException e) {}
         CheckOutServer checkout = new CheckOutServer(this.app, this.ip, this.port);

@@ -1,4 +1,4 @@
 ip = 127.0.0.1
-name = พัสพล
-volumeemusic = 0
-volumeeffect = 49
+name = พลแบบใหม่
+volumeemusic = 81
+volumeeffect = 90
