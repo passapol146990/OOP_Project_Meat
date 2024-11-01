@@ -31,6 +31,7 @@ public class ConnectServer extends Thread{
                 try {Thread.sleep(100);} catch (InterruptedException e) {throw new Exception(e);}
             }
         }catch (Exception e) {
+            this.app.ShowMessageDisconnect();
             System.out.println(e+", Stop Connect Server : "+this.ip+" "+this.port);
             this.app.getBaseClient().nowPage = "menu";
         }
