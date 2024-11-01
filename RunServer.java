@@ -26,7 +26,7 @@ class Server extends Thread{
         try{
             serverSocket = new ServerSocket(this.baseServer.port);
             System.out.println("Start Server PORT : "+this.baseServer.port);
-            while (this.baseServer.createServer){
+            while (true){
                 Socket socket = serverSocket.accept();
                 String ipAddress = socket.getInetAddress().getHostAddress();
                 ObjectInputStream req = new ObjectInputStream(socket.getInputStream());
@@ -71,7 +71,7 @@ class CheckPlayerInServer extends Thread{
         this.baseServer = baseServer;
     }
     public void run(){
-        while (this.baseServer.createServer) {
+        while (true) {
             try {Thread.sleep(100);}catch (InterruptedException e) {e.printStackTrace();}
             // ตรวจสอบถ้าไม่มีผู้เล่นเชื่อมต่อ server จะให้ server กลับมาหน้า lobby
             int countPlayer = 0;
@@ -116,12 +116,13 @@ class SendClient extends Thread{
             if(i){countPlayer+=1;}
         }
         this.baseServer.CountPlayerOnServer = countPlayer;
-        System.out.println(this.ipAddress+" ออกจากเซิฟไปแล้ว มีผู้เล่นเหลืออยู่ : "+this.baseServer.CountPlayerOnServer);
+        System.out.println(this.baseServer.client.get(this.ipAddress).getNameShop()+" ออกจากเซิฟไปแล้ว มีผู้เล่นเหลืออยู่ : "+this.baseServer.CountPlayerOnServer);
     }
 }
 class PanelCreateServer extends JFrame{
     private BaseServer baseServer = new BaseServer();
     private String ip;
+    private boolean createServer = false;
     PanelCreateServer(){
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -131,9 +132,10 @@ class PanelCreateServer extends JFrame{
         JLabel titleShowIP = new JLabel("");
         JLabel titleCountPlayer = new JLabel("Count Player : ");
         JLabel titleTime = new JLabel("Time : ");
+        JLabel countPlayerJoin = new JLabel("ผู้เล่นในเซิฟ : 0");
         JLabel titleShowStatus = new JLabel("ยังไม่ทำงาน");
         JTextField inputCountPlayer = new JTextField("3");
-        JTextField inputTime = new JTextField("300");
+        JTextField inputTime = new JTextField("30");
         JButton runServer = new JButton("Start server");
         //-------------------------[ Set position component]------------------------------------------//
         titleCountPlayer.setBounds(getWidth()/2-100, 20, 100, 20);
@@ -141,6 +143,7 @@ class PanelCreateServer extends JFrame{
         titleTime.setBounds(getWidth()/2-100, 60, 100, 20);
         inputCountPlayer.setBounds(getWidth()/2, 20, 100, 20);
         inputTime.setBounds(getWidth()/2, 60, 100, 20);
+        countPlayerJoin.setBounds(getWidth()/2-100, 140, 200, 20);
         titleShowStatus.setBounds(getWidth()/2-100, 160, 200, 20);
         runServer.setBounds(getWidth()/2-90, 200, 200, 40);
         //-------------------------[ set about component ]------------------------------------------//
@@ -152,6 +155,8 @@ class PanelCreateServer extends JFrame{
         titleShowIP.setFont(new Font("Tahoma",Font.BOLD,12));
         titleShowStatus.setForeground(new Color(255,255,255));
         titleShowStatus.setFont(new Font("Tahoma",Font.BOLD,16));
+        countPlayerJoin.setFont(new Font("Tahoma",Font.BOLD,12));
+        countPlayerJoin.setForeground(new Color(255,255,255));
         titleCountPlayer.setForeground(new Color(255,255,255));
         runServer.setCursor(new Cursor(JFrame.HAND_CURSOR));
         runServer.setFocusPainted(false);
@@ -159,59 +164,82 @@ class PanelCreateServer extends JFrame{
         runServer.setBackground(new Color(19,142,0));
         //-------------------------[ buttom Action]------------------------------------------//
         runServer.addActionListener(e->{
-            if(!this.baseServer.createServer){
-                this.baseServer.createServer = true;
+            try{
+                int countPlayer = Integer.parseInt(inputCountPlayer.getText());
+                int countTime = Integer.parseInt(inputTime.getText());
+                //-------------------------[ Run CMD "ipconfig" ]------------------------------------------//
                 try{
-                    int countPlayer = Integer.parseInt(inputCountPlayer.getText());
-                    int countTime = Integer.parseInt(inputTime.getText());
-                    //-------------------------[ Run CMD "ipconfig" ]------------------------------------------//
-                    try{
-                        Process process = Runtime.getRuntime().exec("ipconfig");
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        String line;
-                        boolean wifiSection = false;
-                        while((line = reader.readLine()) != null) {
-                            line = line.trim();
-                            if(line.startsWith("Wireless LAN adapter Wi-Fi")) {
-                                wifiSection = true;
-                            }
-                            if(wifiSection && line.startsWith("IPv4 Address")) {
-                                ip = line.split(":")[1].trim();
-                                titleShowIP.setText("Join IP : "+ip);
-                                titleShowStatus.setText("สร้างเซิฟเวอร์สำเร็จ");
-                                System.out.println(ip);
-                                break;
-                            }
+                    Process process = Runtime.getRuntime().exec("ipconfig");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    boolean wifiSection = false;
+                    while((line = reader.readLine()) != null) {
+                        line = line.trim();
+                        if(line.startsWith("Wireless LAN adapter Wi-Fi")) {
+                            wifiSection = true;
                         }
-                        reader.close();
-                    }catch(Exception errCMD){System.out.println(errCMD);}
-                    //-------------------------[ Create Server ]------------------------------------------//
-                    baseServer.CountPlayerIsReady = countPlayer;
-                    baseServer.timeIngame = countTime;
+                        if(wifiSection && line.startsWith("IPv4 Address")) {
+                            ip = line.split(":")[1].trim();
+                            titleShowIP.setText("Join IP : "+ip);
+                            titleShowStatus.setText("สร้างเซิฟเวอร์สำเร็จ");
+                            System.out.println(ip);
+                            break;
+                        }
+                    }
+                    reader.close();
+                }catch(Exception errCMD){System.out.println(errCMD);}
+                //-------------------------[ Create Server ]------------------------------------------//
+                baseServer.CountPlayerIsReady = countPlayer;
+                baseServer.timeIngame = countTime;
+                if(createServer==false){
                     Server server = new Server(baseServer);
                     CheckPlayerInServer checkPlayerInServer = new CheckPlayerInServer(baseServer);
+                    RunCheckUI runUI = new RunCheckUI(baseServer,countPlayerJoin);
                     checkPlayerInServer.start();
                     server.start();
-                }catch(NumberFormatException errNumber){}
-                runServer.setText("start server");
-                runServer.setBackground(new Color(165,42,42));
-            }else{
-                this.baseServer.createServer = false;
-                titleShowIP.setText("");
-                titleShowStatus.setText("หยุดทำงานเซิฟเวอร์");
-                runServer.setText("stop server");
-                runServer.setBackground(new Color(19,142,0));
-            }
+                    runUI.start();
+                    createServer = true;
+                }
+            }catch(NumberFormatException errNumber){}
+            runServer.setText("Update Server");
+            UpdateText updateText = new UpdateText(titleShowStatus);
+            updateText.start();
         });
-        //-------------------------[ add component]------------------------------------------//
+        //-------------------------[ add component]------------------------------------------//]
         panel.add(titleCountPlayer);
         panel.add(inputCountPlayer);
         panel.add(titleTime);
         panel.add(inputTime);
         panel.add(titleShowIP);
+        panel.add(countPlayerJoin);
         panel.add(titleShowStatus);
         panel.add(runServer);
         add(panel);
+    }
+}
+class UpdateText extends Thread{
+    JLabel titleShowStatus;
+    UpdateText(JLabel titleShowStatus){
+        this.titleShowStatus = titleShowStatus;
+    }
+    public void run(){
+        titleShowStatus.setText("อัพเดทเซิฟเวอร์สำเร็จ");
+        try{Thread.sleep(2000);}catch(InterruptedException e1){}
+        titleShowStatus.setText("กำลังทำงาน");
+    }
+}
+class RunCheckUI extends Thread{
+    JLabel countPlayerJoin;
+    BaseServer baseServer;
+    RunCheckUI(BaseServer baseServer,JLabel countPlayerJoin){
+        this.baseServer = baseServer;
+        this.countPlayerJoin = countPlayerJoin;
+    }
+    public void run(){
+        while (true) {
+            this.countPlayerJoin.setText(String.format("ผู้เล่นในเซิฟ : %d", this.baseServer.CountPlayerOnServer));
+            try{Thread.sleep(100);}catch(InterruptedException e1){}
+        }
     }
 }
 

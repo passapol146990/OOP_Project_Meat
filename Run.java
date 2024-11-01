@@ -18,7 +18,6 @@ class Run {
         app.addPanel(about, "about");
         app.addPanel(lobby, "lobby");
         app.addPanel(showscore,"showscore");
-    
         openPortClient.start();
         controlClient.start();
     }    

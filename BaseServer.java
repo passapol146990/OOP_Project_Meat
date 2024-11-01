@@ -12,7 +12,7 @@ public class BaseServer implements Serializable{
     HashMap<String,Boolean> controller_client = new HashMap<String,Boolean>();
     HashMap<String,String> IDClientGETIPAddress = new HashMap<String,String>();
     boolean statusInRoby = true;
-    boolean statusInGame,statusEndGame,createServer;
+    boolean statusInGame,statusEndGame,statusSaveServer;
     ArrayList<HashMap<String,String>> orders = new ArrayList<>();
 
     BaseServer(){

@@ -1,4 +1,4 @@
 ip = 127.0.0.1
 name = พลแบบใหม่
-volumeemusic = 81
+volumeemusic = 72
 volumeeffect = 90
