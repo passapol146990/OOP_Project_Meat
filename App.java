@@ -1,8 +1,12 @@
 // class แม่ของโปรแกรมรับหน้าที่เปลี่ยนหน้าต่าง
 import java.awt.CardLayout;
+import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+
 import java.util.*;
 
 import java.awt.Toolkit;
@@ -67,5 +71,10 @@ public class App extends JFrame{
     }
     FileHandler getFile(){
         return this.file;
+    }
+    void ShowMessageDisconnect(){
+        Font font = new Font("Tahoma", Font.PLAIN, 20);  
+        UIManager.put("OptionPane.messageFont", font);  
+        JOptionPane.showMessageDialog(null, "ไม่มีการเชื่อมต่อจากเซิร์ฟเวอร์", "เกิดข้อผิดพลาด", JOptionPane.ERROR_MESSAGE);
     }
 }
